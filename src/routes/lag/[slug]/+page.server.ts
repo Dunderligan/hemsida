@@ -3,51 +3,61 @@ import { error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
-	const team = await db.query.team.findFirst({
-		where: eq(schema.team.slug, params.slug),
-		columns: {},
+	const data = await db.query.roster.findFirst({
+		where: eq(schema.roster.slug, params.slug),
+		columns: {
+			id: true,
+			name: true,
+			slug: true
+		},
 		with: {
-			socials: {
+			members: {
 				columns: {
-					platform: true,
-					url: true
-				}
-			},
-			rosters: {
-				columns: {
-					name: true
+					isCaptain: true,
+					tier: true,
+					rank: true,
+					role: true
 				},
 				with: {
-					members: {
+					player: {
 						columns: {
-							isCaptain: true,
-							tier: true,
-							rank: true,
-							role: true
-						},
-						with: {
-							player: {
-								columns: {
-									battletag: true
-								}
-							}
+							battletag: true
+						}
+					}
+				}
+			},
+			team: {
+				columns: {},
+				with: {
+					socials: {
+						columns: {
+							platform: true,
+							url: true
 						}
 					},
-					group: {
+					rosters: {
 						columns: {
+							id: true,
 							slug: true
 						},
 						with: {
-							division: {
+							group: {
 								columns: {
-									name: true,
 									slug: true
 								},
 								with: {
-									season: {
+									division: {
 										columns: {
 											name: true,
 											slug: true
+										},
+										with: {
+											season: {
+												columns: {
+													name: true,
+													slug: true
+												}
+											}
 										}
 									}
 								}
@@ -59,13 +69,12 @@ export const load = async ({ params }) => {
 		}
 	});
 
-	if (!team) {
+	if (!data) {
 		error(404);
 	}
 
-	if (team.rosters.length === 0) {
-		error(500, 'Team has no roster');
-	}
+	const info = data.team.rosters.find((r) => r.id === data.id)!;
+	const roster = { ...data, team: undefined, ...info };
 
-	return { team };
+	return { roster, team: data.team };
 };

@@ -3,15 +3,22 @@
 
 	let { data } = $props();
 
-	let team = $derived(data.team);
-	let roster = $derived(team.rosters[0]);
+	let { team, roster } = $derived(data);
+	let { group } = $derived(roster);
+	let { division } = $derived(group);
+	let { season } = $derived(division);
+
 	let average = $derived(averageRank(roster.members));
+
+	console.log(data);
 </script>
 
 <h1 class="text-2xl font-bold">{roster.name}</h1>
 
 <div>
-	Spelade i {roster.group.division.name} säsong {roster.group.division.season.name}
+	Spelade i <a href="/sasong/{season.slug}?div={division.slug}&grupp={group.slug}"
+		>{division.name} {season.name}</a
+	>
 </div>
 
 <div>

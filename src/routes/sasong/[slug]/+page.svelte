@@ -1,3 +1,78 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+
 	let { data } = $props();
+
+	let season = $derived(data.season);
+
+	let divisions = $derived(season.divisions);
+	let activeDivision = $derived.by(() => {
+		const param = page.url.searchParams.get('div');
+
+		return (param ? divisions.find((div) => div.slug === param) : divisions[0]) ?? null;
+	});
+
+	let groups = $derived(activeDivision ? activeDivision.groups : []);
+	let activeGroup = $derived.by(() => {
+		const param = page.url.searchParams.get('grupp');
+
+		return (param ? groups.find((group) => group.slug == param) : groups[0]) ?? null;
+	});
+	let rosters = $derived(activeGroup?.rosters ?? []);
+
+	let table = $derived(activeGroup ? (data.tables.get(activeGroup.id) ?? null) : null);
+
+	console.log(data);
 </script>
+
+<h1 class="text-4xl font-bold">Säsong {data.season.name}</h1>
+
+<div class="flex items-center gap-2">
+	<div class="font-semibold">Division</div>
+
+	{#each divisions as division (division.id)}
+		<button onclick={() => goto(`?div=${division.slug}`)}>
+			{division.name}
+			{activeDivision?.id === division.id ? '✓' : ''}
+		</button>
+	{/each}
+</div>
+
+<div class="flex items-center gap-2">
+	<div class="font-semibold">Grupp</div>
+
+	{#each groups as group (group.id)}
+		<button onclick={() => goto(`?div=${activeDivision?.slug}&grupp=${group.slug}`)}>
+			{group.name}
+			{activeGroup?.id === group.id ? '✓' : ''}
+		</button>
+	{/each}
+</div>
+
+{#if table}
+	<table class="w-5xl">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Lag</th>
+				<th>Poäng</th>
+				<th>W/L/D</th>
+				<th>Matcher</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each table as { rosterId, score }, i (rosterId)}
+				{@const roster = rosters.find((r) => r.id === rosterId)}
+
+				<tr>
+					<td>{i + 1}</td>
+					<td><a href="/lag/{roster?.slug}">{roster?.name}</a></td>
+					<td>{score.mapWins}</td>
+					<td>{score.mapWins}/{score.mapLosses}/0</td>
+					<td>{score.matchesPlayed}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+{/if}

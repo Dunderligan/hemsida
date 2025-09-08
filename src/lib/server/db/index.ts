@@ -3,6 +3,7 @@ import postgres from 'postgres';
 import * as schema from './schema';
 import { env } from '$env/dynamic/private';
 import { reset, seed } from 'drizzle-seed';
+import { Rank } from './schema';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
@@ -24,6 +25,8 @@ async function seedDb() {
 	};
 
 	await reset(db, seedSchema);
+
+	/*
 	await seed(db, seedSchema).refine((f) => ({
 		team: {
 			count: 32
@@ -56,8 +59,131 @@ async function seedDb() {
 			count: 32
 		}
 	}));
+	*/
+
+	let season = await db
+		.insert(schema.season)
+		.values({ name: 'Test Säsong', slug: 'test', startedAt: new Date() })
+		.returning();
+
+	let divisions = await Promise.all(
+		Array.from({ length: 3 }).map(async (_, i) => {
+			let name = `Division ${i + 1}`;
+			let slug = `${i + 1}`;
+
+			const res = await db
+				.insert(schema.division)
+				.values({
+					name,
+					slug,
+					seasonId: season[0].id
+				})
+				.returning();
+
+			return res[0];
+		})
+	);
+
+	let groups = await Promise.all(
+		divisions.flatMap((division) =>
+			Array.from({ length: 3 }).map(async (_, i) => {
+				let slug = String.fromCharCode(65 + i);
+				let name = `Grupp ${slug}`;
+
+				const res = await db
+					.insert(schema.group)
+					.values({
+						name,
+						slug,
+						divisionId: division.id
+					})
+					.returning();
+
+				return res[0];
+			})
+		)
+	);
+
+	let teams = await Promise.all(
+		Array.from({ length: 32 }).map(() => db.insert(schema.team).values({}).returning())
+	);
+
+	let rosters = await Promise.all(
+		teams.map(async (team) => {
+			let name = `Team ${team[0].id}`;
+			let groupIndex = Math.floor(Math.random() * groups.length);
+
+			let result = await db
+				.insert(schema.roster)
+				.values({
+					name,
+					slug: name.toLowerCase().replaceAll(' ', '-'),
+					teamId: team[0].id,
+					groupId: groups[groupIndex].id
+				})
+				.returning();
+
+			return result[0];
+		})
+	);
+
+	let players = await Promise.all(
+		Array.from({ length: 32 * 2 * 7 }).map(async () => {
+			let battletag = `Player#${Math.floor(100000 + Math.random() * 900000)}`;
+
+			let result = await db
+				.insert(schema.player)
+				.values({
+					battletag
+				})
+				.returning();
+
+			return result[0];
+		})
+	);
+
+	await Promise.all(
+		players.map(async (player, i) => {
+			let rosterIndex = i % rosters.length;
+			let rank = Rank.BRONZE;
+			let tier = (i % 5) + 1;
+			let isCaptain = i % 7 === 0;
+
+			await db.insert(schema.member).values({
+				playerId: player.id,
+				rosterId: rosters[rosterIndex].id,
+				rank,
+				tier,
+				isCaptain,
+				role: ['damage', 'tank', 'support'][i % 3] as schema.Role
+			});
+		})
+	);
+
+	await Promise.all(
+		groups.map(async (group) => {
+			let groupRosters = rosters.filter((roster) => roster.groupId === group.id);
+
+			for (let i = 0; i < groupRosters.length; i++) {
+				for (let j = i + 1; j < groupRosters.length; j++) {
+					let teamAScore = Math.floor(Math.random() * 4);
+					let teamBScore = 3 - teamAScore;
+
+					await db.insert(schema.match).values({
+						groupId: group.id,
+						rosterAId: groupRosters[i].id,
+						rosterBId: groupRosters[j].id,
+						teamAScore,
+						teamBScore,
+						played: true,
+						draws: 3 - (teamAScore + teamBScore)
+					});
+				}
+			}
+		})
+	);
 }
 
-await seedDb();
+//await seedDb();
 
 export { db, schema };

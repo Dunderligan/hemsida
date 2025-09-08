@@ -27,14 +27,8 @@ export const load = async ({ params }) => {
 							rosters: {
 								columns: {
 									id: true,
-									name: true
-								},
-								with: {
-									team: {
-										columns: {
-											slug: true
-										}
-									}
+									name: true,
+									slug: true
 								}
 							},
 							matches: {
@@ -42,6 +36,7 @@ export const load = async ({ params }) => {
 								columns: {
 									teamAScore: true,
 									teamBScore: true,
+									draws: true,
 									rosterAId: true,
 									rosterBId: true
 								}
@@ -60,6 +55,7 @@ export const load = async ({ params }) => {
 	type TableScore = {
 		mapWins: number;
 		mapLosses: number;
+		mapDraws: number;
 		matchesPlayed: number;
 	};
 
@@ -69,7 +65,7 @@ export const load = async ({ params }) => {
 				const rosterScores = new Map<string, TableScore>();
 
 				for (const roster of group.rosters) {
-					rosterScores.set(roster.id, { mapWins: 0, mapLosses: 0, matchesPlayed: 0 });
+					rosterScores.set(roster.id, { mapWins: 0, mapLosses: 0, mapDraws: 0, matchesPlayed: 0 });
 				}
 
 				for (const match of group.matches) {
@@ -79,21 +75,34 @@ export const load = async ({ params }) => {
 					const teamB = rosterScores.get(match.rosterBId);
 
 					if (!teamA || !teamB) {
-						console.warn('Roster not found in scores table', match);
+						console.warn('Roster not found in group', match);
 						continue;
 					}
 
 					teamA.mapWins += match.teamAScore;
 					teamA.mapLosses += match.teamBScore;
+					teamA.mapDraws += match.draws;
 
 					teamB.mapWins += match.teamBScore;
 					teamB.mapLosses += match.teamAScore;
+					teamB.mapDraws += match.draws;
 
 					teamA.matchesPlayed += 1;
 					teamB.matchesPlayed += 1;
 				}
 
-				return [group.id, rosterScores];
+				const sortedRosters = [...rosterScores]
+					.map(([rosterId, score]) => ({
+						rosterId,
+						score
+					}))
+					.sort(
+						(a, b) =>
+							a.score.mapWins - b.score.mapWins || a.score.matchesPlayed - b.score.matchesPlayed
+					)
+					.reverse();
+
+				return [group.id, sortedRosters];
 			})
 		)
 	);

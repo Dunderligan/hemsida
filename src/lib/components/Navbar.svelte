@@ -16,7 +16,7 @@
 
 <nav class="h-10 w-full p-4">
 	<div class="mx-auto flex max-w-2xl items-center justify-between gap-2">
-		<a href="/stallningar">Ställningar</a>
+		<a href="/sasong/test">Ställningar</a>
 
 		<div>
 			{#if $session.data}

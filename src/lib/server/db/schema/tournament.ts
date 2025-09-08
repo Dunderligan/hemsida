@@ -27,15 +27,19 @@ export const seasonRelations = relations(season, ({ many }) => ({
 	divisions: many(division)
 }));
 
-export const division = pgTable('division', {
-	id: uuid().primaryKey().defaultRandom(),
-	name: text().notNull(),
-	slug: text().notNull().unique(),
-	seasonId: uuid()
-		.notNull()
-		.references(() => season.id, { onDelete: 'cascade' }),
-	...timestamps
-});
+export const division = pgTable(
+	'division',
+	{
+		id: uuid().primaryKey().defaultRandom(),
+		name: text().notNull(),
+		slug: text().notNull(),
+		seasonId: uuid()
+			.notNull()
+			.references(() => season.id, { onDelete: 'cascade' }),
+		...timestamps
+	},
+	(t) => [unique().on(t.slug, t.seasonId)]
+);
 
 export const divisionRelations = relations(division, ({ one, many }) => ({
 	season: one(season, {
@@ -45,15 +49,19 @@ export const divisionRelations = relations(division, ({ one, many }) => ({
 	groups: many(group)
 }));
 
-export const group = pgTable('group', {
-	id: uuid().primaryKey().defaultRandom(),
-	name: text().notNull(),
-	slug: text().notNull().unique(),
-	divisionId: uuid()
-		.notNull()
-		.references(() => division.id, { onDelete: 'cascade' }),
-	...timestamps
-});
+export const group = pgTable(
+	'group',
+	{
+		id: uuid().primaryKey().defaultRandom(),
+		name: text().notNull(),
+		slug: text().notNull(),
+		divisionId: uuid()
+			.notNull()
+			.references(() => division.id, { onDelete: 'cascade' }),
+		...timestamps
+	},
+	(t) => [unique().on(t.slug, t.divisionId)]
+);
 
 export const groupRelations = relations(group, ({ one, many }) => ({
 	division: one(division, {
@@ -66,7 +74,6 @@ export const groupRelations = relations(group, ({ one, many }) => ({
 
 export const team = pgTable('team', {
 	id: uuid().primaryKey().defaultRandom(),
-	slug: text().notNull().unique(),
 	...timestamps
 });
 
@@ -76,8 +83,9 @@ export const teamRelations = relations(team, ({ many }) => ({
 }));
 
 export const roster = pgTable('roster', {
-	id: uuid().primaryKey().notNull(),
+	id: uuid().primaryKey().defaultRandom(),
 	name: text().notNull(),
+	slug: text().notNull().unique(),
 	teamId: uuid()
 		.notNull()
 		.references(() => team.id, { onDelete: 'cascade' }),
@@ -110,15 +118,15 @@ export const socialPlatformEnum = pgEnum('social_platform', enumToPgEnum(SocialP
 export const social = pgTable(
 	'social',
 	{
-		id: uuid().primaryKey().notNull(),
+		id: uuid().primaryKey().defaultRandom(),
 		platform: socialPlatformEnum().notNull(),
 		url: text().notNull(),
 		teamId: uuid()
 			.notNull()
 			.references(() => team.id, { onDelete: 'cascade' }),
 		...timestamps
-	}
-	//(t) => [unique().on(t.teamId, t.platform)]
+	},
+	(t) => [unique().on(t.teamId, t.platform)]
 );
 
 export const socialRelations = relations(social, ({ one }) => ({
@@ -129,7 +137,7 @@ export const socialRelations = relations(social, ({ one }) => ({
 }));
 
 export const player = pgTable('player', {
-	id: uuid().primaryKey().notNull(),
+	id: uuid().primaryKey().defaultRandom(),
 	battletag: text().notNull().unique(),
 	...timestamps
 });
@@ -162,7 +170,6 @@ export const roleEnum = pgEnum('role', enumToPgEnum(Role));
 export const member = pgTable(
 	'member',
 	{
-		id: uuid().primaryKey().notNull(),
 		playerId: uuid()
 			.notNull()
 			.references(() => player.id, { onDelete: 'cascade' }),
@@ -176,7 +183,7 @@ export const member = pgTable(
 		...timestamps
 	},
 	(t) => [
-		//primaryKey({ columns: [t.playerId, t.rosterId] }),
+		primaryKey({ columns: [t.playerId, t.rosterId] }),
 		check('tier', sql`${t.tier} >= 1 AND ${t.tier} <= 5`)
 	]
 );
@@ -208,6 +215,7 @@ export const match = pgTable('match', {
 	rosterBId: uuid().references(() => roster.id, { onDelete: 'restrict' }),
 	teamAScore: integer().notNull().default(0),
 	teamBScore: integer().notNull().default(0),
+	draws: integer().notNull().default(0),
 	played: boolean().notNull().default(false),
 	playedAt: timestamp(),
 	scheduledAt: timestamp(),
