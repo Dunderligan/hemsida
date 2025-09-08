@@ -1,77 +1,25 @@
 import {
 	pgTable,
 	text,
-	timestamp,
 	boolean,
 	uuid,
 	pgEnum,
 	integer,
 	unique,
-	primaryKey
+	primaryKey,
+	timestamp,
+	type AnyPgColumn,
+	check
 } from 'drizzle-orm/pg-core';
-import { enumToPgEnum, timestamps } from './helpers';
-import { relations } from 'drizzle-orm';
-
-export const user = pgTable('user', {
-	id: text().primaryKey(),
-	name: text().notNull(),
-	email: text().notNull().unique(),
-	emailVerified: boolean()
-		.$defaultFn(() => false)
-		.notNull(),
-	image: text(),
-	createdAt: timestamp()
-		.$defaultFn(() => /* @__PURE__ */ new Date())
-		.notNull(),
-	updatedAt: timestamp()
-		.$defaultFn(() => /* @__PURE__ */ new Date())
-		.notNull()
-});
-
-export const session = pgTable('session', {
-	id: text().primaryKey(),
-	expiresAt: timestamp().notNull(),
-	token: text().notNull().unique(),
-	createdAt: timestamp().notNull(),
-	updatedAt: timestamp().notNull(),
-	ipAddress: text(),
-	userAgent: text(),
-	userId: text()
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' })
-});
-
-export const account = pgTable('account', {
-	id: text().primaryKey(),
-	accountId: text().notNull(),
-	providerId: text().notNull(),
-	userId: text()
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	accessToken: text(),
-	refreshToken: text(),
-	idToken: text(),
-	accessTokenExpiresAt: timestamp(),
-	refreshTokenExpiresAt: timestamp(),
-	scope: text(),
-	password: text(),
-	createdAt: timestamp().notNull(),
-	updatedAt: timestamp().notNull()
-});
-
-export const verification = pgTable('verification', {
-	id: text().primaryKey(),
-	identifier: text().notNull(),
-	value: text().notNull(),
-	expiresAt: timestamp().notNull(),
-	createdAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date()),
-	updatedAt: timestamp().$defaultFn(() => /* @__PURE__ */ new Date())
-});
+import { enumToPgEnum, timestamps } from '../helpers';
+import { relations, sql } from 'drizzle-orm';
 
 export const season = pgTable('season', {
 	id: uuid().primaryKey().defaultRandom(),
 	name: text().notNull(),
 	slug: text().notNull().unique(),
+	startedAt: timestamp().notNull(),
+	endedAt: timestamp(),
 	...timestamps
 });
 
@@ -90,7 +38,10 @@ export const division = pgTable('division', {
 });
 
 export const divisionRelations = relations(division, ({ one, many }) => ({
-	season: one(season),
+	season: one(season, {
+		fields: [division.seasonId],
+		references: [season.id]
+	}),
 	groups: many(group)
 }));
 
@@ -104,8 +55,13 @@ export const group = pgTable('group', {
 	...timestamps
 });
 
-export const groupRelations = relations(group, ({ one }) => ({
-	division: one(division)
+export const groupRelations = relations(group, ({ one, many }) => ({
+	division: one(division, {
+		fields: [group.divisionId],
+		references: [division.id]
+	}),
+	rosters: many(roster),
+	matches: many(match)
 }));
 
 export const team = pgTable('team', {
@@ -125,11 +81,23 @@ export const roster = pgTable('roster', {
 	teamId: uuid()
 		.notNull()
 		.references(() => team.id, { onDelete: 'cascade' }),
+	groupId: uuid()
+		.notNull()
+		.references(() => group.id, { onDelete: 'cascade' }),
 	...timestamps
 });
 
-export const rosterRelations = relations(roster, ({ one }) => ({
-	team: one(team)
+export const rosterRelations = relations(roster, ({ one, many }) => ({
+	team: one(team, {
+		fields: [roster.teamId],
+		references: [team.id]
+	}),
+	group: one(group, {
+		fields: [roster.groupId],
+		references: [group.id]
+	}),
+	members: many(member),
+	matches: many(match)
 }));
 
 export enum SocialPlatform {
@@ -149,12 +117,15 @@ export const social = pgTable(
 			.notNull()
 			.references(() => team.id, { onDelete: 'cascade' }),
 		...timestamps
-	},
-	(t) => [unique().on(t.teamId, t.platform)]
+	}
+	//(t) => [unique().on(t.teamId, t.platform)]
 );
 
 export const socialRelations = relations(social, ({ one }) => ({
-	team: one(team)
+	team: one(team, {
+		fields: [social.teamId],
+		references: [team.id]
+	})
 }));
 
 export const player = pgTable('player', {
@@ -162,6 +133,10 @@ export const player = pgTable('player', {
 	battletag: text().notNull().unique(),
 	...timestamps
 });
+
+export const playerRelations = relations(player, ({ many }) => ({
+	memberships: many(member)
+}));
 
 export enum Rank {
 	BRONZE = 'bronze',
@@ -187,6 +162,7 @@ export const roleEnum = pgEnum('role', enumToPgEnum(Role));
 export const member = pgTable(
 	'member',
 	{
+		id: uuid().primaryKey().notNull(),
 		playerId: uuid()
 			.notNull()
 			.references(() => player.id, { onDelete: 'cascade' }),
@@ -199,5 +175,63 @@ export const member = pgTable(
 		isCaptain: boolean().notNull().default(false),
 		...timestamps
 	},
-	(t) => [primaryKey({ columns: [t.playerId, t.rosterId] })]
+	(t) => [
+		//primaryKey({ columns: [t.playerId, t.rosterId] }),
+		check('tier', sql`${t.tier} >= 1 AND ${t.tier} <= 5`)
+	]
 );
+
+export const memberRelations = relations(member, ({ one }) => ({
+	player: one(player, {
+		fields: [member.playerId],
+		references: [player.id]
+	}),
+	roster: one(roster, {
+		fields: [member.rosterId],
+		references: [roster.id]
+	})
+}));
+
+export enum MatchType {
+	GROUP = 'group',
+	BRACKET = 'bracket'
+}
+
+export const matchType = pgEnum('match_type', enumToPgEnum(MatchType));
+
+export const match = pgTable('match', {
+	id: uuid().primaryKey().defaultRandom(),
+	groupId: uuid()
+		.notNull()
+		.references(() => group.id, { onDelete: 'cascade' }),
+	rosterAId: uuid().references(() => roster.id, { onDelete: 'restrict' }),
+	rosterBId: uuid().references(() => roster.id, { onDelete: 'restrict' }),
+	teamAScore: integer().notNull().default(0),
+	teamBScore: integer().notNull().default(0),
+	played: boolean().notNull().default(false),
+	playedAt: timestamp(),
+	scheduledAt: timestamp(),
+	vodUrl: text(),
+	nextMatchId: uuid().references((): AnyPgColumn => match.id, { onDelete: 'set null' }),
+	type: matchType().notNull().default(MatchType.GROUP),
+	...timestamps
+});
+
+export const matchRelations = relations(match, ({ one }) => ({
+	group: one(group, {
+		fields: [match.groupId],
+		references: [group.id]
+	}),
+	rosterA: one(roster, {
+		fields: [match.rosterAId],
+		references: [roster.id]
+	}),
+	rosterB: one(roster, {
+		fields: [match.rosterBId],
+		references: [roster.id]
+	}),
+	nextMatch: one(match, {
+		fields: [match.nextMatchId],
+		references: [match.id]
+	})
+}));
