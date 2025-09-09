@@ -18,7 +18,8 @@ export const auth = betterAuth({
 	socialProviders: {
 		discord: {
 			clientId: DISCORD_CLIENT_ID,
-			clientSecret: DISCORD_CLIENT_SECRET
+			clientSecret: DISCORD_CLIENT_SECRET,
+			prompt: 'consent'
 		}
 	},
 	plugins: [
@@ -29,7 +30,10 @@ export const auth = betterAuth({
 					providerId: 'battlenet',
 					clientId: BATTLENET_CLIENT_ID,
 					clientSecret: BATTLENET_CLIENT_SECRET,
-					discoveryUrl: 'https://oauth.battle.net/.well-known/openid-configuration',
+					authorizationUrl: 'https://oauth.battle.net/authorize',
+					tokenUrl: 'https://oauth.battle.net/token',
+					userInfoUrl: 'https://oauth.battle.net/userinfo',
+					redirectURI: 'http://localhost:5173/',
 					scopes: ['openid']
 				}
 			]

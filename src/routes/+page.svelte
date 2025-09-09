@@ -9,7 +9,6 @@
 <div>
 	{#each data.teams as team (team.id)}
 		<div>
-			{team.slug}
 			<div class="ml-4">
 				{#each team.rosters as roster (roster.id)}
 					<div>

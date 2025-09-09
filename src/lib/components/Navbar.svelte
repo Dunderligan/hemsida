@@ -5,7 +5,9 @@
 
 	async function login() {
 		await authClient.signIn.social({
-			provider: 'battlenet'
+			provider: 'battlenet',
+			callbackURL: 'http://localhost:5173',
+			scopes: ['openid']
 		});
 	}
 
