@@ -1,7 +1,9 @@
-import { command } from '$app/server';
+import { command, getRequestEvent } from '$app/server';
+import { isAdmin } from '$lib/auth-client';
 import { db, schema } from '$lib/server/db';
 import type { Transaction } from '$lib/server/db/helpers';
 import { Rank, Role, SocialPlatform, type Member, type TeamSocial } from '$lib/types';
+import { error } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
 import slugify from 'slugify';
 import * as z from 'zod';
@@ -31,6 +33,12 @@ export const editRoster = command(
 		)
 	}),
 	async ({ id, teamId, name, members, socials }) => {
+		const { locals } = getRequestEvent();
+
+		if (!isAdmin(locals.user)) {
+			error(403);
+		}
+
 		const newSlug = slugify(name).toLowerCase();
 
 		await db.transaction(async (tx) => {

@@ -1,4 +1,5 @@
-import type { Session, User } from 'better-auth';
+import type { User } from '$lib/auth-client';
+import type { Session } from 'better-auth';
 
 declare global {
 	namespace App {

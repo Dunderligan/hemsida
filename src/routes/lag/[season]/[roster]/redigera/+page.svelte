@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Rank, Role, SocialPlatform } from '$lib/types';
-	import { formatSocialPlatform } from '$lib/util';
+	import { formatSocialPlatform, flattenGroup } from '$lib/util';
 	import { editRoster } from './page.remote';
 
 	let { data } = $props();
@@ -62,7 +62,53 @@
 	console.log(data);
 </script>
 
-<form class="space-y-6">
+<div>
+	<table class="w-full">
+		<thead>
+			<tr>
+				<th> Namn </th>
+				<th> Säsong </th>
+				<th> Division </th>
+				<th> Grupp </th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each team.rosters as roster (roster.id)}
+				{@const isCurrent = data.roster.id === roster.id}
+				{@const { group, division, season } = flattenGroup(roster.group)}
+
+				<tr>
+					<td>
+						{#if isCurrent}
+							&rang;
+						{/if}
+
+						{roster.name}
+					</td>
+					<td>
+						{season.name}
+					</td>
+					<td>
+						{division.name}
+					</td>
+					<td>
+						{roster.group.name}
+					</td>
+					<td>
+						{#if !isCurrent}
+							<a href="/lag/{season.slug}/{roster.slug}/redigera">Redigera</a>
+						{/if}
+
+						<button>Radera</button>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
+
+<form class="mt-6 space-y-6">
 	<label class="block">
 		Namn
 		<input type="text" bind:value={roster.name} />

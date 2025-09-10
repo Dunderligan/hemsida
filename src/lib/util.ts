@@ -1,4 +1,4 @@
-import { SocialPlatform, type FullRank, type Rank, type Role } from './types';
+import { SocialPlatform, type FullRank, type NestedGroup, type Rank, type Role } from './types';
 
 const rankNums: Record<Rank, number> = {
 	bronze: 0,
@@ -43,4 +43,21 @@ export function formatSocialPlatform(platform: SocialPlatform) {
 		case SocialPlatform.YOUTUBE:
 			return 'Youtube';
 	}
+}
+
+export function flattenGroup(group: NestedGroup) {
+	return {
+		group: {
+			name: group.name,
+			slug: group.slug
+		},
+		division: {
+			name: group.division.name,
+			slug: group.division.slug
+		},
+		season: {
+			name: group.division.season.name,
+			slug: group.division.season.slug
+		}
+	};
 }

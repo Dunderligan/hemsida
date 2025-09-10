@@ -13,7 +13,8 @@ export const user = pgTable('user', {
 		.notNull(),
 	updatedAt: timestamp()
 		.$defaultFn(() => /* @__PURE__ */ new Date())
-		.notNull()
+		.notNull(),
+	role: text('role').default('user')
 });
 
 export const session = pgTable('session', {

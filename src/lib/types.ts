@@ -30,7 +30,7 @@ export enum MatchType {
 	BRACKET = 'bracket'
 }
 
-export type GroupContext = {
+export type NestedGroup = {
 	name: string;
 	slug: string;
 	division: {
@@ -59,7 +59,7 @@ export type Roster = {
 	name: string;
 	slug: string;
 	seasonSlug: string;
-	group: GroupContext;
+	group: NestedGroup;
 	members: Member[];
 	team?: never;
 };

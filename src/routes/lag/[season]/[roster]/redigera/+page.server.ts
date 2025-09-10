@@ -1,10 +1,15 @@
+import { isAdmin } from '$lib/auth-client';
 import { db, schema } from '$lib/server/db';
 import { groupContext } from '$lib/server/db/helpers';
-import type { Rank, Role, Roster } from '$lib/types';
+import type { Roster } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { eq, and } from 'drizzle-orm';
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
+	if (!isAdmin(locals.user)) {
+		error(403);
+	}
+
 	const data = await db.query.roster.findFirst({
 		where: and(eq(schema.roster.seasonSlug, params.season), eq(schema.roster.slug, params.roster)),
 		columns: {

@@ -92,5 +92,5 @@
 </div>
 
 <div>
-	<a href="{page.url}/redigera">Edit</a>
+	<a href="{page.url}/redigera">Redigera</a>
 </div>
