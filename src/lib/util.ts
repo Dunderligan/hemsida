@@ -1,4 +1,6 @@
-const rankNums = {
+import { SocialPlatform, type FullRank, type Rank, type Role } from './types';
+
+const rankNums: Record<Rank, number> = {
 	bronze: 0,
 	silver: 1,
 	gold: 2,
@@ -7,11 +9,6 @@ const rankNums = {
 	master: 5,
 	grandmaster: 6,
 	champion: 7
-};
-
-export type FullRank = {
-	rank: Rank;
-	tier: number;
 };
 
 export function averageRank(ranks: FullRank[]): FullRank {
@@ -39,29 +36,11 @@ export function sortRole(a: Role, b: Role) {
 	return roleNums[a] - roleNums[b];
 }
 
-export enum Rank {
-	BRONZE = 'bronze',
-	SILVER = 'silver',
-	GOLD = 'gold',
-	PLATINUM = 'platinum',
-	DIAMOND = 'diamond',
-	MASTER = 'master',
-	GRANDMASTER = 'grandmaster',
-	CHAMPION = 'champion'
-}
-
-export enum SocialPlatform {
-	YOUTUBE = 'youtube',
-	TWITTER = 'twitter'
-}
-
-export enum Role {
-	DAMAGE = 'damage',
-	TANK = 'tank',
-	SUPPORT = 'support'
-}
-
-export enum MatchType {
-	GROUP = 'group',
-	BRACKET = 'bracket'
+export function formatSocialPlatform(platform: SocialPlatform) {
+	switch (platform) {
+		case SocialPlatform.TWITTER:
+			return 'Twitter';
+		case SocialPlatform.YOUTUBE:
+			return 'Youtube';
+	}
 }

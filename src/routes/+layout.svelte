@@ -13,6 +13,8 @@
 
 <Navbar />
 
-{@render children?.()}
+<div class="mx-auto w-full max-w-3xl pt-6">
+	{@render children?.()}
+</div>
 
 <Footer />

@@ -13,6 +13,8 @@
 
 	let sortedMembers = $derived(roster.members.toSorted((a, b) => compareRole(a.role, b.role)));
 	let average = $derived(averageRank(roster.members));
+
+	console.log(data);
 </script>
 
 <h1 class="text-2xl font-bold">{roster.name}</h1>

@@ -1,6 +1,7 @@
+import { groupContext } from '$lib/server/db/helpers.js';
 import { db, schema } from '$lib/server/db/index.js';
 import { error } from '@sveltejs/kit';
-import { eq, and, desc, or, asc } from 'drizzle-orm';
+import { eq, and, desc, or } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.roster.findFirst({
@@ -42,27 +43,7 @@ export const load = async ({ params }) => {
 							slug: true
 						},
 						with: {
-							group: {
-								columns: {
-									slug: true
-								},
-								with: {
-									division: {
-										columns: {
-											name: true,
-											slug: true
-										},
-										with: {
-											season: {
-												columns: {
-													name: true,
-													slug: true
-												}
-											}
-										}
-									}
-								}
-							}
+							...groupContext
 						}
 					}
 				}

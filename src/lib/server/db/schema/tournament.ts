@@ -13,7 +13,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { enumToPgEnum, timestamps } from '../helpers';
 import { relations, sql } from 'drizzle-orm';
-import { MatchType, Rank, Role, SocialPlatform } from '$lib/util';
+import { MatchType, Rank, Role, SocialPlatform } from '../../../types';
 
 export const season = pgTable('season', {
 	id: uuid().primaryKey().defaultRandom(),

@@ -41,11 +41,11 @@ export const auth = betterAuth({
 							}
 						}).then((res) => res.json());
 
-						console.log('got stuff from battle.net', result);
-
 						return {
 							id: result.id,
 							name: result.battletag,
+							// better-auth requires an email, but battle.net doesn't return one
+							// this fake email format is borrowed from the X/Twitter OAuth plugin
 							email: `${result.id}@https://battle.net`,
 							emailVerified: true,
 							createdAt: new Date(),

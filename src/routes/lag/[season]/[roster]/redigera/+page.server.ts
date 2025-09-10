@@ -1,4 +1,6 @@
 import { db, schema } from '$lib/server/db';
+import { groupContext } from '$lib/server/db/helpers';
+import type { Rank, Role, Roster } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { eq, and } from 'drizzle-orm';
 
@@ -29,11 +31,12 @@ export const load = async ({ params }) => {
 				}
 			},
 			team: {
-				columns: {},
+				columns: {
+					id: true
+				},
 				with: {
 					socials: {
 						columns: {
-							id: true,
 							platform: true,
 							url: true
 						}
@@ -45,28 +48,7 @@ export const load = async ({ params }) => {
 							slug: true
 						},
 						with: {
-							group: {
-								columns: {
-									name: true,
-									slug: true
-								},
-								with: {
-									division: {
-										columns: {
-											name: true,
-											slug: true
-										},
-										with: {
-											season: {
-												columns: {
-													name: true,
-													slug: true
-												}
-											}
-										}
-									}
-								}
-							}
+							...groupContext
 						}
 					}
 				}
@@ -79,7 +61,7 @@ export const load = async ({ params }) => {
 	}
 
 	const currentRosterInfo = data.team.rosters.find((r) => r.id === data.id)!;
-	const roster = { ...data, team: undefined, ...currentRosterInfo };
+	const roster: Roster = { ...data, team: undefined, ...currentRosterInfo };
 
 	return { roster, team: data.team };
 };

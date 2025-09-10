@@ -3,7 +3,7 @@ import postgres from 'postgres';
 import * as schema from './schema';
 import { env } from '$env/dynamic/private';
 import { reset, seed } from 'drizzle-seed';
-import { Rank } from './schema';
+import { Rank, Role } from '$lib/types';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
@@ -170,7 +170,7 @@ async function seedDb() {
 				rank,
 				tier,
 				isCaptain,
-				role: ['damage', 'tank', 'support'][i % 3] as schema.Role
+				role: ['damage', 'tank', 'support'][i % 3] as Role
 			});
 		})
 	);
