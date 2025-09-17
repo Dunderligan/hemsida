@@ -86,7 +86,9 @@ type TableScore = {
 	matchesPlayed: number;
 };
 
-export function calculateStandings(rosters: { id: string }[], matches: Omit<Match, 'groupId'>[]) {
+type MatchWithoutIds = Omit<Match, 'id' | 'groupId'>;
+
+export function calculateStandings(rosters: { id: string }[], matches: MatchWithoutIds[]) {
 	const rosterScores = new Map<string, TableScore>();
 
 	for (const roster of rosters) {
@@ -130,7 +132,7 @@ export function calculateStandings(rosters: { id: string }[], matches: Omit<Matc
 	return sortedRosters;
 }
 
-export function sortBySeed(rosters: { id: string }[], matches: Omit<Match, 'groupId'>[]) {
+export function sortBySeed(rosters: { id: string }[], matches: MatchWithoutIds[]) {
 	const seeds = new Map(
 		calculateStandings(rosters, matches).map((row, seed) => [row.rosterId, seed])
 	);

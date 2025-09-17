@@ -41,6 +41,7 @@
 		});
 
 		rounds = result.rounds;
+		console.log(rounds);
 	}
 
 	async function save() {
