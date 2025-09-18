@@ -7,7 +7,8 @@ import {
 	type Role,
 	type FullRoster,
 	type Roster,
-	type Match
+	type Match,
+	type BaseGroupInfo
 } from './types';
 
 const rankNums: Record<Rank, number> = {
@@ -55,21 +56,11 @@ export function formatSocialPlatform(platform: SocialPlatform) {
 	}
 }
 
-export function flattenGroup(group: NestedGroup) {
-	return {
-		group: {
-			name: group.name,
-			slug: group.slug
-		},
-		division: {
-			name: group.division.name,
-			slug: group.division.slug
-		},
-		season: {
-			name: group.division.season.name,
-			slug: group.division.season.slug
-		}
-	};
+export function flattenGroup<S, D, G>(nestedGroup: NestedGroup<S, D, G>) {
+	const { division: nestedDivision, ...group } = nestedGroup;
+	const { season, ...division } = nestedDivision;
+
+	return { season, division, group };
 }
 
 export function toSlug(str: string) {

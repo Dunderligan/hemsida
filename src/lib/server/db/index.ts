@@ -142,7 +142,7 @@ async function seedDb() {
 					.insert(schema.group)
 					.values({
 						name,
-						slug,
+						slug: slug.toLowerCase(),
 						divisionId: division.id
 					})
 					.returning();

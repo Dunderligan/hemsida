@@ -1,12 +1,22 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import EditMatchDialog from '$lib/components/EditMatchDialog.svelte';
 	import { RosterState } from '$lib/state/rosters.svelte.js';
+	import { deleteGroup } from './layout.remote.js';
 
 	const { data, children } = $props();
 
 	const { season, division, group } = $derived(data);
 
-	RosterState.set(new RosterState(data.rosters));
+	RosterState.set(new RosterState(data.group.rosters));
+
+	async function submitDelete() {
+		await deleteGroup({
+			id: group.id
+		});
+
+		await goto(`/admin/division/${division.id}`);
+	}
 </script>
 
 <EditMatchDialog />
@@ -24,4 +34,6 @@
 	</div>
 
 	{@render children()}
+
+	<button onclick={submitDelete}>Radera grupp</button>
 </div>

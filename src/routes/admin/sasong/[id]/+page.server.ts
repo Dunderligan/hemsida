@@ -10,6 +10,7 @@ export const load = async ({ params }) => {
 		},
 		with: {
 			divisions: {
+				orderBy: schema.division.name,
 				columns: {
 					createdAt: false,
 					seasonId: false

@@ -30,18 +30,16 @@ export enum MatchType {
 	BRACKET = 'bracket'
 }
 
-export type NestedGroup = {
+export type BaseGroupInfo = {
 	name: string;
 	slug: string;
-	division: {
-		name: string;
-		slug: string;
-		season: {
-			name: string;
-			slug: string;
-		};
-	};
 };
+
+export type NestedGroup<S, D, G> = G & {
+	division: D & { season: S };
+};
+
+export type BaseNestedGroup = NestedGroup<BaseGroupInfo, BaseGroupInfo, BaseGroupInfo>;
 
 export type Member = {
 	rank: Rank;
@@ -62,7 +60,7 @@ export type Roster = {
 
 export type FullRoster = Roster & {
 	seasonSlug: string;
-	group: NestedGroup;
+	group: BaseNestedGroup;
 	members: Member[];
 	team?: never;
 };

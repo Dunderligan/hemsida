@@ -10,6 +10,7 @@ export const load = async ({ params }) => {
 		},
 		with: {
 			groups: {
+				orderBy: schema.group.name,
 				columns: {
 					createdAt: false,
 					divisionId: false

@@ -33,7 +33,7 @@
 </script>
 
 <div class="space-y-6">
-	<button onclick={createMatch}> Skapa </button>
+	<button onclick={createMatch}> Skapa match </button>
 
 	<div class="space-y-2">
 		{#each matches as match, i (match.id)}

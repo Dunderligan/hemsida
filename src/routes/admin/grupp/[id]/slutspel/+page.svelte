@@ -5,7 +5,7 @@
 
 	const { data } = $props();
 
-	const { season, division, group, matches } = $derived(data);
+	const { group, matches } = $derived(data);
 
 	let rounds: Match[][] = $state(buildRounds());
 

@@ -1,4 +1,5 @@
 import { db, schema } from '$lib/server/db';
+import { flattenGroup } from '$lib/util';
 import { error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
@@ -38,21 +39,6 @@ export const load = async ({ params }) => {
 	}
 
 	return {
-		rosters: data.rosters,
-		group: {
-			id: data.id,
-			name: data.name,
-			slug: data.slug
-		},
-		division: {
-			id: data.division.id,
-			name: data.division.name,
-			slug: data.division.slug
-		},
-		season: {
-			id: data.division.season.id,
-			name: data.division.season.name,
-			slug: data.division.season.slug
-		}
+		...flattenGroup(data)
 	};
 };
