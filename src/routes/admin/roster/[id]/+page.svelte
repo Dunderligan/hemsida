@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { Rank, Role, SocialPlatform } from '$lib/types';
 	import { formatSocialPlatform, flattenGroup } from '$lib/util';
-	import { createRoster, editRoster } from './page.remote';
+	import { createRoster, editRoster, uploadLogo } from './page.remote';
 
 	let { data } = $props();
 
@@ -26,8 +26,6 @@
 	let newSocialUrl = $state('');
 
 	let newGroupId = $state('');
-
-	let fileList = $state(new FileList());
 
 	async function submitEdit() {
 		await editRoster({
@@ -83,6 +81,12 @@
 
 	$inspect(roster.members);
 </script>
+
+<form {...uploadLogo}>
+	<input type="file" name="file" accept="application/png">
+	<input type="text" name="rosterId" value={roster.id}>
+	<button>Upload</button>
+</form>
 
 <form class="mt-6 space-y-6">
 	<div>
