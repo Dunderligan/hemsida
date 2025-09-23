@@ -1,3 +1,15 @@
+export type ClassDictionary = Record<string, any>;
+export type ClassArray = ClassValue[];
+export type ClassValue =
+	| ClassArray
+	| ClassDictionary
+	| string
+	| number
+	| bigint
+	| null
+	| boolean
+	| undefined;
+
 export type FullRank = {
 	rank: Rank;
 	tier: number;
@@ -70,7 +82,7 @@ export type TeamSocial = {
 	url: string;
 };
 
-export type Match = {
+export type FullMatch = {
 	id: string;
 	groupId?: string | null;
 	divisionId?: string | null;
@@ -85,4 +97,21 @@ export type Match = {
 	scheduledAt?: Date | null;
 	vodUrl?: string | null;
 	nextMatchId?: string | null;
+};
+
+export type Match = {
+	id: string;
+	played?: boolean | null;
+	teamAScore?: number | null;
+	teamBScore?: number | null;
+	draws?: number | null;
+	rosterA?: MatchRoster | null;
+	rosterB?: MatchRoster | null;
+};
+
+export type MatchRoster = {
+	id: string;
+	name: string;
+	slug: string;
+	seasonSlug: string;
 };

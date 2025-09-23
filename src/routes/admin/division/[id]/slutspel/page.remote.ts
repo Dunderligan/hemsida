@@ -1,7 +1,7 @@
 import { command } from '$app/server';
 import { matchSchema } from '$lib/schemas';
 import { db, schema } from '$lib/server/db';
-import type { Match } from '$lib/types';
+import type { FullMatch } from '$lib/types';
 import { sortBySeed, toSlug } from '$lib/util';
 import { eq, inArray } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
@@ -133,7 +133,7 @@ async function aggregateGroups(divisionId: string) {
 	};
 }
 
-function createMatch(divisionId: string, nextMatchId?: string): Match {
+function createMatch(divisionId: string, nextMatchId?: string): FullMatch {
 	return {
 		id: uuidv4(),
 		nextMatchId,

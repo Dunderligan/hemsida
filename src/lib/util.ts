@@ -7,7 +7,7 @@ import {
 	type Role,
 	type FullRoster,
 	type Roster,
-	type Match,
+	type FullMatch,
 	type BaseGroupInfo
 } from './types';
 import { PUBLIC_CDN_ENDPOINT } from '$env/static/public';
@@ -24,18 +24,22 @@ const rankNums: Record<Rank, number> = {
 };
 
 export function averageRank(ranks: FullRank[]): FullRank {
-	// convert the ranks to decimal numbers using the record above
-	const rankNumbers = ranks
-		.map((fullRank) => rankNums[fullRank.rank] + (fullRank.tier - 1) / 5)
-		.reduce((a, b) => a + b, 0);
+	let total = 0;
 
-	const average = rankNumbers / ranks.length;
-	const rank = Object.entries(rankNums)
-		.reverse()
-		.find(([_, num]) => num <= average) ?? ['bronze', 0];
-	const tier = Math.round((average - (rank[1] ?? 0)) * 5) + 1;
+	for (const rank of ranks) {
+		total += rankNums[rank.rank] * 5 + (5 - rank.tier);
+	}
 
-	return { rank: rank[0] as Rank, tier };
+	const avg = Math.round(total / ranks.length);
+
+	const rankNum = Math.floor(avg / 5);
+	const rank = Object.keys(rankNums).find((key) => rankNums[key as Rank] === rankNum) as Rank;
+	const tier = 5 - (avg % 5);
+
+	return {
+		rank,
+		tier
+	};
 }
 
 const roleNums: Record<Role, number> = {
@@ -78,7 +82,7 @@ type TableScore = {
 	matchesPlayed: number;
 };
 
-type MatchWithoutIds = Omit<Match, 'id' | 'groupId'>;
+type MatchWithoutIds = Omit<FullMatch, 'id' | 'groupId'>;
 
 export function calculateStandings(rosters: { id: string }[], matches: MatchWithoutIds[]) {
 	const rosterScores = new Map<string, TableScore>();
@@ -139,4 +143,21 @@ export function cdnImageSrc(path: string, { width, height }: { width: number; he
 	}
 
 	return `${PUBLIC_CDN_ENDPOINT}/cdn-cgi/image/${filters}/dunderligan${path}`;
+}
+
+export function capitalize(str: string) {
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function roleIcon(role: Role): string {
+	switch (role) {
+		case 'tank':
+			return 'mdi:shield';
+		case 'damage':
+			return 'mdi:sword-cross';
+		case 'support':
+			return 'mdi:band-aid';
+	}
+
+	return 'mdi:help';
 }

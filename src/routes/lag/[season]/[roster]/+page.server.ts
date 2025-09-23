@@ -73,14 +73,16 @@ export const load = async ({ params }) => {
 				columns: {
 					id: true,
 					name: true,
-					slug: true
+					slug: true,
+					seasonSlug: true
 				}
 			},
 			rosterB: {
 				columns: {
 					id: true,
 					name: true,
-					slug: true
+					slug: true,
+					seasonSlug: true
 				}
 			}
 		}

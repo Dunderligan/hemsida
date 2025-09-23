@@ -3,10 +3,11 @@
 
 	type Props = {
 		icon: string;
+		title?: string;
 		class?: string;
 	};
 
-	let { icon, class: classProp }: Props = $props();
+	let { icon, title, class: classProp }: Props = $props();
 </script>
 
-<iconify-icon {icon} class={classProp} inline></iconify-icon>
+<iconify-icon {icon} class={classProp} inline {title}></iconify-icon>

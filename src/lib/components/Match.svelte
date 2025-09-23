@@ -1,0 +1,62 @@
+<script lang="ts">
+	import type { Match, MatchRoster, ClassValue } from '$lib/types';
+	import { cdnImageSrc } from '$lib/util';
+	import Icon from './Icon.svelte';
+
+	type Props = {
+		match: Match;
+	};
+
+	let { match }: Props = $props();
+
+	const teamAWon =
+		match.played === false ? null : (match.teamAScore ?? 0) > (match.teamBScore ?? 0);
+</script>
+
+<div
+	class="relative flex items-center gap-4 overflow-hidden rounded-lg bg-gray-200 px-6 py-3 text-lg"
+>
+	{#if teamAWon !== null}
+		<div class={['absolute h-full w-2 bg-accent-600', teamAWon ? 'left-0' : 'right-0']}></div>
+	{/if}
+
+	{#if match.rosterA}
+		{@render side(match.rosterA, teamAWon === true, { name: 'text-right' })}
+	{/if}
+
+	<div class="shrink-0 rounded-lg bg-white px-3 py-1.5 font-display text-xl font-extrabold">
+		{match.teamAScore ?? 0} - {match.teamBScore ?? 0}
+	</div>
+
+	{#if match.rosterB}
+		{@render side(match.rosterB, teamAWon === false, { root: 'flex-row-reverse' })}
+	{/if}
+</div>
+
+{#snippet side(
+	roster: MatchRoster,
+	won: boolean,
+	classes: { root?: ClassValue; name?: ClassValue }
+)}
+	<div class={[classes.root, 'flex w-full items-center']}>
+		<img
+			src={cdnImageSrc(`/logos/${roster.id}.png`, { width: 128 })}
+			class="size-12 rounded-md"
+			alt=""
+		/>
+
+		{#if won}
+			<Icon icon="mdi:crown" class="mx-2 text-2xl text-accent-600" />
+		{/if}
+
+		<a
+			href="/lag/{roster.seasonSlug}/{roster.slug}"
+			class={[
+				classes.name,
+				'grow truncate font-semibold text-gray-800 hover:text-accent-600 hover:underline'
+			]}
+		>
+			{roster.name}
+		</a>
+	</div>
+{/snippet}

@@ -1,4 +1,4 @@
-import type { Match, Roster } from '$lib/types';
+import type { FullMatch, Roster } from '$lib/types';
 import { defineContext } from './util';
 
 const { get, set } = defineContext<RosterState>('$_roster_state');
@@ -7,7 +7,7 @@ export class RosterState {
 	static get = get;
 	static set = set;
 
-	editingMatch: Match | null;
+	editingMatch: FullMatch | null;
 	map: Map<string, Roster>;
 
 	constructor(list: Roster[]) {
@@ -15,7 +15,7 @@ export class RosterState {
 		this.map = $state(new Map(list.map((roster) => [roster.id, roster])));
 	}
 
-	edit = (match: Match) => {
+	edit = (match: FullMatch) => {
 		if (!match.id) return;
 
 		this.editingMatch = match;

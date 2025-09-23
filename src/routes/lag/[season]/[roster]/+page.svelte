@@ -1,8 +1,18 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { PUBLIC_CDN_ENDPOINT } from '$env/static/public';
 	import { authClient, isAdmin } from '$lib/auth-client';
-	import { averageRank, cdnImageSrc, sortRole as compareRole, flattenGroup } from '$lib/util';
+	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import Match from '$lib/components/Match.svelte';
+	import Table from '$lib/components/Table.svelte';
+	import Tabs from '$lib/components/Tabs.svelte';
+	import {
+		averageRank,
+		capitalize,
+		cdnImageSrc,
+		sortRole as compareRole,
+		flattenGroup,
+		roleIcon
+	} from '$lib/util';
 
 	const session = authClient.useSession();
 
@@ -11,98 +21,112 @@
 	let { team, roster } = $derived(data);
 	let { group, division, season } = $derived(flattenGroup(roster.group));
 
-	let otherRosters = $derived(team.rosters.filter((other) => other.id !== roster.id));
-
 	let sortedMembers = $derived(roster.members.toSorted((a, b) => compareRole(a.role, b.role)));
 	let average = $derived(averageRank(roster.members));
+
+	const rosterTabItems = $derived(
+		team.rosters.map((roster) => {
+			const { season, division } = flattenGroup(roster.group);
+
+			return {
+				label: `${season.name} ${division.name}`,
+				value: roster.id,
+				href: `/lag/${season.slug}/${roster.slug}`
+			};
+		})
+	);
 </script>
 
-<img src={cdnImageSrc(`/logos/${roster.id}.png`, { width: 512 })} alt="" class="size-52" />
+<header class="mx-auto flex w-full max-w-4xl items-center gap-6">
+	<img src={cdnImageSrc(`/logos/${roster.id}.png`, { width: 512 })} alt="" class="size-40" />
 
-<h1 class="text-2xl font-bold">{roster.name}</h1>
-
-<div class="flex items-center gap-4">
-	{#each team.socials as social (social.platform)}
-		<div>
-			<a href={social.url} class="underline">{social.platform}</a>
+	<div>
+		<h1 class="mb-1 font-display text-6xl font-extrabold text-black">{roster.name}</h1>
+		<div class="flex items-center gap-3">
+			{#each team.socials as { platform, url } (platform)}
+				<a href={url}><Icon class="gap-2 text-4xl text-accent-600" icon="mdi:{platform}" /></a>
+			{/each}
 		</div>
-	{/each}
-</div>
+	</div>
+</header>
 
-<div>
-	Spelade i <a class="underline" href="/sasong/{season.slug}?div={division.slug}&grupp={group.slug}"
-		>{division.name} {season.name}</a
-	>
-</div>
+<main class="relative z-10 mt-12 grow bg-white px-4 py-12 shadow-2xl">
+	<div class="mx-auto flex max-w-4xl gap-10">
+		<section class="grow">
+			{#if rosterTabItems.length > 1}
+				<div class="mb-6 flex items-center gap-6">
+					<h3 class="text-xl font-semibold text-gray-700">Rosters</h3>
 
-<div>
-	{#each team.socials as social}
-		<div>
-			<a href={social.url}>{social.platform}</a>
-		</div>
-	{/each}
-</div>
-
-<div>
-	{#each sortedMembers as member}
-		<div>
-			({member.role}) {member.player?.battletag}
-			{member.rank}
-			{member.tier}
-			{#if member.isCaptain}
-				- Kapten
+					<Tabs class="grow" items={rosterTabItems} />
+				</div>
+			{:else}
+				<div class="mb-4 text-lg font-medium text-gray-700">
+					Spelade i <a
+						href="/sasong/{season.slug}?div={division.slug}&grupp={group.slug}"
+						class="font-bold text-accent-600 hover:text-accent-700 hover:underline"
+						>{season.name}, {division.name}</a
+					>.
+				</div>
 			{/if}
-		</div>
-	{/each}
-</div>
 
-<div>
-	Genomsnittlig rank: {average.rank}
-	{average.tier}
-</div>
+			<Table
+				columns={[
+					{
+						label: 'Roll',
+						center: true
+					},
+					{
+						label: 'Battletag'
+					},
+					{ label: 'Rank' }
+				]}
+				rows={sortedMembers}
+				class="grid-cols-[70px_1fr_170px]"
+			>
+				{#snippet row({ value: member })}
+					<div class="bg-gray-200 py-3.5 text-center text-xl text-gray-800">
+						<Icon icon={roleIcon(member.role)} title={capitalize(member.role)} />
+					</div>
+					<div class="flex items-center bg-gray-200 text-lg font-semibold">
+						{member.player.battletag}
 
-<div>
-	<h2 class="text-lg font-semibold">Senaste matcherna</h2>
+						{#if member.isCaptain}
+							<Icon icon="mdi:crown" class="mb-0.5 ml-2 text-gray-800" title="Lagkapten" />
+						{/if}
+					</div>
+					<div class="flex items-center bg-gray-200 text-lg font-medium">
+						<img src="/rank/{member.rank}.webp" alt="" class="mr-2 inline size-6" />
+						{capitalize(member.rank)}
+						{member.tier}
+					</div>
+				{/snippet}
+			</Table>
 
-	<div>
-		{#each roster.matches as match (match.id)}
-			{@const flipped = match.rosterB?.id === roster.id}
+			<h2 class="mt-8 mb-4 font-display text-2xl font-bold text-gray-700">Senaste matcher</h2>
 
-			<div class={[flipped && 'flex-row-reverse', 'flex max-w-max items-center gap-2']}>
-				<div>
-					<a class="underline" href="/lag/{season.slug}/{match.rosterA?.slug}"
-						>{match.rosterA?.name}</a
-					>
-					({match.teamAScore})
-				</div>
-
-				<div>vs</div>
-
-				<div>
-					<a class="underline" href="/lag/{season.slug}/{match.rosterB?.slug}"
-						>{match.rosterB?.name}</a
-					>
-					({match.teamBScore})
-				</div>
+			<div class="space-y-2">
+				{#each roster.matches as match (match.id)}
+					<Match {match} />
+				{/each}
 			</div>
-		{/each}
-	</div>
-</div>
+		</section>
 
-<div>
-	<h2 class="text-lg font-semibold">Andra rosters</h2>
+		<section class="w-1/4 shrink-0">
+			{#if isAdmin($session.data?.user)}
+				<Button href="/admin/roster/{roster.id}" kind="secondary" class="mb-4">
+					<Icon icon="mdi:pencil" />
+					Redigera lag
+				</Button>
+			{/if}
 
-	<div class="flex items-center gap-2">
-		{#each otherRosters as roster (roster.id)}
 			<div>
-				<a href="roster.slug">{roster.group.division.season.name} {roster.group.division.name}</a>
+				<div class="font-medium text-gray-700">Genomsnittlig rank</div>
+				<div class="text-xl font-semibold text-gray-800">
+					<img src="/rank/{average.rank}.webp" alt="" class="mr-1 inline size-6" />
+					{capitalize(average.rank)}
+					{average.tier}
+				</div>
 			</div>
-		{/each}
+		</section>
 	</div>
-</div>
-
-{#if isAdmin($session.data?.user)}
-	<div>
-		<a href="/admin/roster/{roster.id}">Redigera</a>
-	</div>
-{/if}
+</main>

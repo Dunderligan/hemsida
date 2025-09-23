@@ -31,7 +31,7 @@
 	];
 </script>
 
-<nav class="h-18 w-full bg-gradient-to-t to-gray-200/80 px-2 pt-3 pb-1 backdrop-blur-xs">
+<nav class="mb-8 h-18 w-full bg-gradient-to-t to-gray-300/80 px-2 pt-4 backdrop-blur-xs">
 	<div class="mx-auto flex h-full max-w-3xl items-center justify-between gap-2">
 		<div class="flex items-center gap-8">
 			<a href="/">
@@ -43,7 +43,7 @@
 			{/each}
 		</div>
 
-		<div class="flex items-center gap-6 text-xl text-gray-800">
+		<div class="flex items-center gap-6 text-2xl text-gray-800">
 			<button>
 				<Icon icon="mdi:white-balance-sunny" />
 			</button>

@@ -2,7 +2,7 @@
 	import EditableMatch from '$lib/components/EditableMatch.svelte';
 	import EditMatchDialog from '$lib/components/EditMatchDialog.svelte';
 	import { RosterState } from '$lib/state/rosters.svelte';
-	import type { Match } from '$lib/types';
+	import type { FullMatch } from '$lib/types';
 	import { deleteBracket, generateBracket, updateBracket } from './page.remote';
 
 	const { data } = $props();
@@ -11,7 +11,7 @@
 
 	RosterState.set(new RosterState(data.rosters));
 
-	let rounds: Match[][] = $state(buildRounds());
+	let rounds: FullMatch[][] = $state(buildRounds());
 
 	function buildRounds() {
 		const finalMatch = matches.values().find((match) => !match.nextMatchId);
@@ -21,7 +21,7 @@
 			return [];
 		}
 
-		const rounds: Match[][] = [];
+		const rounds: FullMatch[][] = [];
 		let currentRound = [finalMatch];
 
 		while (currentRound.length > 0) {

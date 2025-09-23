@@ -4,13 +4,13 @@
 	import { RosterState } from '$lib/state/rosters.svelte.js';
 	import { v4 as uuidv4 } from 'uuid';
 	import { updateGroupMatches } from './page.remote.js';
-	import { MatchType, type Match } from '$lib/types.js';
+	import { MatchType, type FullMatch } from '$lib/types.js';
 
 	const { data } = $props();
 
 	const { group } = $derived(data);
 
-	const matches: Match[] = $state(data.matches);
+	const matches: FullMatch[] = $state(data.matches);
 
 	const rosters = RosterState.get();
 

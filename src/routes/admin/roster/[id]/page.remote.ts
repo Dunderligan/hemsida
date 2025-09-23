@@ -152,7 +152,7 @@ async function updateSocials(tx: Transaction, teamId: string, socials: TeamSocia
 				url: social.url,
 				platform: social.platform,
 				teamId
-			}))[0]
+			}))
 		)
 		.onConflictDoUpdate({
 			target: [schema.social.teamId, schema.social.platform],

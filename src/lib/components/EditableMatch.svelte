@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { RosterState } from '$lib/state/rosters.svelte';
-	import type { Match, Roster } from '$lib/types';
+	import type { FullMatch, Roster } from '$lib/types';
 	import { DropdownMenu } from 'bits-ui';
 
 	type Props = {
-		match: Match;
+		match: FullMatch;
 		ondelete?: () => void;
 	};
 
