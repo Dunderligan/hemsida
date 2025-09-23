@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client';
+	import Icon from './Icon.svelte';
 
 	const session = authClient.useSession();
 
@@ -13,20 +14,53 @@
 	async function logout() {
 		await authClient.signOut();
 	}
+
+	const links = [
+		{
+			href: '/sasong/test',
+			label: 'Ställningar'
+		},
+		{
+			href: '/',
+			label: 'Arkiv'
+		},
+		{
+			href: '/om',
+			label: 'Om oss'
+		}
+	];
 </script>
 
-<nav class="h-10 w-full p-4">
-	<div class="mx-auto flex max-w-2xl items-center justify-between gap-2">
-		<a href="/">Dunderligan</a>
-		<a href="/sasong/test">Ställningar</a>
-		<a href="/admin">Admin</a>
+<nav class="mt-1 h-18 w-full p-2 backdrop-blur-sm">
+	<div class="mx-auto flex h-full max-w-3xl items-center justify-between gap-2">
+		<div class="flex items-center gap-8">
+			<a href="/">
+				<img src="/logo.png" alt="Dunderligan" class="size-8" />
+			</a>
 
-		<div>
-			{#if $session.data?.user}
-				<button onclick={logout}>{$session.data?.user.name}</button>
-			{:else}
-				<button onclick={login}>Logga in</button>
-			{/if}
+			{#each links as { href, label } (href)}
+				<a class="text-lg font-semibold text-gray-800" {href}>{label}</a>
+			{/each}
+		</div>
+
+		<div class="flex items-center gap-6 text-xl text-gray-800">
+			<button>
+				<Icon icon="mdi:white-balance-sunny" />
+			</button>
+
+			<button>
+				<Icon icon="mdi:account-circle" />
+			</button>
+
+			<!-- 
+			<div>
+				{#if $session.data?.user}
+					<button onclick={logout}>{$session.data?.user.name}</button>
+				{:else}
+					<button onclick={login}>Logga in</button>
+				{/if}
+			</div>
+			 -->
 		</div>
 	</div>
 </nav>

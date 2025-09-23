@@ -18,3 +18,13 @@
 </div>
 
 <Footer />
+
+<style>
+	:global(body) {
+		min-height: 100lvh;
+		background-image:
+			linear-gradient(to bottom, transparent, rgba(255, 255, 255, 100) 50%), url('/striped-bg.png');
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+</style>

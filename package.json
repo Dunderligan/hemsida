@@ -39,6 +39,7 @@
 		"bits-ui": "^2.9.8",
 		"drizzle-orm": "^0.40.0",
 		"drizzle-seed": "^0.3.1",
+		"iconify-icon": "^3.0.1",
 		"postgres": "^3.4.5",
 		"slugify": "^1.6.6",
 		"uuid": "^13.0.0",
