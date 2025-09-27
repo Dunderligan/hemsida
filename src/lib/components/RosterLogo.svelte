@@ -2,9 +2,9 @@
 	import type { ClassValue } from '$lib/types';
 	import { cdnImageSrc } from '$lib/util';
 
-	type Props = { id: string; class?: ClassValue };
+	type Props = { id: string; class?: ClassValue; imgSize?: number };
 
-	let { id, class: classProp }: Props = $props();
+	let { id, class: classProp, imgSize = 64 }: Props = $props();
 
 	let element: HTMLImageElement;
 
@@ -15,8 +15,8 @@
 </script>
 
 <img
-	src={cdnImageSrc(`/logos/${id}.png`, { width: 64 })}
-	class={[classProp, 'size-12 shrink-0 rounded-md']}
+	src={cdnImageSrc(`/logos/${id}.png`, { width: imgSize })}
+	class={[classProp, 'shrink-0 rounded-md']}
 	{onerror}
 	alt=""
 	bind:this={element}

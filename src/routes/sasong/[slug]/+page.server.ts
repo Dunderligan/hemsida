@@ -22,6 +22,7 @@ export const load = async ({ params }) => {
 				},
 				with: {
 					matches: {
+						orderBy: schema.match.order,
 						columns: {
 							id: true,
 							teamAScore: true,

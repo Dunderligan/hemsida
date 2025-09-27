@@ -6,5 +6,6 @@ export const matchSchema = z.object({
 	rosterBId: z.string().nullable().optional(),
 	teamAScore: z.int().nullable().optional(),
 	teamBScore: z.int().nullable().optional(),
-	draws: z.int().nullable().optional()
+	draws: z.int().nullable().optional(),
+	played: z.boolean()
 });

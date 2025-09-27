@@ -8,6 +8,13 @@
 	const match = $derived(rosters.editingMatch);
 
 	let open = $derived(match !== null);
+
+	$effect(() => {
+		if (!match) return;
+		match.played = ((match.teamAScore ?? 0) > 0 ||
+			(match.teamBScore ?? 0 > 0) ||
+			(match.draws ?? 0 > 0)) as boolean;
+	});
 </script>
 
 <Dialog
@@ -28,5 +35,6 @@
 			<RosterSelect bind:selectedId={match.rosterBId} />
 			<input class="min-w-0 grow" bind:value={match.teamBScore} type="number" min="0" max="3" />
 		</div>
+		<input type="checkbox" bind:checked={match.played} />
 	{/if}
 </Dialog>

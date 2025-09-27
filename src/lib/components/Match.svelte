@@ -44,7 +44,7 @@
 	classes: { root?: ClassValue; name?: ClassValue }
 )}
 	<div class={[classes.root, 'flex w-full items-center']}>
-		<RosterLogo id={roster.id} />
+		<RosterLogo id={roster.id} class="size-12" />
 
 		{#if won}
 			<Icon icon="mdi:crown" class="mx-2 text-2xl text-accent-600" />
@@ -54,7 +54,7 @@
 			href="/lag/{seasonSlug}/{roster.slug}"
 			class={[
 				classes.name,
-				'grow font-semibold text-gray-800 hover:text-accent-600 hover:underline'
+				'grow truncate font-semibold text-gray-800 hover:text-accent-600 hover:underline'
 			]}
 		>
 			{roster.name}

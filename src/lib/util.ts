@@ -79,7 +79,7 @@ export type TableScore = {
 	matchesPlayed: number;
 };
 
-type MatchWithoutIds = Omit<FullMatch, 'id' | 'groupId'>;
+type MatchWithoutIds = Omit<FullMatch, 'id' | 'groupId' | 'played' | 'order'>;
 
 export function calculateStandings(rosters: { id: string }[], matches: MatchWithoutIds[]) {
 	const rosterScores = new Map<string, TableScore>();

@@ -50,17 +50,18 @@ export const generateBracket = command(
 		const emptySlots = Math.pow(numberOfRounds, 2) - rosters.length;
 
 		const rounds = [];
+		let order = 0;
 
 		// create the final match
-		rounds.push([createMatch(divisionId)]);
+		rounds.push([createMatch(divisionId, order++)]);
 
 		// create matches in reverse order
 		for (let i = 1; i < numberOfRounds; i++) {
 			const round = [];
 
 			for (const nextMatch of rounds[i - 1]) {
-				const matchA = createMatch(divisionId, nextMatch.id);
-				const matchB = createMatch(divisionId, nextMatch.id);
+				const matchA = createMatch(divisionId, order++, nextMatch.id);
+				const matchB = createMatch(divisionId, order++, nextMatch.id);
 
 				round.push(matchA);
 				round.push(matchB);
@@ -133,11 +134,13 @@ async function aggregateGroups(divisionId: string) {
 	};
 }
 
-function createMatch(divisionId: string, nextMatchId?: string): FullMatch {
+function createMatch(divisionId: string, order: number, nextMatchId?: string): FullMatch {
 	return {
 		id: uuidv4(),
 		nextMatchId,
-		divisionId
+		divisionId,
+		played: false,
+		order
 	};
 }
 
@@ -148,9 +151,9 @@ export const updateBracket = command(
 	async ({ matches }) => {
 		await db.transaction(async (tx) => {
 			await Promise.all(
-				matches.map((match) =>
-					tx.update(schema.match).set(match).where(eq(schema.match.id, match.id))
-				)
+				matches.map((match) => {
+					return tx.update(schema.match).set(match).where(eq(schema.match.id, match.id));
+				})
 			);
 		});
 

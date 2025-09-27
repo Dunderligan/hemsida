@@ -84,11 +84,12 @@ export type FullMatch = {
 	teamAScore?: number | null;
 	teamBScore?: number | null;
 	draws?: number | null;
-	played?: boolean;
+	played: boolean;
 	playedAt?: Date | null;
 	scheduledAt?: Date | null;
 	vodUrl?: string | null;
 	nextMatchId?: string | null;
+	order: number;
 };
 
 export type ResolvedMatch = {

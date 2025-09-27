@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { ResolvedMatch, MatchRoster, ClassValue } from '$lib/types';
-	import Icon from './Icon.svelte';
+	import type { ResolvedMatch, MatchRoster } from '$lib/types';
 	import RosterLogo from './RosterLogo.svelte';
 
 	type Props = {
@@ -25,25 +24,29 @@
 	won: boolean,
 	score: number | undefined | null
 )}
-	<div class="flex h-14 items-center gap-2 bg-gray-200 pr-1">
+	<div class="flex h-14 items-center bg-gray-200 pr-2">
 		<div
 			class={[
-				won ? 'bg-accent-600 text-white' : 'text-gray-800',
-				'flex h-full items-center justify-center px-4 font-display text-2xl font-extrabold'
+				won ? 'bg-accent-600 text-white' : 'text-gray-700',
+				'flex h-full w-10 shrink-0 items-center justify-center font-display text-2xl font-extrabold'
 			]}
 		>
 			{score ?? '-'}
 		</div>
 
 		{#if roster}
-			<RosterLogo id={roster.id} />
+			<RosterLogo id={roster.id} class="mx-2 size-12" />
+			<a
+				href="/lag/{seasonSlug}/{roster?.slug}"
+				class={[
+					won ? 'font-semibold text-gray-800' : 'font-semibold text-gray-600',
+					'mr-auto truncate hover:text-accent-600 hover:underline'
+				]}
+			>
+				{roster?.name}
+			</a>
+		{:else}
+			<div class="font-medium text-gray-400 italic">Ska beslutas...</div>
 		{/if}
-
-		<a
-			href="/lag/{seasonSlug}/{roster?.slug}"
-			class="grow truncate font-semibold text-gray-800 hover:text-accent-600 hover:underline"
-		>
-			{roster?.name ?? '?'}
-		</a>
 	</div>
 {/snippet}

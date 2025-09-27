@@ -3,7 +3,6 @@
 	import { authClient, isAdmin } from '$lib/auth-client';
 	import BracketMatch from '$lib/components/BracketMatch.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Match from '$lib/components/Match.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
 	import StandingsTable from '$lib/components/StandingsTable.svelte';
@@ -38,6 +37,8 @@
 				return 'group';
 		}
 	});
+
+	$inspect(activeDivision);
 </script>
 
 <PageHeader>
@@ -65,7 +66,7 @@
 </PageHeader>
 
 <PageSection>
-	<section class="grow">
+	<section class="grow overflow-hidden">
 		<div class="mb-6 flex max-w-lg flex-col gap-1.5">
 			<Tabs
 				selected={activeDivision.id}
@@ -90,7 +91,8 @@
 						icon: 'mdi:bracket',
 						label: 'Slutspel',
 						value: 'bracket',
-						href: `?div=${activeDivision.slug}&visa=slutspel`
+						href: `?div=${activeDivision.slug}&visa=slutspel`,
+						disabled: activeDivision.matches.length === 0
 					}
 				]}
 			/>
@@ -105,28 +107,30 @@
 		{:else}
 			{@const rounds = buildBracket(activeDivision.matches)}
 
-			<div class="flex w-full items-stretch gap-4">
-				{#each rounds as round}
-					<div class="flex w-full flex-col justify-around gap-4">
-						{#each round as match}
-							{@const rosterA = activeDivision.rosters.find(
-								(roster) => roster.id === match.rosterAId
-							)}
-							{@const rosterB = activeDivision.rosters.find(
-								(roster) => roster.id === match.rosterBId
-							)}
+			<div class="w-full overflow-x-auto overflow-y-scroll rounded-lg p-1">
+				<div class="flex min-w-3xl items-stretch gap-4">
+					{#each rounds as round}
+						<div class="flex flex-col justify-around gap-4" style="width: {100 / rounds.length}%;">
+							{#each round as match}
+								{@const rosterA = activeDivision.rosters.find(
+									(roster) => roster.id === match.rosterAId
+								)}
+								{@const rosterB = activeDivision.rosters.find(
+									(roster) => roster.id === match.rosterBId
+								)}
 
-							<BracketMatch
-								seasonSlug={season.slug}
-								match={{
-									rosterA,
-									rosterB,
-									...match
-								}}
-							/>
-						{/each}
-					</div>
-				{/each}
+								<BracketMatch
+									seasonSlug={season.slug}
+									match={{
+										rosterA,
+										rosterB,
+										...match
+									}}
+								/>
+							{/each}
+						</div>
+					{/each}
+				</div>
 			</div>
 		{/if}
 
@@ -139,5 +143,5 @@
 				href="/admin/division/{activeDivision.id}/{mode === 'group' ? 'grupper' : 'slutspel'}"
 			/>
 		{/if}
-	</section></PageSection
->
+	</section>
+</PageSection>

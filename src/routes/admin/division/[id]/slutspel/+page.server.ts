@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
-	const rosterData = await db.query.group.findMany({
+	const groups = await db.query.group.findMany({
 		where: eq(schema.group.divisionId, params.id),
 		columns: {},
 		with: {
@@ -19,6 +19,7 @@ export const load = async ({ params }) => {
 
 	const matches = await db.query.match.findMany({
 		where: eq(schema.match.divisionId, params.id),
+		orderBy: schema.match.order,
 		columns: {
 			id: true,
 			rosterAId: true,
@@ -26,15 +27,17 @@ export const load = async ({ params }) => {
 			teamAScore: true,
 			teamBScore: true,
 			draws: true,
-			nextMatchId: true
+			nextMatchId: true,
+			played: true,
+			order: true
 		}
 	});
 
-	if (!rosterData || !matches) {
+	if (!groups || !matches) {
 		error(404);
 	}
 
-	const rosters = rosterData.flatMap((group) => group.rosters);
+	const rosters = groups.flatMap((group) => group.rosters);
 
 	return { matches, rosters };
 };

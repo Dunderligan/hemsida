@@ -202,6 +202,7 @@ export const match = pgTable('match', {
 	scheduledAt: timestamp(),
 	vodUrl: text(),
 	nextMatchId: uuid().references((): AnyPgColumn => match.id, { onDelete: 'set null' }),
+	order: integer().notNull().default(0),
 	...timestamps
 });
 

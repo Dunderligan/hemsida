@@ -7,6 +7,7 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
 	import Rank from '$lib/components/Rank.svelte';
+	import RosterLogo from '$lib/components/RosterLogo.svelte';
 	import Table from '$lib/components/Table.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
 	import TeamSocial from '$lib/components/TeamSocial.svelte';
@@ -44,11 +45,7 @@
 </script>
 
 <PageHeader>
-	<img
-		src={cdnImageSrc(`/logos/${roster.id}.png`, { width: 512 })}
-		alt=""
-		class="size-40 shrink-0 rounded-lg"
-	/>
+	<RosterLogo id={roster.id} class="size-40" imgSize={256} />
 
 	<div>
 		<h1
