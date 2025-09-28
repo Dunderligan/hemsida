@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { RosterState } from '$lib/state/rosters.svelte';
-	import type { FullMatch, Roster } from '$lib/types';
+	import type { FullMatch } from '$lib/types';
 	import { DropdownMenu } from 'bits-ui';
 
 	type Props = {
 		match: FullMatch;
+		canEditRosters?: boolean;
 		ondelete?: () => void;
 	};
 
-	let { match, ondelete }: Props = $props();
+	let { match, canEditRosters = true, ondelete }: Props = $props();
 
 	const rosters = RosterState.get();
 </script>
@@ -22,7 +23,9 @@
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>:</DropdownMenu.Trigger>
 		<DropdownMenu.Content>
-			<DropdownMenu.Item onclick={() => rosters.edit(match)}>Redigera</DropdownMenu.Item>
+			<DropdownMenu.Item onclick={() => rosters.edit(match, canEditRosters)}
+				>Redigera</DropdownMenu.Item
+			>
 			<DropdownMenu.Item onclick={ondelete}>Radera</DropdownMenu.Item>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>

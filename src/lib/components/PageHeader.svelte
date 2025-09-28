@@ -1,13 +1,15 @@
 <script lang="ts">
+	import type { ClassValue } from '$lib/types';
 	import type { Snippet } from 'svelte';
 
 	type Props = {
+		class?: ClassValue;
 		children?: Snippet;
 	};
 
-	let { children }: Props = $props();
+	let { children, class: classProp }: Props = $props();
 </script>
 
-<header class="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:flex-row">
+<header class={[classProp, 'mx-auto w-full max-w-4xl px-4 font-display']}>
 	{@render children?.()}
 </header>

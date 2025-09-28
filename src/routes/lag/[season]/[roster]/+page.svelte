@@ -44,7 +44,7 @@
 	);
 </script>
 
-<PageHeader>
+<PageHeader class="flex flex-col items-center gap-6 sm:flex-row">
 	<RosterLogo id={roster.id} class="size-40" imgSize={256} />
 
 	<div>
@@ -61,7 +61,7 @@
 	</div>
 </PageHeader>
 
-<PageSection>
+<PageSection class="flex flex-col-reverse gap-10 sm:flex-row">
 	<section class="grow">
 		{#if rosterTabItems.length > 1}
 			<div class="mb-6 flex items-center gap-6">

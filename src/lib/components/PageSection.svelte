@@ -1,15 +1,17 @@
 <script lang="ts">
+	import type { ClassValue } from '$lib/types';
 	import type { Snippet } from 'svelte';
 
 	type Props = {
+		class?: ClassValue;
 		children?: Snippet;
 	};
 
-	let { children }: Props = $props();
+	let { children, class: classProp }: Props = $props();
 </script>
 
 <main class="relative z-0 mt-14 grow bg-white px-4 py-12 shadow-2xl">
-	<div class="mx-auto flex max-w-4xl flex-col-reverse gap-10 sm:flex-row">
+	<div class={[classProp, 'mx-auto max-w-4xl']}>
 		{@render children?.()}
 	</div>
 </main>

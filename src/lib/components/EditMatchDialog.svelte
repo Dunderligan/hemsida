@@ -11,9 +11,7 @@
 
 	$effect(() => {
 		if (!match) return;
-		match.played = ((match.teamAScore ?? 0) > 0 ||
-			(match.teamBScore ?? 0 > 0) ||
-			(match.draws ?? 0 > 0)) as boolean;
+		match.played = match.teamAScore !== null || match.teamBScore !== null || match.draws !== null;
 	});
 </script>
 
@@ -28,13 +26,12 @@
 >
 	{#if match}
 		<div class="flex">
-			<RosterSelect bind:selectedId={match.rosterAId} />
+			<RosterSelect bind:selectedId={match.rosterAId} disabled={!rosters.canEditRosters} />
 			<input class="min-w-0 grow" bind:value={match.teamAScore} type="number" min="0" max="3" />
 		</div>
 		<div class="flex">
-			<RosterSelect bind:selectedId={match.rosterBId} />
+			<RosterSelect bind:selectedId={match.rosterBId} disabled={!rosters.canEditRosters} />
 			<input class="min-w-0 grow" bind:value={match.teamBScore} type="number" min="0" max="3" />
 		</div>
-		<input type="checkbox" bind:checked={match.played} />
 	{/if}
 </Dialog>

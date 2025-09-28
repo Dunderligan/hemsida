@@ -3,6 +3,7 @@
 	import { authClient, isAdmin } from '$lib/auth-client';
 	import BracketMatch from '$lib/components/BracketMatch.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
 	import StandingsTable from '$lib/components/StandingsTable.svelte';
@@ -38,30 +39,46 @@
 		}
 	});
 
-	$inspect(activeDivision);
+	function formatDate(date: Date) {
+		return date.toLocaleDateString(undefined, {
+			month: 'long',
+			day: 'numeric'
+		});
+	}
 </script>
 
 <PageHeader>
-	<div class="font-display">
-		<h1
-			class="mb-3 text-center font-display text-6xl font-extrabold text-black sm:text-left sm:text-7xl"
-		>
-			{season.name}
-		</h1>
+	<h1
+		class="mb-3 text-center font-display text-6xl font-extrabold text-black sm:text-left sm:text-7xl"
+	>
+		{season.name}
+	</h1>
 
-		{#if isOngoing}
-			<span class="mr-1 rounded-full bg-green-200 px-4 py-2 text-sm font-semibold text-green-800">
-				Pågående</span
-			>
-		{/if}
-
-		<span class="font-medium text-gray-500"
-			>• Startade {season.startedAt.toLocaleDateString(undefined, {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'
-			})}</span
+	<div class="flex items-center justify-center gap-1 sm:justify-start">
+		<div
+			class={[
+				isOngoing
+					? 'bg-green-200 font-semibold text-green-800'
+					: 'bg-gray-300 font-medium text-gray-700',
+				'mr-1 flex max-w-max items-center gap-1 rounded-full py-1 pr-3 pl-2 text-sm'
+			]}
 		>
+			<Icon icon={isOngoing ? 'mdi:circle-outline' : 'mdi:pause'} class="text-xl" />
+
+			{isOngoing ? 'Pågående' : 'Avslutad'}
+		</div>
+
+		<div class="font-medium text-gray-500">
+			•
+
+			{#if isOngoing}
+				Startade {formatDate(season.startedAt)}
+			{:else}
+				Pågick mellan {formatDate(season.startedAt)} och {formatDate(season.endedAt ?? new Date())}
+			{/if}
+
+			{season.startedAt.getFullYear()}
+		</div>
 	</div>
 </PageHeader>
 
@@ -110,7 +127,7 @@
 			<div class="w-full overflow-x-auto overflow-y-scroll rounded-lg p-1">
 				<div class="flex min-w-3xl items-stretch gap-4">
 					{#each rounds as round}
-						<div class="flex flex-col justify-around gap-4" style="width: {100 / rounds.length}%;">
+						<div class="flex flex-col justify-around gap-8" style="width: {100 / rounds.length}%;">
 							{#each round as match}
 								{@const rosterA = activeDivision.rosters.find(
 									(roster) => roster.id === match.rosterAId

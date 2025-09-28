@@ -35,15 +35,41 @@
 
 		rounds = [];
 	}
+
+	$effect(() => {
+		for (let i = 0; i < rounds.length - 1; i++) {
+			for (let j = 0; j < rounds[i].length; j++) {
+				const match = rounds[i][j];
+				if (!match.rosterAId || !match.rosterBId) continue;
+
+				const nextMatch = rounds[i + 1][Math.floor(j / 2)];
+				const isRosterAInNext = j % 2 == 0;
+
+				const winner = match.played
+					? (match.teamAScore ?? 0) > (match.teamBScore ?? 0)
+						? match.rosterAId
+						: match.rosterBId
+					: null;
+
+				if (isRosterAInNext) {
+					nextMatch.rosterAId = winner;
+				} else if (!isRosterAInNext) {
+					nextMatch.rosterBId = winner;
+				}
+
+				console.log('set to', winner);
+			}
+		}
+	});
 </script>
 
 <div class="space-y-6">
 	{#if rounds.length > 0}
 		<div class="flex w-full items-stretch gap-4">
-			{#each rounds as round}
+			{#each rounds as round, i}
 				<div class="flex w-full flex-col justify-around gap-4">
 					{#each round as match}
-						<EditableMatch {match} />
+						<EditableMatch {match} canEditRosters={i === 0} />
 					{/each}
 				</div>
 			{/each}

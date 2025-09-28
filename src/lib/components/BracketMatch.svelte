@@ -24,10 +24,10 @@
 	won: boolean,
 	score: number | undefined | null
 )}
-	<div class="flex h-14 items-center bg-gray-200 pr-2">
+	<div class={['flex h-14 items-center pr-2', won ? 'bg-gray-200' : 'bg-gray-100']}>
 		<div
 			class={[
-				won ? 'bg-accent-600 text-white' : 'text-gray-700',
+				won ? 'bg-accent-600 text-white' : 'text-gray-600',
 				'flex h-full w-10 shrink-0 items-center justify-center font-display text-2xl font-extrabold'
 			]}
 		>
