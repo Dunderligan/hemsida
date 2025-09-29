@@ -124,7 +124,7 @@
 		{:else}
 			{@const rounds = buildBracket(activeDivision.matches)}
 
-			<div class="w-full overflow-x-auto overflow-y-scroll rounded-lg p-1">
+			<div class="w-full overflow-x-auto rounded-lg p-1">
 				<div class="flex min-w-3xl items-stretch gap-4">
 					{#each rounds as round}
 						<div class="flex flex-col justify-around gap-8" style="width: {100 / rounds.length}%;">

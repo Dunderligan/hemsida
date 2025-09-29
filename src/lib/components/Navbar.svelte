@@ -33,10 +33,10 @@
 </script>
 
 <nav
-	class="fixed z-40 mb-10 h-18 w-full bg-gradient-to-t to-gray-300/80 px-8 pt-4 backdrop-blur-[2px]"
+	class="fixed z-40 mb-10 h-18 w-full bg-gradient-to-t to-gray-800/80 px-8 pt-4 text-gray-200 backdrop-blur-[2px]"
 >
 	<div class="mx-auto flex h-full max-w-3xl items-center justify-between gap-2">
-		<div class="flex items-center gap-8 text-gray-800">
+		<div class="flex items-center gap-8">
 			<a href="/">
 				<img src="/logo.png" alt="Dunderligan" class="size-10" />
 			</a>
@@ -46,7 +46,7 @@
 			{/each}
 		</div>
 
-		<div class="flex items-center gap-6 text-2xl text-gray-800">
+		<div class="flex items-center gap-6 text-2xl">
 			<button>
 				<Icon icon="mdi:white-balance-sunny" />
 			</button>

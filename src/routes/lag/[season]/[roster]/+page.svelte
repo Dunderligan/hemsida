@@ -71,7 +71,7 @@
 			</div>
 		{:else}
 			<div class="mb-4 text-lg font-medium text-gray-700">
-				Spelade i <a
+				Spelar i <a
 					href="/sasong/{season.slug}?div={division.slug}"
 					class="font-bold text-accent-600 hover:text-accent-700 hover:underline"
 					>{season.name}, {division.name}</a
