@@ -20,7 +20,7 @@
 		},
 		{
 			platform: 'github',
-			href: 'https://github.com/Kesomannen/dunderligan-web'
+			href: 'https://github.com/Dunderligan'
 		}
 	];
 </script>

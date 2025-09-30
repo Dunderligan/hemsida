@@ -6,7 +6,7 @@
 	let { data } = $props();
 </script>
 
-<header class="relative h-[36rem] w-full px-4 sm:h-[42rem]">
+<header class="relative h-[40rem] w-full px-4 sm:h-[45rem]">
 	<div id="color-overlay" class="fixed top-0 bottom-0 left-0 -z-10 w-full"></div>
 	<div id="background" class="absolute top-0 bottom-0 left-0 -z-20 w-full"></div>
 
