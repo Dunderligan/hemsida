@@ -34,6 +34,10 @@
 		{
 			href: '/om',
 			label: 'Om oss'
+		},
+		{
+			href: '/admin',
+			label: 'Admin'
 		}
 	];
 </script>

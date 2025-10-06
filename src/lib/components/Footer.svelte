@@ -26,7 +26,7 @@
 </script>
 
 <footer class="relative bg-gray-900 px-4 pt-10 pb-16 text-center font-medium text-gray-200">
-	<div class="mx-auto flex max-w-4xl items-start text-left">
+	<div class="mx-auto flex max-w-4xl flex-col items-start gap-8 text-left sm:flex-row">
 		<div class="w-full">
 			<img src="/logo.png" alt="Dunderligan" class="-mt-2 size-14" />
 			<p class="text-lg">
@@ -52,7 +52,7 @@
 			<a href="/om" class="block text-lg underline hover:text-accent-500">Om oss</a>
 		</div> -->
 
-		<div class="hidden w-full flex-col items-start sm:flex">
+		<div class="flex w-full flex-col items-start">
 			<h4 class="mb-2 text-xl font-semibold text-white">Kontakt</h4>
 
 			<a href="mailto:info@dunderligan.se" class="block text-lg underline hover:text-accent-500"
@@ -60,9 +60,7 @@
 			>
 		</div>
 
-		<div
-			class="flex w-full flex-col items-center gap-4 text-center text-gray-400 sm:flex-row sm:text-left"
-		>
+		<div class="flex w-full gap-4 text-left text-gray-400 sm:flex-row sm:text-left">
 			<img src="/lysator.svg" class="size-16" alt="Lysator" />
 
 			<div>Hemsidan driftas i samarbete med Lysator.</div>
