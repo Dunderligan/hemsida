@@ -2,10 +2,14 @@
 	import { goto } from '$app/navigation';
 	import AdminCard from '$lib/components/AdminCard.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import InputField from '$lib/components/InputField.svelte';
+	import Label from '$lib/components/Label.svelte';
+	import Notice from '$lib/components/Notice.svelte';
 	import RosterLogo from '$lib/components/RosterLogo.svelte';
 	import { Rank, Role, SocialPlatform } from '$lib/types';
-	import { formatSocialPlatform, flattenGroup } from '$lib/util';
+	import { formatSocialPlatform, flattenGroup, capitalize } from '$lib/util';
 	import { createRoster, editRoster, uploadLogo } from './page.remote';
 
 	let { data } = $props();
@@ -96,34 +100,61 @@
 
 <AdminCard title="Medlemmar"></AdminCard>
 
-<AdminCard title="Sociala medier"></AdminCard>
+<AdminCard title="Sociala medier">
+	{#if team.socials.length === 0}
+		<Notice kind="info">Detta lag har inga sociala medier kopplade.</Notice>
+	{:else}
+		<div class="space-y-1.5 overflow-hidden rounded-lg py-1">
+			{#each team.socials as social, i (social.platform)}
+				<Label>
+					{#snippet label()}
+						<Icon class="text-2xl" icon="mdi:{social.platform}" />
+						{formatSocialPlatform(social.platform)}
+					{/snippet}
+
+					<InputField bind:value={social.url} placeholder="URL" />
+
+					<Button
+						icon="mdi:delete"
+						class="ml-2"
+						kind="tertiary"
+						title="Radera"
+						onclick={() => team.socials.splice(i, 1)}
+					/>
+				</Label>
+			{/each}
+		</div>
+	{/if}
+</AdminCard>
 
 <AdminCard title="Inställningar">
-	<form {...uploadLogo} enctype="multipart/form-data">
-		<label class="group relative flex size-32 cursor-pointer items-center justify-center">
-			<RosterLogo
-				id={roster.id}
-				class="absolute -z-10 h-full w-full transition-all group-hover:brightness-75"
-				imgSize={128}
-			/>
-			<Icon
-				icon="mdi:upload"
-				class="hidden items-center justify-center rounded-lg bg-accent-600 p-4 text-center text-xl font-bold text-white group-hover:block"
-			/>
-			<input type="file" name="file" accept="image/png" class="hidden" />
-		</label>
-		<input type="text" name="rosterId" value={roster.id} class="hidden" />
-	</form>
+	<Label label="Namn">
+		<InputField bind:value={roster.name} />
+	</Label>
+
+	<Label label="Logotyp">
+		<form {...uploadLogo} enctype="multipart/form-data">
+			<label class="group relative flex size-32 cursor-pointer items-center justify-center">
+				<RosterLogo
+					id={roster.id}
+					class="absolute -z-10 h-full w-full transition-all group-hover:brightness-75"
+					imgSize={128}
+				/>
+				<div
+					class="hidden items-center justify-center rounded-lg bg-gray-600 p-2 text-xl text-white group-hover:flex"
+				>
+					<Icon icon="mdi:upload" />
+				</div>
+				<input type="file" name="file" accept="image/png" class="hidden" />
+			</label>
+			<input type="text" name="rosterId" value={roster.id} class="hidden" />
+		</form>
+	</Label>
+
+	<Button icon="mdi:delete" label="Radera roster" kind="negative" />
 </AdminCard>
 
 <form>
-	<div>
-		<label class="mt-2 block">
-			Namn
-			<input type="text" bind:value={roster.name} />
-		</label>
-	</div>
-
 	<div>
 		<h2 class="text-xl font-semibold">Spelare</h2>
 
@@ -178,9 +209,7 @@
 						<td>
 							<input type="checkbox" bind:checked={member.isCaptain} />
 						</td>
-						<td>
-							<button onclick={() => roster.members.splice(i, 1)}>Ta bort</button>
-						</td>
+						<td> </td>
 					</tr>
 				{/each}
 				<tr>

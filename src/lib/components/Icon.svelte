@@ -11,4 +11,4 @@
 	let { icon, title, class: classProp }: Props = $props();
 </script>
 
-<iconify-icon {icon} class={classProp} inline {title}></iconify-icon>
+<iconify-icon {icon} class={classProp} inline {...title ? { title } : {}}></iconify-icon>

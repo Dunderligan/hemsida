@@ -10,6 +10,11 @@
 				label: string;
 				icon?: string;
 		  }
+		| {
+				children?: never;
+				label?: never;
+				icon: string;
+		  }
 	) &
 		WithoutChildren<ButtonRootProps>;
 
@@ -19,7 +24,7 @@
 		{
 			primary: 'bg-accent-600 hover:bg-accent-700 font-semibold text-white',
 			secondary: 'bg-gray-500 hover:bg-gray-600 font-semibold text-gray-200',
-			tertiary: 'text-accent-900 hover:bg-accent-100',
+			tertiary: 'text-gray-700 hover:bg-gray-100',
 			negative: 'bg-red-700 hover:bg-red-600 font-semibold text-red-100 hover:text-white'
 		}[kind]
 	);
@@ -29,7 +34,8 @@
 	class={[
 		classProp,
 		typeClass,
-		'flex items-center justify-center gap-2 rounded-lg px-4 py-2 transition-colors'
+		icon && !label ? 'p-2' : 'px-4 py-2',
+		'flex items-center justify-center gap-2 rounded-lg transition-colors'
 	]}
 	{...props}
 >
@@ -37,7 +43,7 @@
 		{@render children()}
 	{:else}
 		{#if icon}
-			<Icon {icon} class="text-xl" />
+			<Icon {icon} class="text-lg" />
 		{/if}
 
 		{label}

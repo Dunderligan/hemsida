@@ -7,6 +7,7 @@
 	import EditableMatch from '$lib/components/EditableMatch.svelte';
 	import EditMatchDialog from '$lib/components/EditMatchDialog.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import Notice from '$lib/components/Notice.svelte';
 	import { RosterState } from '$lib/state/rosters.svelte';
 	import type { FullMatch } from '$lib/types';
 	import { buildBracket } from '$lib/util';
@@ -127,15 +128,11 @@
 
 		<Button icon="mdi:trash-can" label="Radera bracket" kind="negative" onclick={onDeleteBracket} />
 	{:else}
-		<div
-			class="flex items-center gap-2 rounded-lg bg-accent-50 py-2 pr-3 pl-6 font-medium text-accent-800"
-		>
-			<Icon icon="mdi:info" />
-
+		<Notice kind="info">
 			Denna division har inget bracket.
 
 			<Button kind="tertiary" label="Generera" class="ml-auto" onclick={generate}></Button>
-		</div>
+		</Notice>
 	{/if}
 </AdminCard>
 
