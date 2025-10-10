@@ -3,8 +3,11 @@
 	import AdminCard from '$lib/components/AdminCard.svelte';
 	import AdminLink from '$lib/components/AdminLink.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import Dialog from '$lib/components/Dialog.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import InputField from '$lib/components/InputField.svelte';
+	import Label from '$lib/components/Label.svelte';
 	import { createDivision, deleteSeason } from './page.remote.js';
 
 	const { data } = $props();
@@ -38,7 +41,7 @@
 	}
 </script>
 
-<Breadcrumbs crumbs={[{ label: season.name, href: `admin/sasong/${season.id}` }]} />
+<Breadcrumbs crumbs={[{ label: season.name, href: `/admin/sasong/${season.id}` }]} />
 
 <AdminCard title="Divisioner">
 	<div class="space-y-1 overflow-hidden rounded-lg">
@@ -48,15 +51,17 @@
 			</AdminLink>
 		{/each}
 	</div>
+
+	<Button icon="mdi:plus" kind="secondary" onclick={() => (createDialogOpen = true)} />
 </AdminCard>
 
-<div class="rounded-xl bg-gray-100 p-6">
-	<h2 class="text-xl font-bold">Inställningar</h2>
+<AdminCard title="Inställningar">
+	<Label label="Namn">
+		<InputField bind:value={name} />
+	</Label>
 
-	<input class="block" type="text" bind:value={name} />
-
-	<button onclick={submitDelete}>Radera säsong</button>
-</div>
+	<Button icon="mdi:trash-can" label="Radera säsong" kind="negative" onclick={submitDelete} />
+</AdminCard>
 
 <Dialog title="Skapa division" bind:open={createDialogOpen}>
 	<input type="text" bind:value={newDivisionName} />

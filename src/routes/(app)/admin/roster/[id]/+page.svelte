@@ -125,6 +125,8 @@
 			{/each}
 		</div>
 	{/if}
+
+	<Button icon="mdi:add" kind="secondary" />
 </AdminCard>
 
 <AdminCard title="Inställningar">
@@ -134,7 +136,7 @@
 
 	<Label label="Logotyp">
 		<form {...uploadLogo} enctype="multipart/form-data">
-			<label class="group relative flex size-32 cursor-pointer items-center justify-center">
+			<label class="group relative flex size-24 cursor-pointer items-center justify-center">
 				<RosterLogo
 					id={roster.id}
 					class="absolute -z-10 h-full w-full transition-all group-hover:brightness-75"

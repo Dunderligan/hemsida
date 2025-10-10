@@ -10,7 +10,7 @@
 </script>
 
 <div class="flex max-w-xl items-center">
-	<div class="flex max-w-48 grow items-center gap-2 font-semibold text-gray-800">
+	<div class="flex max-w-48 grow items-center gap-2 font-semibold text-gray-700">
 		{#if typeof label === 'string'}
 			{label}
 		{:else}

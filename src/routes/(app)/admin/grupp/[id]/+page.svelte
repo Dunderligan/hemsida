@@ -36,9 +36,9 @@
 
 <AdminCard title="Lag">
 	<div class="space-y-1 overflow-hidden rounded-lg">
-		{#each group.rosters as { id, name, slug } (id)}
+		{#each group.rosters as { id, name } (id)}
 			<AdminLink href="/admin/roster/{id}">
-				<RosterLogo {id} class="mr-2 inline size-10" />
+				<RosterLogo {id} class="mr-2 inline size-12" />
 				{name}</AdminLink
 			>
 		{/each}

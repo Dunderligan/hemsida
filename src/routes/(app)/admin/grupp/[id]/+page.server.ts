@@ -12,6 +12,7 @@ export const load = async ({ params }) => {
 		},
 		with: {
 			rosters: {
+				orderBy: schema.roster.name,
 				columns: {
 					id: true,
 					name: true,
