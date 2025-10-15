@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { RosterState } from '$lib/state/rosters.svelte';
+	import { RosterContext } from '$lib/state/rosters.svelte';
 	import Dialog from './Dialog.svelte';
 	import RosterSelect from './RosterSelect.svelte';
 
-	const rosters = RosterState.get();
+	const rosters = RosterContext.get();
 
 	const match = $derived(rosters.editingMatch);
 

@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import AdminCard from '$lib/components/AdminCard.svelte';
+	import AdminEmptyNotice from '$lib/components/AdminEmptyNotice.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Dialog from '$lib/components/Dialog.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import InputField from '$lib/components/InputField.svelte';
 	import Label from '$lib/components/Label.svelte';
-	import Notice from '$lib/components/Notice.svelte';
 	import RosterLogo from '$lib/components/RosterLogo.svelte';
 	import SaveToast from '$lib/components/SaveToast.svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Table from '$lib/components/Table.svelte';
-	import { ConfirmState } from '$lib/state/confirm.svelte';
+	import { ConfirmContext } from '$lib/state/confirm.svelte';
+	import { SaveContext } from '$lib/state/save.svelte';
 	import { Rank, Role, SocialPlatform } from '$lib/types';
 	import {
 		formatSocialPlatform,
@@ -24,6 +25,8 @@
 	import { createRoster, deleteRoster, editRoster, uploadLogo } from './page.remote';
 
 	let { data } = $props();
+
+	SaveContext.set(new SaveContext(save));
 
 	$effect(() => {
 		roster = data.roster;
@@ -49,8 +52,8 @@
 
 	let newGroupId = $state('');
 
-	let dirty = $state(false);
-	let confirmState = ConfirmState.get();
+	let confirm = ConfirmContext.get();
+	let saveCtx = SaveContext.get();
 
 	async function save() {
 		const { slug } = await editRoster({
@@ -62,7 +65,7 @@
 		});
 
 		// await goto(`/lag/${season.slug}/${slug}`);
-		dirty = false;
+		saveCtx.setDirty();
 	}
 
 	async function addNewPlayer() {
@@ -91,8 +94,7 @@
 			url: newSocialUrl
 		});
 
-		markDirty();
-
+		saveCtx.setDirty();
 		resetNewSocial();
 	}
 
@@ -114,25 +116,22 @@
 
 		newGroupId = '';
 
-		markDirty();
-
 		await goto(`/admin/roster/${roster.id}`);
 	}
 
 	async function submitDelete() {
-		if (!(await confirmState.show('Är du säker?', 'Är du säker?'))) {
-			return;
-		}
+		await confirm.confirm({
+			title: 'Radera roster',
+			description: `Är du säker på att du vill radera ${roster.name} från ${season.name}? <b>Detta går inte att ångra!</b>`,
+			negative: true,
+			action: async () => {
+				await deleteRoster({
+					id: roster.id
+				});
 
-		await deleteRoster({
-			id: roster.id
+				await goto(`/admin/grupp/${group.id}`);
+			}
 		});
-
-		await goto(`/admin/grupp/${group.id}`);
-	}
-
-	function markDirty() {
-		dirty = true;
 	}
 </script>
 
@@ -147,17 +146,9 @@
 
 <AdminCard title="Medlemmar">
 	{#if roster.members.length === 0}
-		<Notice kind="info">
-			Detta lag har inga medlemmar.
-
-			<Button
-				icon="mdi:add"
-				label="Lägg till"
-				kind="transparent"
-				class="ml-auto"
-				onclick={() => (newPlayerOpen = true)}
-			/>
-		</Notice>
+		<AdminEmptyNotice bind:createDialogOpen={newPlayerOpen}>
+			Detta roster har inga medlemmar.
+		</AdminEmptyNotice>
 	{:else}
 		<Table
 			columns={[{ label: 'Battletag', center: false }, 'Roll', 'Rank', '']}
@@ -174,7 +165,7 @@
 						type="single"
 						triggerClass="grow"
 						bind:value={member.role}
-						onValueChange={markDirty}
+						onValueChange={saveCtx.setDirty}
 						itemIcon={(role) => roleIcon(role as Role)}
 						items={enumToPgEnum(Role).map((role) => ({
 							label: capitalize(role),
@@ -188,7 +179,7 @@
 						type="single"
 						triggerClass="grow"
 						bind:value={member.rank}
-						onValueChange={markDirty}
+						onValueChange={saveCtx.setDirty}
 						items={enumToPgEnum(Rank).map((rank) => ({
 							label: capitalize(rank),
 							value: rank
@@ -203,7 +194,7 @@
 						type="single"
 						triggerClass="w-1/4"
 						bind:value={() => member.tier.toString(), (str) => (member.tier = parseInt(str))}
-						onValueChange={markDirty}
+						onValueChange={saveCtx.setDirty}
 						items={[1, 2, 3, 4, 5].map((tier) => ({
 							label: tier.toString(),
 							value: tier.toString()
@@ -218,7 +209,7 @@
 						kind="tertiary"
 						onclick={() => {
 							roster.members.splice(index, 1);
-							markDirty();
+							saveCtx.setDirty();
 						}}
 					/>
 				</div>
@@ -231,17 +222,9 @@
 
 <AdminCard title="Sociala medier">
 	{#if team.socials.length === 0}
-		<Notice kind="info"
-			>Detta lag har inga länkade sociala medier.
-
-			<Button
-				icon="mdi:add"
-				label="Lägg till"
-				kind="transparent"
-				class="ml-auto"
-				onclick={() => (newSocialOpen = true)}
-			/>
-		</Notice>
+		<AdminEmptyNotice bind:createDialogOpen={newSocialOpen}>
+			Detta lag har inga länkade sociala medier.
+		</AdminEmptyNotice>
 	{:else}
 		<div class="space-y-1.5 overflow-hidden rounded-lg py-1">
 			{#each team.socials as social, i (social.platform)}
@@ -260,7 +243,7 @@
 						title="Radera"
 						onclick={() => {
 							team.socials.splice(i, 1);
-							markDirty();
+							saveCtx.setDirty();
 						}}
 					/>
 				</Label>
@@ -268,14 +251,14 @@
 		</div>
 
 		{#if remainingPlatforms.length > 0}
-			<Button icon="mdi:add" kind="secondary" onclick={() => (newSocialOpen = true)} />
+			<Button icon="mdi:add" onclick={() => (newSocialOpen = true)} />
 		{/if}
 	{/if}
 </AdminCard>
 
 <AdminCard title="Inställningar">
 	<Label label="Namn">
-		<InputField bind:value={roster.name} oninput={markDirty} />
+		<InputField bind:value={roster.name} oninput={saveCtx.setDirty} />
 	</Label>
 
 	<Label label="Logotyp">
@@ -412,4 +395,4 @@
 	</Label>
 </Dialog>
 
-<SaveToast bind:open={dirty} onsave={save} />
+<SaveToast />

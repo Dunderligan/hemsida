@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RosterState } from '$lib/state/rosters.svelte';
+	import { RosterContext } from '$lib/state/rosters.svelte';
 
 	type Props = {
 		selectedId?: string | null;
@@ -8,7 +8,7 @@
 
 	let { selectedId = $bindable(), disabled }: Props = $props();
 
-	const rosters = RosterState.get();
+	const rosters = RosterContext.get();
 </script>
 
 <select bind:value={selectedId} {disabled}>

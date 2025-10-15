@@ -42,7 +42,9 @@ export function averageRank(ranks: FullRank[]): FullRank {
 const roleNums: Record<Role, number> = {
 	tank: 0,
 	damage: 1,
-	support: 2
+	support: 2,
+	flex: 3,
+	coach: 4
 };
 
 export function sortRole(a: Role, b: Role) {
@@ -181,6 +183,10 @@ export function roleIcon(role: Role): string {
 			return 'mdi:sword-cross';
 		case 'support':
 			return 'mdi:band-aid';
+		case 'flex':
+			return 'mdi:anonymous';
+		case 'coach':
+			return 'mdi:brain';
 	}
 
 	return 'mdi:help';

@@ -6,9 +6,8 @@
 	import Button from '$lib/components/Button.svelte';
 	import EditableMatch from '$lib/components/EditableMatch.svelte';
 	import EditMatchDialog from '$lib/components/EditMatchDialog.svelte';
-	import Icon from '$lib/components/Icon.svelte';
 	import Notice from '$lib/components/Notice.svelte';
-	import { RosterState } from '$lib/state/rosters.svelte';
+	import { RosterContext } from '$lib/state/rosters.svelte';
 	import type { FullMatch } from '$lib/types';
 	import { buildBracket } from '$lib/util';
 	import {
@@ -24,7 +23,7 @@
 	const { division } = $derived(data);
 	const { season } = $derived(division);
 
-	RosterState.set(new RosterState(data.division.groups.flatMap((group) => group.rosters)));
+	RosterContext.set(new RosterContext(data.division.groups.flatMap((group) => group.rosters)));
 
 	let createDialogOpen = $state(false);
 	let newGroupName = $state('');

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EditableMatch from '$lib/components/EditableMatch.svelte';
 	import EditMatchDialog from '$lib/components/EditMatchDialog.svelte';
-	import { RosterState } from '$lib/state/rosters.svelte.js';
+	import { RosterContext } from '$lib/state/rosters.svelte.js';
 	import { v4 as uuidv4 } from 'uuid';
 	import { updateGroupMatches } from './page.remote.js';
 	import { MatchType, type FullMatch } from '$lib/types.js';
@@ -12,7 +12,7 @@
 
 	const matches: FullMatch[] = $state(data.matches);
 
-	const rosters = RosterState.get();
+	const rosters = RosterContext.get();
 
 	function createMatch() {
 		const match = {

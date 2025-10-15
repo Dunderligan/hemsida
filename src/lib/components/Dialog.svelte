@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { Dialog, type DialogRootProps } from 'bits-ui';
-	import { quadOut } from 'svelte/easing';
-	import { fade, fly } from 'svelte/transition';
+	import { backOut, quadOut, sineOut } from 'svelte/easing';
+	import { fade, fly, scale } from 'svelte/transition';
 	import type { ButtonKind } from '$lib/types';
 	import Button from './Button.svelte';
 
 	type ButtonType = {
 		label: string;
 		icon?: string;
-		kind: ButtonKind;
+		kind?: ButtonKind;
 		disabled?: boolean;
+		loading?: boolean;
 		onclick?: () => void;
 	};
 
@@ -39,17 +40,17 @@
 				{#if open}
 					<div
 						class="fixed top-[50%] left-[50%] z-40 w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] space-y-2 rounded-xl bg-white p-8 shadow-xl sm:max-w-lg md:w-full"
-						transition:fly={{ duration: 80, y: 3, easing: quadOut }}
+						transition:scale={{ duration: 80, start: 0.95, easing: sineOut }}
 						{...props}
 					>
-						<Dialog.Title class="mb-6 text-center font-display text-2xl font-bold text-gray-900"
+						<Dialog.Title class="mb-4 text-center font-display text-2xl font-bold text-gray-900"
 							>{title}</Dialog.Title
 						>
 
 						{@render children?.()}
 
 						{#if buttons}
-							<div class="flex items-center justify-end gap-2 pt-2">
+							<div class="flex items-center justify-end gap-2 pt-4">
 								{#each buttons as button}
 									<Button {...button} />
 								{/each}

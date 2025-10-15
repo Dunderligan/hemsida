@@ -1,39 +1,36 @@
 import { defineContext } from './util';
 
-const { get, set } = defineContext<ConfirmState>('$_confirm_state');
+const { get, set } = defineContext<ConfirmContext>('$_confirm_state');
 
-export class ConfirmState {
+export type ConfirmData = {
+	title: string;
+	description: string;
+	negative?: boolean;
+	icon?: string;
+	action?: () => Promise<void>;
+};
+
+export class ConfirmContext {
 	static get = get;
 	static set = set;
 
-	current: {
-		title: string;
-		description: string;
-	} | null = $state(null);
+	current: ConfirmData | null = $state(null);
 
-	#callbackValue: boolean | null = false;
+	private resolver: ((confirmed: boolean) => void) | null = null;
 
-	show = async (title: string, description: string) => {
-		this.current = {
-			title,
-			description
-		};
+	async confirm(data: ConfirmData): Promise<boolean> {
+		this.current = data;
 
-		await new Promise(() => this.#callbackValue !== null);
+		return new Promise<boolean>((resolve) => {
+			this.resolver = resolve;
+		});
+	}
 
-		const confirmed = this.#callbackValue!;
-		this.#callbackValue = null;
+	async submit(result: boolean) {
+		if (!this.resolver) return;
+
+		this.resolver(result);
+		this.resolver = null;
 		this.current = null;
-
-		return confirmed;
-	};
-
-	hide = () => {
-		this.current = null;
-	};
-
-	callback = (confirmed: boolean) => {
-		if (!this.current) return;
-		this.#callbackValue = confirmed;
-	};
+	}
 }

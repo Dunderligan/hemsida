@@ -1,9 +1,9 @@
 import type { FullMatch, Roster } from '$lib/types';
 import { defineContext } from './util';
 
-const { get, set } = defineContext<RosterState>('$_roster_state');
+const { get, set } = defineContext<RosterContext>('$_roster_state');
 
-export class RosterState {
+export class RosterContext {
 	static get = get;
 	static set = set;
 

@@ -5,7 +5,7 @@ import { db, schema } from '$lib/server/db';
 import { nestedGroupQuery as nestedGroupQuery, type Transaction } from '$lib/server/db/helpers';
 import { Rank, Role, SocialPlatform, type Member, type TeamSocial } from '$lib/types';
 import { flattenGroup, toSlug } from '$lib/util';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { error } from '@sveltejs/kit';
 import { and, eq, inArray, not, sql } from 'drizzle-orm';
 import S3 from '$lib/server/s3';
@@ -76,6 +76,8 @@ export const editRoster = command(
 				updateSocials(tx, teamId, socials)
 			]);
 		});
+
+		console.log('saved changes');
 
 		return { slug: newSlug };
 	}
@@ -194,5 +196,12 @@ export const deleteRoster = command(
 	}),
 	async ({ id }) => {
 		await db.delete(schema.roster).where(eq(schema.roster.id, id));
+
+		const command = new DeleteObjectCommand({
+			Bucket: S3_BUCKET_NAME,
+			Key: `logos/${id}.png`
+		});
+
+		await S3.send(command);
 	}
 );

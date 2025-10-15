@@ -1,34 +1,55 @@
 <script lang="ts">
-	import { ConfirmState } from '$lib/state/confirm.svelte';
+	import { ConfirmContext } from '$lib/state/confirm.svelte';
 	import Dialog from './Dialog.svelte';
 
-	let state = ConfirmState.get();
+	let context = ConfirmContext.get();
 
-	let open = $derived(state.current !== null);
+	let loading = $state(false);
+	let open = $derived(context.current !== null);
 
-	$inspect(state.current);
+	async function confirm() {
+		if (!context.current) return;
+
+		if (context.current.action) {
+			try {
+				loading = true;
+				await context.current.action();
+			} finally {
+				loading = false;
+			}
+		}
+
+		context.submit(true);
+	}
 </script>
 
 <Dialog
 	bind:open
-	title={state.current?.title ?? ''}
-	onOpenChange={() => state.callback(false)}
+	title={context.current?.title ?? ''}
+	onOpenChange={(newState) => {
+		if (!newState) {
+			context.submit(false);
+		}
+	}}
 	buttons={[
 		{
 			label: 'Avbryt',
 			kind: 'secondary',
-			onclick: () => state.callback(false)
+			disabled: loading,
+			onclick: () => context.submit(false)
 		},
 		{
 			label: 'Fortsätt',
-			kind: 'primary',
-			onclick: () => state.callback(true)
+			kind: context.current?.negative ? 'negative' : 'primary',
+			icon: context.current?.icon,
+			loading,
+			onclick: confirm
 		}
 	]}
 >
-	{#if state.current}
-		<p>
-			{state.current.description}
-		</p>
+	{#if context.current}
+		<div class="text-lg font-medium text-gray-600">
+			{@html context.current.description}
+		</div>
 	{/if}
 </Dialog>

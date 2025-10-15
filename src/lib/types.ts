@@ -26,7 +26,9 @@ export enum SocialPlatform {
 export enum Role {
 	DAMAGE = 'damage',
 	TANK = 'tank',
-	SUPPORT = 'support'
+	SUPPORT = 'support',
+	FLEX = 'flex',
+	COACH = 'coach'
 }
 
 export enum MatchType {

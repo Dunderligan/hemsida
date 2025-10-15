@@ -42,10 +42,10 @@
 
 	const typeClass = $derived(
 		disabled
-			? 'text-gray-400 bg-gray-100 font-medium'
+			? 'text-gray-500 bg-gray-200 font-medium'
 			: {
 					primary: 'bg-accent-600 enabled:hover:bg-accent-700 font-semibold text-white',
-					secondary: 'bg-gray-400 enabled:hover:bg-gray-500 font-semibold text-white',
+					secondary: 'bg-gray-500 enabled:hover:bg-gray-600 font-semibold text-white',
 					tertiary: 'text-gray-500 font-medium enabled:hover:bg-gray-100 underline',
 					transparent: 'text-accent-800 enabled:hover:bg-accent-100 enabled:active:bg-accent-200',
 					negative:

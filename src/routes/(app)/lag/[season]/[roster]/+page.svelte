@@ -1,25 +1,16 @@
 <script lang="ts">
 	import { authClient, isAdmin } from '$lib/auth-client';
 	import Button from '$lib/components/Button.svelte';
-	import Icon from '$lib/components/Icon.svelte';
 	import Match from '$lib/components/Match.svelte';
 	import MembersTable from '$lib/components/MembersTable.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
 	import Rank from '$lib/components/Rank.svelte';
 	import RosterLogo from '$lib/components/RosterLogo.svelte';
-	import Table from '$lib/components/Table.svelte';
 	import Tabs from '$lib/components/Tabs.svelte';
 	import TeamSocial from '$lib/components/TeamSocial.svelte';
 	import type { ClassValue } from '$lib/types';
-	import {
-		averageRank,
-		capitalize,
-		cdnImageSrc,
-		sortRole as compareRole,
-		flattenGroup,
-		roleIcon
-	} from '$lib/util';
+	import { averageRank, sortRole as compareRole, flattenGroup } from '$lib/util';
 
 	const session = authClient.useSession();
 

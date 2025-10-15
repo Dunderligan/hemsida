@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RosterState } from '$lib/state/rosters.svelte';
+	import { RosterContext } from '$lib/state/rosters.svelte';
 	import type { FullMatch } from '$lib/types';
 	import { DropdownMenu } from 'bits-ui';
 	import Icon from './Icon.svelte';
@@ -14,7 +14,7 @@
 
 	let { match, canEditRosters = true, canDelete = true, ondelete }: Props = $props();
 
-	const rosters = RosterState.get();
+	const rosters = RosterContext.get();
 </script>
 
 <div class="relative flex overflow-hidden rounded-lg bg-gray-100">
