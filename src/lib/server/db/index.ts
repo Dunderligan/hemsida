@@ -244,6 +244,6 @@ async function seedDb() {
 	);
 }
 
-//await seedDb();
+// await seedDb();
 
 export { db, schema };

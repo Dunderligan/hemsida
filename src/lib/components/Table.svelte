@@ -20,7 +20,7 @@
 	let { columns, rows, row, key, class: classProp }: Props = $props();
 </script>
 
-<div class={[classProp, 'grid w-full gap-y-1 overflow-hidden rounded-lg']}>
+<div class={[classProp, 'grid w-full gap-y-1 overflow-hidden rounded-lg text-gray-700']}>
 	{#each columns as column}
 		{@const [label, center] =
 			typeof column === 'string' ? [column, true] : [column.label, column.center ?? true]}
@@ -28,7 +28,7 @@
 		<div
 			class={[
 				center ? 'text-center ' : 'text-left',
-				'mb-0.5 bg-gray-100 py-2 font-medium text-gray-700'
+				'mb-0.5 bg-gray-50 py-2 font-medium text-gray-600'
 			]}
 		>
 			{label}

@@ -15,7 +15,7 @@
 </script>
 
 <div
-	class="relative flex items-center gap-4 overflow-hidden rounded-lg bg-gray-200 px-6 py-3 text-lg"
+	class="relative flex items-center gap-4 overflow-hidden rounded-lg bg-gray-100 px-6 py-3 text-lg"
 >
 	{#if teamAWon !== null}
 		<div class={['absolute h-full w-2 bg-accent-600', teamAWon ? 'left-0' : 'right-0']}></div>
@@ -54,7 +54,7 @@
 			href="/lag/{seasonSlug}/{roster.slug}"
 			class={[
 				classes.name,
-				'grow truncate font-semibold text-gray-800 hover:text-accent-600 hover:underline'
+				'grow truncate font-semibold text-gray-700 hover:text-accent-600 hover:underline'
 			]}
 		>
 			{roster.name}

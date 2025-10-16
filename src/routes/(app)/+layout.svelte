@@ -10,7 +10,7 @@
 		id="splotch"
 	></div>
 
-	<div class="mb-8 h-18"></div>
+	<div class="mb-12 h-18"></div>
 
 	{@render children?.()}
 </div>
