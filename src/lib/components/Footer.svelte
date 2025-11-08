@@ -43,14 +43,14 @@
 			<p class="text-gray-400">Byggd av Bobbo med ❤️</p>
 		</div>
 
-		<!-- <div class="hidden w-full flex-col items-start md:flex">
+		<div class="hidden w-full flex-col items-start md:flex">
 			<h4 class="mb-2 text-xl font-semibold text-white">Navigation</h4>
 
 			<a href="/" class="block text-lg underline hover:text-accent-500">Startsida</a>
 			<a href="/sasong/test" class="block text-lg underline hover:text-accent-500">Ställningar</a>
 			<a href="/arkiv" class="block text-lg underline hover:text-accent-500">Arkiv</a>
 			<a href="/om" class="block text-lg underline hover:text-accent-500">Om oss</a>
-		</div> -->
+		</div>
 
 		<div class="flex w-full flex-col items-start">
 			<h4 class="mb-2 text-xl font-semibold text-white">Kontakt</h4>
