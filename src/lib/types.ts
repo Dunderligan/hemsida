@@ -108,6 +108,11 @@ export type ResolvedMatch = {
 	draws?: number | null;
 	rosterA?: MatchRoster | null;
 	rosterB?: MatchRoster | null;
+	playedAt?: Date | null;
+	scheduledAt?: Date | null;
+	groupId?: string | null;
+	divisionId?: string | null;
+	vodUrl?: string | null;
 };
 
 export type MatchRoster = {

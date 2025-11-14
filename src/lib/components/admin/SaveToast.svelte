@@ -4,8 +4,16 @@
 	import { fly } from 'svelte/transition';
 	import { SaveContext } from '$lib/state/save.svelte';
 	import { Portal } from 'bits-ui';
+	import { goto } from '$app/navigation';
 
 	const context = SaveContext.get();
+
+	async function onsaveclick() {
+		await context.save();
+		if (context.href) {
+			await goto(context.href);
+		}
+	}
 </script>
 
 <Portal>
@@ -28,7 +36,7 @@
 				icon="mdi:content-save"
 				label="Spara"
 				kind="primary"
-				onclick={context.save}
+				onclick={onsaveclick}
 				loading={context.saving}
 				disabled={context.discarding}
 			/>

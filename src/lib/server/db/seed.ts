@@ -228,6 +228,8 @@ export async function seed(db: PostgresJsDatabase<typeof schema>) {
 						teamAScore,
 						teamBScore,
 						played: true,
+						playedAt: new Date(),
+						scheduledAt: new Date(),
 						draws: 3 - (teamAScore + teamBScore)
 					});
 				}

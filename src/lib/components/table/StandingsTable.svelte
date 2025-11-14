@@ -38,7 +38,7 @@
 		<div class="flex min-w-0 items-center gap-2 bg-gray-100 py-2 text-lg font-semibold">
 			<RosterLogo {id} class="size-12" />
 
-			<a href="/lag/{seasonSlug}/{slug}" class="truncate hover:text-accent-600 hover:underline"
+			<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:text-accent-600 hover:underline"
 				>{name}</a
 			>
 		</div>

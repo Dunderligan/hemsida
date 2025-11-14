@@ -65,7 +65,7 @@
 			socials: team.socials
 		});
 
-		// await goto(`/lag/${season.slug}/${slug}`);
+		// await goto(`/lag/${slug}/${season.slug}`);
 		saveCtx.setDirty();
 	}
 
@@ -146,7 +146,7 @@
 	]}
 />
 
-<AdminCard title="Medlemmar">
+<AdminCard title="Spelare">
 	{#if roster.members.length === 0}
 		<AdminEmptyNotice oncreateclick={() => (newPlayerOpen = true)}>
 			Detta roster har inga medlemmar.

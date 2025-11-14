@@ -14,50 +14,91 @@
 		match.played === false ? null : (match.teamAScore ?? 0) > (match.teamBScore ?? 0);
 </script>
 
-<div
-	class="relative flex items-center gap-4 overflow-hidden rounded-lg bg-gray-100 px-6 py-3 text-lg"
->
-	{#if teamAWon !== null}
-		<div class={['absolute h-full w-2 bg-accent-600', teamAWon ? 'left-0' : 'right-0']}></div>
-	{/if}
+<div class="relative overflow-hidden rounded-lg bg-gray-100 px-6 py-3">
+	<div class="flex items-center gap-4 pb-2 text-sm font-medium text-gray-600 sm:justify-center">
+		{#if match.played}
+			{#if match.playedAt}
+				<div>
+					{match.playedAt.toLocaleDateString()}
+				</div>
+			{/if}
 
-	{#if match.rosterA}
-		{@render side(match.rosterA, teamAWon === true, { name: 'text-right' })}
-	{/if}
-
-	<div class="shrink-0 rounded-lg bg-white px-3 py-1.5 font-display text-xl font-extrabold">
-		{#if match.played === false}
-			? - ?
+			{#if match.vodUrl}
+				<a class="hover:underline" href={match.vodUrl}>
+					<Icon icon="mdi:external-link" />
+					VOD
+				</a>
+			{/if}
 		{:else}
-			{match.teamAScore ?? 0} - {match.teamBScore ?? 0}
+			<div>
+				<Icon icon="mdi:timetable" />
+				Planerad
+
+				{#if match.scheduledAt}
+					{match.scheduledAt.toLocaleString()}
+				{/if}
+			</div>
 		{/if}
 	</div>
+	<div class="flex flex-col items-center gap-2 sm:flex-row">
+		{#if match.rosterA}
+			{@render side(match.rosterA, teamAWon === true, match.teamAScore, {
+				root: 'flex-row sm:flex-row-reverse'
+			})}
+		{/if}
 
-	{#if match.rosterB}
-		{@render side(match.rosterB, teamAWon === false, { root: 'flex-row-reverse' })}
-	{/if}
+		<div class="mx-2 hidden shrink-0 text-3xl text-gray-600 sm:block">
+			{#if match.played}
+				<span class={[teamAWon && 'text-accent-600', 'font-extrabold']}
+					>{match.teamAScore ?? 0}
+				</span>
+				<span class="font-bold">-</span>
+				<span class={[!teamAWon && 'text-accent-600', 'font-extrabold']}
+					>{match.teamBScore ?? 0}</span
+				>
+			{:else}
+				<span class="font-semibold">? - ?</span>
+			{/if}
+		</div>
+
+		{#if match.rosterB}
+			{@render side(match.rosterB, teamAWon === false, match.teamBScore, { root: '' })}
+		{/if}
+	</div>
 </div>
 
 {#snippet side(
 	roster: MatchRoster,
 	won: boolean,
-	classes: { root?: ClassValue; name?: ClassValue }
+	score?: number | null,
+	classes?: { root?: ClassValue; name?: ClassValue }
 )}
-	<div class={[classes.root, 'flex w-full items-center']}>
-		<RosterLogo id={roster.id} class="size-12" />
-
-		{#if won}
-			<Icon icon="mdi:crown" class="mx-2 text-2xl text-accent-600" />
-		{/if}
+	<div class={[classes?.root, 'flex w-full items-center gap-2']}>
+		<RosterLogo id={roster.id} class="size-10 sm:size-12" />
 
 		<a
-			href="/lag/{seasonSlug}/{roster.slug}"
+			href="/lag/{roster.slug}/{seasonSlug}"
 			class={[
-				classes.name,
-				'grow truncate font-semibold text-gray-700 hover:text-accent-600 hover:underline'
+				classes?.name,
+				'truncate text-lg font-semibold text-gray-700 hover:text-accent-600 hover:underline'
 			]}
 		>
 			{roster.name}
 		</a>
+
+		{#if won}
+			<Icon icon="mdi:crown" class="text-xl text-accent-600" />
+		{/if}
+
+		{#if match.played}
+			<div
+				class={[
+					won ? 'text-accent-600' : 'text-gray-600',
+					'ml-auto text-3xl font-extrabold sm:hidden'
+				]}
+			>
+				{score ?? 0}
+			</div>
+		{/if}
 	</div>
 {/snippet}

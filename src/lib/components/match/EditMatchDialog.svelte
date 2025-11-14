@@ -5,6 +5,8 @@
 	import InputField from '../ui/InputField.svelte';
 	import Label from '../ui/Label.svelte';
 	import RosterSelect from '../admin/RosterSelect.svelte';
+	import Checkbox from '../ui/Checkbox.svelte';
+	import DateInput from '../ui/DateInput.svelte';
 
 	const rosterCtx = RosterContext.get();
 	const saveCtx = SaveContext.get();
@@ -12,11 +14,6 @@
 	const match = $derived(rosterCtx.editingMatch);
 
 	let open = $derived(match !== null);
-
-	$effect(() => {
-		if (!match) return;
-		match.played = match.teamAScore !== null || match.teamBScore !== null || match.draws !== null;
-	});
 </script>
 
 <Dialog
@@ -29,6 +26,17 @@
 	}}
 >
 	{#if match}
+		<div class="space-y-1">
+			<Label label="Spelad">
+				<Checkbox
+					bind:checked={match.played}
+					onCheckedChange={() => {
+						console.log('checked change');
+					}}
+				/>
+			</Label>
+		</div>
+
 		<div class="flex gap-2">
 			<RosterSelect
 				bind:selectedId={match.rosterAId}
@@ -38,7 +46,7 @@
 			<InputField
 				class="w-1/4 min-w-0"
 				bind:value={match.teamAScore}
-				oninput={saveCtx.setDirty}
+				onchange={saveCtx.setDirty}
 				type="number"
 				placeholder="Poäng"
 			/>
@@ -52,15 +60,29 @@
 			<InputField
 				class="w-1/4 min-w-0"
 				bind:value={match.teamBScore}
-				oninput={saveCtx.setDirty}
+				onchange={saveCtx.setDirty}
 				type="number"
 				placeholder="Poäng"
 			/>
 		</div>
 
 		<div class="mt-4 space-y-1">
+			<Label label="Spelad">
+				<DateInput
+					bind:value={match.playedAt}
+					oninput={saveCtx.setDirty}
+					disabled={!match.played}
+				/>
+			</Label>
+			<Label label="Planerad">
+				<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
+			</Label>
 			<Label label="VOD">
-				<InputField bind:value={match.vodUrl} placeholder="https://youtube.com/..." />
+				<InputField
+					bind:value={match.vodUrl}
+					onchange={saveCtx.setDirty}
+					placeholder="https://youtube.com/..."
+				/>
 			</Label>
 		</div>
 	{/if}

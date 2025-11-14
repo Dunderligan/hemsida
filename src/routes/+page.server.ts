@@ -10,7 +10,9 @@ export const load = async () => {
 			id: true,
 			teamAScore: true,
 			teamBScore: true,
-			draws: true
+			draws: true,
+			playedAt: true,
+			scheduledAt: true
 		},
 		with: {
 			rosterA: {

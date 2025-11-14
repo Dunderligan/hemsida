@@ -19,7 +19,7 @@
 		icon="mdi:add"
 		label={createButtonLabel}
 		kind="transparent"
-		class="ml-auto"
+		class="ml-auto shrink-0"
 		onclick={oncreateclick}
 	/>
 </Notice>

@@ -99,6 +99,8 @@
 		rosterCtx.editMatch(group.matches[0]);
 		saveCtx.setDirty();
 	}
+
+	$inspect(group.matches);
 </script>
 
 <EditMatchDialog />

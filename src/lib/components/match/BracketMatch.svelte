@@ -13,7 +13,7 @@
 		match.played === false ? null : (match.teamAScore ?? 0) > (match.teamBScore ?? 0);
 </script>
 
-<div class="flex">
+<div class="flex h-[100px]">
 	<div class="grow overflow-hidden rounded-lg">
 		{@render side(match.rosterA, teamAWon === true, match.teamAScore)}
 
@@ -27,15 +27,15 @@
 	<div
 		class={[
 			'flex h-12 items-center overflow-hidden pr-4',
-			match.played ? (won ? 'bg-gray-200' : 'bg-gray-50') : ' bg-gray-100'
+			match.played ? (won ? 'bg-gray-200' : 'bg-gray-50') : 'bg-gray-100'
 		]}
 	>
 		{#if roster}
 			<div
 				class={[
-					match.played ? 'text-2xl font-extrabold' : 'text-md font-medium',
+					match.played ? 'text-2xl font-extrabold' : 'text-lg font-medium',
 					won ? 'text-accent-600' : 'text-gray-400',
-					'flex h-full shrink-0 items-center justify-center px-4'
+					'flex h-full shrink-0 items-center justify-center px-4 text-center'
 				]}
 			>
 				{score ?? '?'}
@@ -43,7 +43,7 @@
 
 			<RosterLogo id={roster.id} class="mr-2 size-8" />
 			<a
-				href="/lag/{seasonSlug}/{roster?.slug}"
+				href="/lag/{roster?.slug}/{seasonSlug}"
 				class={[
 					match.played
 						? won

@@ -90,7 +90,6 @@
 	}
 
 	$effect(() => {
-		console.log('refresh');
 		rounds = buildBracket(data.matches);
 	});
 

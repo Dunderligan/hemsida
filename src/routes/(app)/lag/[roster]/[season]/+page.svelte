@@ -29,7 +29,7 @@
 			return {
 				label: `${season.name}`,
 				value: roster.id,
-				href: `/lag/${season.slug}/${roster.slug}`
+				href: `/lag/${roster.slug}/${season.slug}`
 			};
 		})
 	);
@@ -58,7 +58,7 @@
 			<div class="mb-6 flex items-center gap-6">
 				<h3 class="text-xl font-semibold text-gray-700">Rosters</h3>
 
-				<Tabs class="grow" items={rosterTabItems} />
+				<Tabs class="grow" items={rosterTabItems} selected={roster.id} />
 			</div>
 		{:else}
 			<div class="mb-4 text-lg font-medium text-gray-700">

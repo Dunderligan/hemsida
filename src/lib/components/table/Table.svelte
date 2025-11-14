@@ -20,7 +20,12 @@
 	let { columns, rows, row, key, class: classProp }: Props = $props();
 </script>
 
-<div class={[classProp, 'grid w-full gap-y-1 overflow-hidden rounded-lg text-gray-700']}>
+<div
+	class={[
+		classProp,
+		'grid w-full gap-y-1 overflow-hidden overflow-x-scroll rounded-lg text-gray-700'
+	]}
+>
 	{#each columns as column}
 		{@const [label, center] =
 			typeof column === 'string' ? [column, true] : [column.label, column.center ?? true]}

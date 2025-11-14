@@ -27,7 +27,10 @@ export const updateGroup = command(
 			await tx.delete(schema.match).where(and(eq(schema.match.groupId, id)));
 
 			const inserts = matches.map((match) => ({ ...match, groupId: id }));
-			await tx.insert(schema.match).values(inserts);
+
+			if (inserts.length > 0) {
+				await tx.insert(schema.match).values(inserts);
+			}
 		});
 	}
 );

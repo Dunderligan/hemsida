@@ -57,7 +57,7 @@ export const load = async ({ params }) => {
 
 	const matches = await db.query.match.findMany({
 		where: and(
-			eq(schema.match.played, true),
+			// eq(schema.match.played, true),
 			or(eq(schema.match.rosterAId, data.id), eq(schema.match.rosterBId, data.id))
 		),
 		limit: 5,
@@ -66,7 +66,11 @@ export const load = async ({ params }) => {
 			id: true,
 			teamAScore: true,
 			teamBScore: true,
-			draws: true
+			draws: true,
+			playedAt: true,
+			scheduledAt: true,
+			played: true,
+			vodUrl: true
 		},
 		with: {
 			rosterA: {

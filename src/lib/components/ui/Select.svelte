@@ -68,7 +68,7 @@
 	<Select.Trigger
 		class={[
 			triggerClass,
-			'group flex items-center overflow-hidden rounded-lg bg-gray-100 py-2 pr-2 pl-4 font-medium text-gray-800 transition-all duration-75 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500'
+			'group flex items-center overflow-hidden rounded-lg bg-gray-100 py-2 pr-2 pl-4 font-medium text-gray-700 transition-all duration-75 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500'
 		]}
 	>
 		{#if selectedItem}
@@ -104,7 +104,7 @@
 									<Select.Item
 										{...item}
 										class={[
-											'flex cursor-pointer items-center rounded-md px-4 py-1.5 text-left font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-800 data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-800'
+											'flex cursor-pointer items-center rounded-md px-4 py-1.5 text-left font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700 data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700'
 										]}
 									>
 										{#snippet children({ selected })}

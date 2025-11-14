@@ -7,5 +7,8 @@ export const matchSchema = z.object({
 	teamAScore: z.int().nullable().optional(),
 	teamBScore: z.int().nullable().optional(),
 	draws: z.int().nullable().optional(),
-	played: z.boolean()
+	played: z.boolean(),
+	vodUrl: z.url().nullable().optional(),
+	scheduledAt: z.date().nullable().optional(),
+	playedAt: z.date().nullable().optional()
 });

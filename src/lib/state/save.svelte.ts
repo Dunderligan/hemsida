@@ -15,9 +15,16 @@ export class SaveContext {
 	private saveAction: () => Promise<void>;
 	private discardAction: () => Promise<void>;
 
-	constructor(save: () => Promise<void>, discard?: () => Promise<void>) {
+	href?: string;
+
+	constructor(
+		save: () => Promise<void>,
+		options?: { discard?: () => Promise<void>; href?: string }
+	) {
 		this.saveAction = save;
-		this.discardAction = discard ?? (() => invalidateAll());
+		this.discardAction = options?.discard ?? (() => invalidateAll());
+
+		this.href = options?.href;
 
 		beforeNavigate(({ cancel }) => {
 			if (!this.isDirty) return;
