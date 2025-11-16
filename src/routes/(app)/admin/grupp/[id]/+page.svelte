@@ -70,7 +70,7 @@
 			groupId: group.id,
 			seasonSlug: season.slug,
 			name: newRosterName,
-			teamId: newRosterTeamId ?? null
+			teamId: newRosterTeamId && newRosterTeamId.length > 0 ? newRosterTeamId : null
 		});
 
 		await goto(`/admin/roster/${roster.id}`);
@@ -99,8 +99,6 @@
 		rosterCtx.editMatch(group.matches[0]);
 		saveCtx.setDirty();
 	}
-
-	$inspect(group.matches);
 </script>
 
 <EditMatchDialog />

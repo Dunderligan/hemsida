@@ -12,14 +12,30 @@
 </script>
 
 <main
-	class={[topMargin && 'mt-18', 'relative z-0 grow overflow-hidden bg-white px-4 py-12 shadow-2xl']}
+	class={[
+		topMargin && 'mt-18',
+		'relative z-0 grow overflow-hidden bg-white px-4 pt-12 pb-40 shadow-2xl'
+	]}
 >
 	<div class={[classProp, 'mx-auto max-w-4xl']}>
 		{@render children?.()}
 	</div>
+
+	<div class="halftone pointer-events-none absolute bottom-0 -z-10 h-[600px] w-full"></div>
 </main>
 
 <style>
+	.halftone {
+		mask-image: url('/halftone2.png');
+		mask-size: cover;
+		mask-repeat: no-repeat;
+		background-image: linear-gradient(
+			to top right,
+			var(--color-gray-100) 0%,
+			var(--color-transparent) 50%
+		);
+	}
+
 	/* main::before {
 		content: '';
 		position: absolute;

@@ -40,7 +40,7 @@ export const createAndAddRoster = command(
 		groupId: z.uuidv4(),
 		seasonSlug: z.string(),
 		name: z.string().nonempty(),
-		teamId: z.uuidv4().nullable()
+		teamId: z.uuidv4().nullable().optional()
 	}),
 	async ({ groupId, seasonSlug, name, teamId }) => {
 		if (!teamId) {
