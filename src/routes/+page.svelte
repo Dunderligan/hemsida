@@ -10,7 +10,7 @@
 	<!-- <div id="color-overlay" class="fixed top-0 bottom-0 left-0 -z-10 w-full"></div> -->
 	<!-- <div id="background" class="absolute top-0 bottom-0 left-0 -z-20 w-full"></div> -->
 
-	<video src="/hero.mp4" class="fixed inset-0 -z-10 brightness-50" autoplay muted loop></video>
+	<video src="/hero.avi" class="fixed inset-0 -z-10 brightness-50" autoplay muted loop></video>
 
 	<div
 		class="mx-auto flex h-full max-w-4xl flex-col justify-center gap-6 pt-8 text-left font-display"
