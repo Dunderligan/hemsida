@@ -1,16 +1,17 @@
 import { db, schema } from '$lib/server/db';
-import { eq } from 'drizzle-orm';
+import { asc, desc, eq, SQL } from 'drizzle-orm';
 
-export const load = async () => {
-	const matches = db.query.match.findMany({
+const getMatches = async (played: boolean, orderBy: SQL) => {
+	return await db.query.match.findMany({
 		limit: 3,
-		orderBy: schema.match.playedAt,
-		where: eq(schema.match.played, true),
+		orderBy,
+		where: eq(schema.match.played, played),
 		columns: {
 			id: true,
 			teamAScore: true,
 			teamBScore: true,
 			draws: true,
+			played: true,
 			playedAt: true,
 			scheduledAt: true
 		},
@@ -33,8 +34,13 @@ export const load = async () => {
 			}
 		}
 	});
+};
 
+export const load = async () => {
 	return {
-		matches
+		matches: {
+			upcoming: getMatches(false, desc(schema.match.scheduledAt)),
+			latest: getMatches(true, asc(schema.match.playedAt))
+		}
 	};
 };

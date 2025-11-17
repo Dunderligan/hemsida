@@ -2,6 +2,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Match from '$lib/components/match/Match.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
+	import type { ResolvedMatch } from '$lib/types';
 
 	let { data } = $props();
 </script>
@@ -33,11 +34,16 @@
 	</div>
 </header>
 
-<PageSection topMargin={false}>
-	<h2 class="mb-4 font-display text-2xl font-bold text-gray-700">Senaste matcher</h2>
+<PageSection topMargin={false} class="space-y-10">
+	{@render matchList('Senaste matcher', data.matches.latest)}
+	{@render matchList('Kommande matcher', data.matches.upcoming)}
+</PageSection>
+
+{#snippet matchList(title: string, matches: Promise<ResolvedMatch[]>)}
+	<h2 class="mb-4 font-display text-2xl font-bold text-gray-700">{title}</h2>
 
 	<div class="max-w-2xl space-y-2">
-		{#await data.matches}
+		{#await matches}
 			{#each Array.from({ length: 3 })}
 				<div class="h-16 animate-pulse rounded-lg bg-gray-200"></div>
 			{/each}
@@ -47,7 +53,7 @@
 			{/each}
 		{/await}
 	</div>
-</PageSection>
+{/snippet}
 
 <style>
 	#color-overlay {

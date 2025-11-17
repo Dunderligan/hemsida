@@ -10,6 +10,6 @@
 	let { children, class: classProp }: Props = $props();
 </script>
 
-<header class={[classProp, 'mx-auto w-full max-w-4xl px-4 font-display']}>
+<header class={[classProp, 'mx-auto w-full max-w-4xl px-4 font-display text-black']}>
 	{@render children?.()}
 </header>

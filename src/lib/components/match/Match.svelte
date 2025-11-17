@@ -19,6 +19,8 @@
 		{#if match.played}
 			{#if match.playedAt}
 				<div>
+					Spelad
+
 					{match.playedAt.toLocaleDateString()}
 				</div>
 			{/if}
