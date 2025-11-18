@@ -27,12 +27,12 @@
 	<label class="group relative flex size-24 cursor-pointer items-center justify-center">
 		<RosterLogo
 			id={rosterId}
-			class="absolute -z-10 h-full w-full transition-all group-hover:brightness-75"
+			class="absolute h-full w-full transition-all group-hover:brightness-75"
 			imgSize={128}
 			src={srcOverride}
 		/>
 		<div
-			class="hidden items-center justify-center rounded-lg bg-gray-600 p-2 text-xl text-white group-hover:flex"
+			class="z-10 hidden items-center justify-center rounded-lg bg-gray-600 p-2 text-xl text-white group-hover:flex"
 		>
 			<Icon icon="ph:upload-simple" />
 		</div>

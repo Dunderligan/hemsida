@@ -131,7 +131,7 @@
 						href: `?div=${division.slug}&visa=gruppspel`
 					},
 					{
-						icon: 'ph:brackets-curly',
+						icon: 'iconoir:tournament',
 						label: 'Slutspel',
 						value: 'bracket',
 						href: `?div=${division.slug}&visa=slutspel`,

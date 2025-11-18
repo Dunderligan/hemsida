@@ -175,7 +175,7 @@ export function cdnImageSrc(path: string, { width, height }: { width: number; he
 		filters += `,height=${height}`;
 	}
 
-	return `${PUBLIC_CDN_ENDPOINT}/cdn-cgi/image/${filters}/${PUBLIC_S3_BUCKET_NAME}${path}`;
+	return `${PUBLIC_CDN_ENDPOINT}/cdn-cgi/image/${filters}/${path}`;
 }
 
 export function capitalize(str: string) {

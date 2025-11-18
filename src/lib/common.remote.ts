@@ -6,7 +6,7 @@ import { nestedGroupQuery } from './server/db/helpers';
 import type { RosterWithGroup } from './types';
 import { error } from '@sveltejs/kit';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { S3_BUCKET_NAME } from '$env/static/private';
+import { PUBLIC_S3_BUCKET_NAME } from '$env/static/public';
 import S3 from './server/s3';
 
 export const queryTeams = query(
@@ -66,13 +66,11 @@ export const uploadRosterLogo = form(async (data) => {
 	const buffer = Buffer.from(await file.arrayBuffer());
 
 	const command = new PutObjectCommand({
-		Bucket: S3_BUCKET_NAME,
+		Bucket: PUBLIC_S3_BUCKET_NAME,
 		Key: `logos/${rosterId}.png`,
 		Body: buffer,
 		ContentType: `image/png`
 	});
 
 	await S3.send(command);
-
-	console.log('uploaded logo');
 });

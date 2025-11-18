@@ -26,7 +26,7 @@
 </script>
 
 <footer class="relative bg-gray-900 px-4 pt-10 pb-16 text-center font-medium text-gray-200">
-	<div class="mx-auto flex max-w-4xl flex-col items-start gap-8 text-left sm:flex-row">
+	<div class="mx-auto flex max-w-4xl flex-col items-start gap-8 text-left md:flex-row">
 		<div class="w-full">
 			<img src="/logo.png" alt="Dunderligan" class="-mt-2 size-14" />
 			<p class="text-lg">
@@ -43,7 +43,7 @@
 			<p class="text-gray-400">Byggd av Bobbo med ❤️</p>
 		</div>
 
-		<div class="hidden w-full flex-col items-start md:flex">
+		<div class="w-full">
 			<div class="mb-2 text-xl font-semibold text-white">Navigation</div>
 
 			<a href="/" class="block text-lg hover:text-accent-400 hover:underline">Startsida</a>
@@ -54,7 +54,7 @@
 			<a href="/om" class="block text-lg hover:text-accent-400 hover:underline">Om oss</a>
 		</div>
 
-		<div class="flex w-full flex-col items-start">
+		<div class="w-full">
 			<div class="mb-2 text-xl font-semibold text-white">Kontakt</div>
 
 			<a
@@ -63,8 +63,10 @@
 			>
 		</div>
 
-		<div class="flex w-full gap-4 text-left text-gray-400 sm:flex-row sm:text-left">
-			<img src="/lysator.svg" class="size-16" alt="Lysator" />
+		<div class="flex w-full items-center gap-4 text-gray-400">
+			<a href="https://www.lysator.liu.se/inhysningar" class="flex shrink-0"
+				><img src="/lysator.svg" alt="Lysator" class="size-16" /></a
+			>
 
 			<div>Hemsidan driftas i samarbete med Lysator.</div>
 		</div>
@@ -74,9 +76,9 @@
 </footer>
 
 <style>
-	#pattern {
+	/* #pattern {
 		background-image: url('/topographic-bg.jpg');
 		filter: invert(0);
 		mix-blend-mode: multiply;
-	}
+	} */
 </style>

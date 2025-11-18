@@ -42,9 +42,8 @@
 		content="Laget {roster.name} spelar i {group.name}, {division.name} i {season.name} av Dunderligan, Sveriges främsta Overwatchliga.
 		{roster.name} har {roster.members.length} medlemmar: {sortedMembers
 			.map((member) => member.player.battletag)
-			.join(', ')}, 
-		med den genomsnittliga ranken {average.rank} {average.tier}. Laget har {team.socials
-			.length} sociala medier länkade: {team.socials
+			.join(', ')}, med den genomsnittliga ranken {average.rank} {average.tier}. Laget har {team
+			.socials.length} sociala medier länkade: {team.socials
 			.map((social) => `${social.platform} (${social.url})`)
 			.join(', ')}."
 	/>
