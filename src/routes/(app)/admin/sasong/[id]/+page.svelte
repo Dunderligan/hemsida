@@ -11,15 +11,17 @@
 	import SaveToast from '$lib/components/admin/SaveToast.svelte';
 	import { ConfirmContext } from '$lib/state/confirm.svelte.js';
 	import { SaveContext } from '$lib/state/save.svelte.js';
-	import { createDivision, deleteSeason } from './page.remote.js';
+	import { createDivision, deleteSeason, editSeason } from './page.remote.js';
+	import DateInput from '$lib/components/ui/DateInput.svelte';
 
 	const { data } = $props();
 
 	const season = $state(data.season);
 
-	SaveContext.set(new SaveContext({ href: `/sasong/${season.slug}` }));
+	SaveContext.set(new SaveContext({ save, href: `/sasong/${season.slug}` }));
 
 	const confirmCtx = ConfirmContext.get();
+	const saveCtx = SaveContext.get();
 
 	let createDivisionOpen = $state(false);
 	let newDivisionName = $state('');
@@ -31,6 +33,14 @@
 		});
 
 		await goto(`/admin/division/${division.id}`);
+	}
+
+	async function save() {
+		await editSeason({
+			id: season.id,
+			startedAt: season.startedAt,
+			endedAt: season.endedAt
+		});
 	}
 
 	async function submitDelete() {
@@ -70,6 +80,16 @@
 </AdminCard>
 
 <AdminCard title="Inställningar">
+	<div class="space-y-1">
+		<Label label="Startdatum">
+			<DateInput bind:value={season.startedAt} type="date" oninput={saveCtx.setDirty} required />
+		</Label>
+
+		<Label label="Slutdatum">
+			<DateInput bind:value={season.endedAt} type="date" oninput={saveCtx.setDirty} />
+		</Label>
+	</div>
+
 	<Button icon="ph:trash" label="Radera säsong" kind="negative" onclick={submitDelete} />
 </AdminCard>
 

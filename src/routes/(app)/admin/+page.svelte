@@ -11,6 +11,7 @@
 	import Label from '$lib/components/ui/Label.svelte';
 	import { createSeason } from './page.remote.js';
 	import { SaveContext } from '$lib/state/save.svelte.js';
+	import DateInput from '$lib/components/ui/DateInput.svelte';
 
 	let { data } = $props();
 
@@ -30,6 +31,11 @@
 		});
 
 		await goto(`/admin/sasong/${season.id}`);
+	}
+
+	function resetNewSeason() {
+		newSeasonName = '';
+		newSeasonStartedAt = new Date();
 	}
 </script>
 
@@ -53,23 +59,18 @@
 	{/if}
 </AdminCard>
 
-<Dialog title="Skapa säsong" bind:open={createSeasonOpen}>
-	<input type="text" bind:value={newSeasonName} placeholder="Namn" />
-	<button onclick={submitNewSeason}>Skapa</button>
-</Dialog>
-
 <CreateDialog
 	title="Skapa säsong"
 	bind:open={createSeasonOpen}
 	oncreate={submitNewSeason}
-	onclose={() => (newSeasonName = '')}
-	disabled={!newSeasonName}
+	onclose={resetNewSeason}
+	disabled={!newSeasonName.trim()}
 >
 	<Label label="Namn">
-		<InputField
-			bind:value={newSeasonName}
-			placeholder="T.ex. Säsong 1..."
-			onenter={submitNewSeason}
-		/>
+		<InputField bind:value={newSeasonName} placeholder="T.ex. Säsong 1..." />
+	</Label>
+
+	<Label label="Startdatum">
+		<DateInput bind:value={newSeasonStartedAt} type="date" required />
 	</Label>
 </CreateDialog>

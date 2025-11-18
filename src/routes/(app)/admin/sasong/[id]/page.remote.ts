@@ -25,6 +25,17 @@ export const createDivision = command(
 	}
 );
 
+export const editSeason = command(
+	z.object({
+		id: z.uuid(),
+		startedAt: z.date(),
+		endedAt: z.date().nullable().optional()
+	}),
+	async ({ id, startedAt, endedAt }) => {
+		await db.update(schema.season).set({ startedAt, endedAt }).where(eq(schema.season.id, id));
+	}
+);
+
 export const deleteSeason = command(
 	z.object({
 		id: z.uuidv4()

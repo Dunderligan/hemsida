@@ -50,7 +50,7 @@
 	});
 
 	function formatDateWithoutYear(date: Date) {
-		return date.toLocaleDateString(undefined, {
+		return date.toLocaleDateString('sv-SE', {
 			month: 'long',
 			day: 'numeric'
 		});
@@ -84,11 +84,11 @@
 			class={[
 				isOngoing
 					? 'bg-green-200 font-semibold text-green-800'
-					: 'bg-gray-300 font-medium text-gray-700',
-				'mr-1 flex max-w-max items-center gap-1 rounded-full py-1 pr-3 pl-2 text-sm'
+					: 'bg-gray-200 font-medium text-gray-600',
+				'mr-1 flex max-w-max items-center gap-1 rounded-full px-4 py-1.5 text-sm'
 			]}
 		>
-			<Icon icon={isOngoing ? 'ph:circle' : 'ph:pause'} class="text-xl" />
+			<Icon icon={isOngoing ? 'ph:circle' : 'ph:stop'} class="text-xl" />
 
 			{isOngoing ? 'Pågående' : 'Avslutad'}
 		</div>

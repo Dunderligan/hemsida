@@ -25,8 +25,12 @@
 
 	const links = [
 		{
-			href: '/sasong/test',
+			href: '/stallningar',
 			label: 'Ställningar'
+		},
+		{
+			href: '/arkiv',
+			label: 'Arkiv'
 		},
 		{
 			href: '/om',
