@@ -11,7 +11,6 @@
 	<title>Dunderligan</title>
 	<meta name="description" content="Sveriges största återkommande Overwatchturnering." />
 
-	<meta property="og:type" content="website" />
 	<meta property="og:description" content="Sveriges största återkommande Overwatchturnering!" />
 </svelte:head>
 
@@ -71,7 +70,7 @@
 {/snippet}
 
 <style>
-	#color-overlay {
+	/* #color-overlay {
 		mix-blend-mode: color;
 		background-image: linear-gradient(to bottom, var(--color-accent-900), var(--color-accent-600));
 		filter: saturate(75%);
@@ -81,7 +80,7 @@
 		background-image: url('/hero.png');
 		filter: contrast(110%) brightness(50%);
 		background-size: cover;
-	}
+	} */
 
 	h1 {
 		line-height: 110%;

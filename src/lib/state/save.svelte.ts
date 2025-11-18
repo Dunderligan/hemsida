@@ -22,7 +22,7 @@ export class SaveContext {
 		options?: { discard?: () => Promise<void>; href?: string }
 	) {
 		this.saveAction = save;
-		this.discardAction = options?.discard ?? (() => invalidateAll());
+		this.discardAction = options?.discard ?? invalidateAll;
 
 		this.href = options?.href;
 

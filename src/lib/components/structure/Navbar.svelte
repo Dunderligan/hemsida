@@ -72,7 +72,7 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content class="floating" avoidCollisions={false}>
 						<DropdownMenu.Item class="floating-item">
-							<a href="/admin" class="space-y-2"> Admin </a>
+							<a href="/admin" class="grow"> Admin </a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item class="floating-item gap-2" onclick={logout}>
 							Logga ut</DropdownMenu.Item

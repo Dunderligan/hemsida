@@ -4,7 +4,7 @@
 
 	type Props = {} & WithoutChildrenOrChild<Checkbox.RootProps>;
 
-	let { checked = $bindable(), class: classProp }: Props = $props();
+	let { checked = $bindable(false), class: classProp, ...props }: Props = $props();
 </script>
 
 <Checkbox.Root
@@ -16,6 +16,7 @@
 			: 'border-gray-300 bg-gray-100 hover:bg-gray-50',
 		'flex size-7 items-center justify-center rounded-md border text-gray-200 transition-colors duration-75'
 	]}
+	{...props}
 >
 	{#if checked}
 		<Icon icon="ph:check" />

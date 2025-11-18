@@ -19,6 +19,13 @@
 <Dialog
 	title="Redigera match"
 	{open}
+	buttons={[
+		{
+			label: 'Klar',
+			icon: 'ph:check',
+			onclick: () => rosterCtx.stopMatchEdit()
+		}
+	]}
 	onOpenChange={(state) => {
 		if (!state) {
 			rosterCtx.stopMatchEdit();
@@ -28,12 +35,7 @@
 	{#if match}
 		<div class="space-y-1">
 			<Label label="Spelad">
-				<Checkbox
-					bind:checked={match.played}
-					onCheckedChange={() => {
-						console.log('checked change');
-					}}
-				/>
+				<Checkbox bind:checked={match.played} onCheckedChange={saveCtx.setDirty} />
 			</Label>
 		</div>
 
@@ -67,15 +69,15 @@
 		</div>
 
 		<div class="mt-4 space-y-1">
+			<Label label="Planerad">
+				<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
+			</Label>
 			<Label label="Spelad">
 				<DateInput
 					bind:value={match.playedAt}
 					oninput={saveCtx.setDirty}
 					disabled={!match.played}
 				/>
-			</Label>
-			<Label label="Planerad">
-				<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
 			</Label>
 			<Label label="VOD">
 				<InputField

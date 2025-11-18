@@ -68,7 +68,6 @@
 			I divisionen tävlar {division.rosters.map((roster) => roster.name).join(', ')}."
 	/>
 
-	<meta property="og:type" content="website" />
 	<meta
 		property="og:description"
 		content="{displayMode}, {division.name} i {season.name} av Dunderligan."

@@ -11,6 +11,9 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={page.url.toString()} />
 </svelte:head>
 
 <ProgressBar class="text-accent-500" zIndex={100} />

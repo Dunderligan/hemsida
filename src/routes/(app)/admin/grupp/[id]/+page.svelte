@@ -136,7 +136,7 @@
 			Denna grupp har inga matcher.
 		</AdminEmptyNotice>
 	{:else}
-		<div class="grid grid-cols-2 gap-2 overflow-hidden rounded-lg">
+		<div class="grid grid-cols-1 gap-2 overflow-hidden rounded-lg md:grid-cols-2">
 			{#each group.matches as match, i (match.id)}
 				<EditableMatch
 					{match}

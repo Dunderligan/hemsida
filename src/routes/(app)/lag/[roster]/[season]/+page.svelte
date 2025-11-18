@@ -49,7 +49,6 @@
 			.join(', ')}."
 	/>
 
-	<meta property="og:type" content="website" />
 	<meta property="og:title" content={roster.name} />
 	<meta
 		property="og:description"

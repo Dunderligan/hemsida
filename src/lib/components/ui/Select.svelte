@@ -68,7 +68,7 @@
 	<Select.Trigger
 		class={[
 			triggerClass,
-			'group flex items-center overflow-hidden rounded-lg bg-gray-100 py-2 pr-2 pl-4 font-medium text-gray-700 transition-all duration-75 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500'
+			'group flex items-center overflow-hidden rounded-lg bg-gray-100 px-4 py-2 font-medium text-gray-700 transition-all duration-75 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500'
 		]}
 	>
 		{#if selectedItem}
@@ -84,7 +84,7 @@
 			{label ?? selectedLabel ?? placeholder}
 		</div>
 
-		<Icon icon="ph:caret-down" class={[open && 'rotate-180', 'ml-auto transform text-gray-400']} />
+		<Icon icon="ph:caret-down" class={[open && 'rotate-180', 'ml-auto transform text-gray-600']} />
 	</Select.Trigger>
 	<Select.Portal>
 		<Select.Content forceMount {avoidCollisions}>

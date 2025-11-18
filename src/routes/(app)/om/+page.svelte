@@ -10,7 +10,6 @@
 		content="Information om Dunderligan, Sveriges största återkommande Overwatchturnering."
 	/>
 
-	<meta property="og:type" content="website" />
 	<meta property="og:description" content="Om Dunderligan." />
 </svelte:head>
 
