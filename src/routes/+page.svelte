@@ -35,7 +35,7 @@
 			<br />Overwatchturnering
 		</h1>
 		<p class="text-white text-shadow-xs sm:text-lg">
-			Varje år tävlar 32 lag från hela landet i Dunderligan.<br />Alla ranker och erfarenhetsnivåer
+			Varje år tävlar 36 lag från hela landet i Dunderligan.<br />Alla ranker och erfarenhetsnivåer
 			välkomnas!
 		</p>
 

@@ -58,8 +58,8 @@
 			<div class="mb-2 text-xl font-semibold text-white">Kontakt</div>
 
 			<a
-				href="mailto:info@dunderligan.se"
-				class="block text-lg hover:text-accent-400 hover:underline">info@dunderligan.se</a
+				href="mailto:dunderleagueow@gmail.com"
+				class="block text-lg hover:text-accent-400 hover:underline">dunderleagueow@gmail.com</a
 			>
 		</div>
 
