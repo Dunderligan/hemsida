@@ -44,7 +44,7 @@
 		</div>
 
 		<div class="hidden w-full flex-col items-start md:flex">
-			<h4 class="mb-2 text-xl font-semibold text-white">Navigation</h4>
+			<div class="mb-2 text-xl font-semibold text-white">Navigation</div>
 
 			<a href="/" class="block text-lg hover:text-accent-400 hover:underline">Startsida</a>
 			<a href="/sasong/test" class="block text-lg hover:text-accent-400 hover:underline"
@@ -55,7 +55,7 @@
 		</div>
 
 		<div class="flex w-full flex-col items-start">
-			<h4 class="mb-2 text-xl font-semibold text-white">Kontakt</h4>
+			<div class="mb-2 text-xl font-semibold text-white">Kontakt</div>
 
 			<a
 				href="mailto:info@dunderligan.se"

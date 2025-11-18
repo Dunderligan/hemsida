@@ -19,7 +19,7 @@
 
 	const isOngoing = $derived(season.endedAt === null);
 
-	let activeDivision = $derived.by(() => {
+	let division = $derived.by(() => {
 		const param = page.url.searchParams.get('div');
 
 		return param ? (divisions.find((div) => div.slug === param) ?? divisions[0]) : divisions[0];
@@ -40,6 +40,15 @@
 		}
 	});
 
+	const displayMode = $derived.by(() => {
+		switch (mode) {
+			case 'group':
+				return 'Gruppspel';
+			case 'bracket':
+				return 'Slutspel';
+		}
+	});
+
 	function formatDateWithoutYear(date: Date) {
 		return date.toLocaleDateString(undefined, {
 			month: 'long',
@@ -47,6 +56,24 @@
 		});
 	}
 </script>
+
+<svelte:head>
+	<title>{displayMode} - {division.name} - {season.name} | Dunderligan</title>
+	<meta
+		name="description"
+		content="{displayMode} för {division.name} i {season.name} av Dunderligan, sveriges främsta Overwatchliga.
+			Säsongen inleddes {season.startedAt}{season.endedAt
+			? ` och avslutades ${season.endedAt}`
+			: ' och pågår fortfarande'}.
+			I divisionen tävlar {division.rosters.map((roster) => roster.name).join(', ')}."
+	/>
+
+	<meta property="og:type" content="website" />
+	<meta
+		property="og:description"
+		content="{displayMode}, {division.name} i {season.name} av Dunderligan."
+	/>
+</svelte:head>
 
 <PageHeader>
 	<h1 class="mb-3 text-center text-6xl font-extrabold text-black sm:text-left sm:text-7xl">
@@ -86,7 +113,7 @@
 	<section class="grow overflow-hidden">
 		<div class="mb-6 flex max-w-lg flex-col gap-1.5">
 			<Tabs
-				selected={activeDivision.id}
+				selected={division.id}
 				items={divisions.map((division) => ({
 					label: division.name,
 					value: division.id,
@@ -102,33 +129,29 @@
 						icon: 'ph:table',
 						label: 'Gruppspel',
 						value: 'group',
-						href: `?div=${activeDivision.slug}&visa=gruppspel`
+						href: `?div=${division.slug}&visa=gruppspel`
 					},
 					{
 						icon: 'ph:brackets-curly',
 						label: 'Slutspel',
 						value: 'bracket',
-						href: `?div=${activeDivision.slug}&visa=slutspel`,
-						disabled: activeDivision.matches.length === 0
+						href: `?div=${division.slug}&visa=slutspel`,
+						disabled: division.matches.length === 0
 					}
 				]}
 			/>
 		</div>
 
 		{#if mode === 'group'}
-			<StandingsTable
-				rosters={activeDivision.rosters}
-				scores={activeDivision.table}
-				seasonSlug={season.slug}
-			/>
+			<StandingsTable rosters={division.rosters} scores={division.table} seasonSlug={season.slug} />
 		{:else}
 			<Bracket
 				seasonSlug={season.slug}
 				rounds={buildBracket(
-					activeDivision.matches.map((match) => {
+					division.matches.map((match) => {
 						// resolve match rosters
-						const rosterA = activeDivision.rosters.find((roster) => roster.id === match.rosterAId);
-						const rosterB = activeDivision.rosters.find((roster) => roster.id === match.rosterBId);
+						const rosterA = division.rosters.find((roster) => roster.id === match.rosterAId);
+						const rosterB = division.rosters.find((roster) => roster.id === match.rosterBId);
 
 						return {
 							rosterA,
@@ -146,7 +169,7 @@
 				icon="ph:pencil-simple"
 				kind="secondary"
 				class="mt-4 max-w-max"
-				href="/admin/division/{activeDivision.id}"
+				href="/admin/division/{division.id}"
 			/>
 		{/if}
 	</section>

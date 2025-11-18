@@ -3,6 +3,17 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 </script>
 
+<svelte:head>
+	<title>Om oss | Dunderligan</title>
+	<meta
+		name="description"
+		content="Information om Dunderligan, Sveriges största återkommande Overwatchturnering."
+	/>
+
+	<meta property="og:type" content="website" />
+	<meta property="og:description" content="Om Dunderligan." />
+</svelte:head>
+
 <PageHeader>
 	<h1 class="text-center font-display text-6xl font-extrabold text-black sm:text-left sm:text-7xl">
 		Om Dunderligan

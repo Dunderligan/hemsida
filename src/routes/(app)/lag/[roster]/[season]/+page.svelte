@@ -10,7 +10,7 @@
 	import Tabs from '$lib/components/ui/Tabs.svelte';
 	import TeamSocial from '$lib/components/ui/TeamSocial.svelte';
 	import type { ClassValue } from '$lib/types';
-	import { averageRank, sortRole as compareRole, flattenGroup } from '$lib/util';
+	import { averageRank, cdnImageSrc, sortRole as compareRole, flattenGroup } from '$lib/util';
 
 	const session = authClient.useSession();
 
@@ -34,6 +34,29 @@
 		})
 	);
 </script>
+
+<svelte:head>
+	<title>{roster.name} - {season.name} | Dunderligan</title>
+	<meta
+		name="description"
+		content="Laget {roster.name} spelar i {group.name}, {division.name} i {season.name} av Dunderligan, Sveriges främsta Overwatchliga.
+		{roster.name} har {roster.members.length} medlemmar: {sortedMembers
+			.map((member) => member.player.battletag)
+			.join(', ')}, 
+		med den genomsnittliga ranken {average.rank} {average.tier}. Laget har {team.socials
+			.length} sociala medier länkade: {team.socials
+			.map((social) => `${social.platform} (${social.url})`)
+			.join(', ')}."
+	/>
+
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={roster.name} />
+	<meta
+		property="og:description"
+		content="Laget {roster.name} i {division.name} av Dunderligan, {season.name}."
+	/>
+	<meta property="og:image" content={cdnImageSrc(`/logos/${roster.id}.png`, { width: 630 })} />
+</svelte:head>
 
 <PageHeader class="flex flex-col items-center gap-6 sm:flex-row">
 	<RosterLogo id={roster.id} class="size-40" imgSize={256} />
