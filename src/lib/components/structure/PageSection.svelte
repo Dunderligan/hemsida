@@ -24,13 +24,13 @@
 
 	<div
 		class="halftone pointer-events-none absolute bottom-0 -z-10 h-[600px] w-full"
-		style="mask-image: url('{cdnImageSrc('/halftone.png', { width: 512 })}');"
+		style="mask-image: url('{cdnImageSrc('/dunderligan/halftone.png', { width: 512 })}');"
 	></div>
 </main>
 
 <style>
 	.halftone {
-		mask-image: url('https://cdn.kesomannen.com/cdn-cgi/image/fit=scale_down,format=auto,height=512/dunderligan/halftone.png');
+		/* mask-image: url('https://cdn.kesomannen.com/cdn-cgi/image/fit=scale_down,format=auto,height=512/dunderligan/halftone.png'); */
 		mask-size: cover;
 		mask-repeat: no-repeat;
 		background-image: linear-gradient(

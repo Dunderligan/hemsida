@@ -1,5 +1,5 @@
 import { command, form, getRequestEvent } from '$app/server';
-import { S3_BUCKET_NAME } from '$env/static/private';
+import { PUBLIC_S3_BUCKET_NAME } from '$env/static/public';
 import { isAdmin } from '$lib/auth-client';
 import { db, schema } from '$lib/server/db';
 import { nestedGroupQuery as nestedGroupQuery, type Transaction } from '$lib/server/db/helpers';
@@ -51,8 +51,6 @@ export const editRoster = command(
 				updateSocials(tx, teamId, socials)
 			]);
 		});
-
-		console.log('saved changes');
 
 		return { slug: newSlug };
 	}
@@ -173,7 +171,7 @@ export const deleteRoster = command(
 		await db.delete(schema.roster).where(eq(schema.roster.id, id));
 
 		const command = new DeleteObjectCommand({
-			Bucket: S3_BUCKET_NAME,
+			Bucket: PUBLIC_S3_BUCKET_NAME,
 			Key: `logos/${id}.png`
 		});
 

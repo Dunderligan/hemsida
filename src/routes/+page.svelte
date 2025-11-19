@@ -20,7 +20,7 @@
 	<!-- <div id="background" class="absolute top-0 bottom-0 left-0 -z-20 w-full"></div> -->
 
 	<video
-		src={cdnSrc('/trailer.mp4')}
+		src={cdnSrc('/dunderligan/trailer.mp4')}
 		class="absolute top-0 left-0 -z-10 h-full w-full bg-accent-800 object-cover brightness-50"
 		autoplay
 		muted

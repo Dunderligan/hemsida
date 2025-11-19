@@ -166,7 +166,7 @@ export function buildBracket<T extends { id: string; nextMatchId?: string | null
 }
 
 export function cdnSrc(path: string) {
-	return `${PUBLIC_CDN_ENDPOINT}/${PUBLIC_S3_BUCKET_NAME}${path}`;
+	return `${PUBLIC_CDN_ENDPOINT}${path}`;
 }
 
 export function cdnImageSrc(path: string, { width, height }: { width: number; height?: number }) {
@@ -175,7 +175,7 @@ export function cdnImageSrc(path: string, { width, height }: { width: number; he
 		filters += `,height=${height}`;
 	}
 
-	return `${PUBLIC_CDN_ENDPOINT}/cdn-cgi/image/${filters}/${path}`;
+	return `${PUBLIC_CDN_ENDPOINT}/cdn-cgi/image/${filters}${path}`;
 }
 
 export function capitalize(str: string) {
