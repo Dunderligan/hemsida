@@ -15,7 +15,8 @@ const getMatches = async ({ played, orderBy }: { played: boolean; orderBy: SQL }
 			draws: true,
 			played: true,
 			playedAt: true,
-			scheduledAt: true
+			scheduledAt: true,
+			vodUrl: true
 		},
 		with: {
 			rosterA: {

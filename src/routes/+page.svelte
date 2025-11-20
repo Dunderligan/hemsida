@@ -44,7 +44,7 @@
 			icon="ph:arrow-right"
 			class="max-w-max shadow-lg"
 			label="Se ställningar"
-			href="/stallningar"
+			href="/sasong/test"
 		/>
 	</div>
 </header>
@@ -60,7 +60,7 @@
 	<div class="max-w-2xl space-y-2">
 		{#await matches}
 			{#each Array.from({ length: 3 })}
-				<div class="h-[140px] animate-pulse rounded-lg bg-gray-100 sm:h-[100px]"></div>
+				<div class="h-[140px] animate-pulse rounded-lg bg-gray-100 sm:h-[80px]"></div>
 			{/each}
 		{:then matches}
 			{#each matches as match (match.id)}

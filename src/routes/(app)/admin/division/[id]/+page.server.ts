@@ -40,18 +40,7 @@ export const load = async ({ params }) => {
 
 	const matches = await db.query.match.findMany({
 		where: eq(schema.match.divisionId, params.id),
-		orderBy: schema.match.order,
-		columns: {
-			id: true,
-			rosterAId: true,
-			rosterBId: true,
-			teamAScore: true,
-			teamBScore: true,
-			draws: true,
-			nextMatchId: true,
-			played: true,
-			order: true
-		}
+		orderBy: schema.match.order
 	});
 
 	return { division: data, matches };
