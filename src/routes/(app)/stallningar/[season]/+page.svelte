@@ -77,9 +77,9 @@
 		<div
 			class={[
 				{
-					upcoming: 'bg-yellow-200 font-semibold text-yellow-800',
-					ongoing: 'bg-green-200 font-semibold text-green-800',
-					ended: 'bg-gray-200 font-medium text-gray-600'
+					upcoming: 'bg-yellow-200 font-semibold text-yellow-800 shadow-sm',
+					ongoing: 'bg-green-200 font-semibold text-green-800 shadow-sm',
+					ended: 'bg-gray-200 font-medium text-gray-600 shadow-sm'
 				}[state],
 				'flex max-w-max items-center gap-1 rounded-full px-4 py-1.5 text-sm'
 			]}

@@ -41,6 +41,8 @@
 	{/each}
 
 	{#each rows as value, index (key?.(value) ?? value)}
-		{@render row({ value, index })}
+		<div class="group contents">
+			{@render row({ value, index })}
+		</div>
 	{/each}
 </div>
