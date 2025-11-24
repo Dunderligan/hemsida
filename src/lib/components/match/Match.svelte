@@ -14,7 +14,9 @@
 		match.played === false ? null : (match.teamAScore ?? 0) > (match.teamBScore ?? 0);
 </script>
 
-<div class="relative overflow-hidden rounded-lg bg-gray-100 px-6 py-3">
+<div
+	class="relative overflow-hidden rounded-lg bg-gray-100 px-6 py-3 transition-all duration-300 hover:bg-gray-50 hover:shadow-md"
+>
 	<div class="flex items-center gap-4 pb-2 text-sm font-medium text-gray-600 sm:justify-center">
 		{#if match.played}
 			{#if match.playedAt}
@@ -26,7 +28,10 @@
 			{/if}
 
 			{#if match.vodUrl}
-				<a class="hover:underline" href={match.vodUrl}>
+				<a
+					class="transition-colors duration-200 hover:text-accent-600 hover:underline"
+					href={match.vodUrl}
+				>
 					<Icon icon="ph:arrow-square-out" />
 					VOD
 				</a>
@@ -76,13 +81,16 @@
 	classes?: { root?: ClassValue; name?: ClassValue }
 )}
 	<div class={[classes?.root, 'flex w-full items-center gap-2']}>
-		<RosterLogo id={roster.id} class="size-10 sm:size-12" />
+		<RosterLogo
+			id={roster.id}
+			class="size-10 transition-transform duration-200 hover:scale-110 sm:size-12"
+		/>
 
 		<a
 			href="/lag/{roster.slug}/{seasonSlug}"
 			class={[
 				classes?.name,
-				'truncate text-lg font-semibold text-gray-700 hover:text-accent-600 hover:underline'
+				'truncate text-lg font-semibold text-gray-700 transition-colors duration-200 hover:text-accent-600 hover:underline'
 			]}
 		>
 			{roster.name}

@@ -41,12 +41,12 @@
 				onitemclick?.(value);
 			}}
 			class={[
-				'flex w-full items-center justify-center gap-2 p-2.5',
+				'flex w-full items-center justify-center gap-2 p-2.5 transition-all duration-200',
 				disabled
-					? 'bg-gray-200 font-semibold text-gray-500'
+					? 'cursor-not-allowed bg-gray-200 font-semibold text-gray-500'
 					: isSelected
-						? 'bg-accent-600 font-bold text-white'
-						: 'bg-accent-200 font-semibold text-accent-800'
+						? 'bg-accent-600 font-bold text-white shadow-sm'
+						: 'bg-accent-200 font-semibold text-accent-800 hover:bg-accent-300 hover:shadow-sm'
 			]}
 		>
 			{@const renderedIcon = isSelected && !hideSelectedIcon ? null : icon}

@@ -33,11 +33,17 @@
 				Dunderligan
 				<br />
 				Källkod under
-				<a href="https://choosealicense.com/licenses/gpl-3.0/" class="underline">GPL v3</a>.
+				<a
+					href="https://choosealicense.com/licenses/gpl-3.0/"
+					class="underline transition-colors duration-200 hover:text-accent-400">GPL v3</a
+				>.
 			</p>
 			<div class="my-2 flex items-center gap-3">
 				{#each socials as social}
-					<TeamSocial {...social} class="text-2xl" />
+					<TeamSocial
+						{...social}
+						class="text-2xl transition-transform duration-200 hover:scale-110"
+					/>
 				{/each}
 			</div>
 			<p class="text-gray-400">Byggd av Bobbo med ❤️</p>
@@ -46,12 +52,26 @@
 		<div class="w-full">
 			<div class="mb-2 text-xl font-semibold text-white">Navigation</div>
 
-			<a href="/" class="block text-lg hover:text-accent-400 hover:underline">Startsida</a>
-			<a href="/stallningar" class="block text-lg hover:text-accent-400 hover:underline"
+			<a
+				href="/"
+				class="block text-lg transition-colors duration-200 hover:text-accent-400 hover:underline"
+				>Startsida</a
+			>
+			<a
+				href="/stallningar"
+				class="block text-lg transition-colors duration-200 hover:text-accent-400 hover:underline"
 				>Ställningar</a
 			>
-			<a href="/arkiv" class="block text-lg hover:text-accent-400 hover:underline">Arkiv</a>
-			<a href="/om" class="block text-lg hover:text-accent-400 hover:underline">Om oss</a>
+			<a
+				href="/arkiv"
+				class="block text-lg transition-colors duration-200 hover:text-accent-400 hover:underline"
+				>Arkiv</a
+			>
+			<a
+				href="/om"
+				class="block text-lg transition-colors duration-200 hover:text-accent-400 hover:underline"
+				>Om oss</a
+			>
 		</div>
 
 		<div class="w-full">
@@ -59,12 +79,15 @@
 
 			<a
 				href="mailto:dunderleagueow@gmail.com"
-				class="block text-lg hover:text-accent-400 hover:underline">dunderleagueow@gmail.com</a
+				class="block text-lg transition-colors duration-200 hover:text-accent-400 hover:underline"
+				>dunderleagueow@gmail.com</a
 			>
 		</div>
 
 		<div class="flex w-full items-center gap-4 text-gray-400">
-			<a href="https://www.lysator.liu.se/inhysningar" class="flex shrink-0"
+			<a
+				href="https://www.lysator.liu.se/inhysningar"
+				class="flex shrink-0 transition-transform duration-200 hover:scale-110"
 				><img src="/lysator.svg" alt="Lysator" class="size-16" /></a
 			>
 

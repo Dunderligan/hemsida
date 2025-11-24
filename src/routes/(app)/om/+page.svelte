@@ -22,14 +22,14 @@
 	</h1>
 </PageHeader>
 
-<PageSection class="text-lg font-medium text-gray-800">
-	<p class="mb-8">
+<PageSection class="space-y-6 text-lg leading-relaxed font-medium text-gray-800">
+	<p class="text-xl">
 		Dunderligan är Sveriges största återkommande Overwatchturnering som årligen samlar 32 lag från
 		alla ranker för att göra upp om vem som är bäst. Turneringen delas upp i olika divisioner enligt
 		rankerna på lagens spelare, så alla har en chans att ha kul och visa upp sig själva.
 	</p>
 
-	<p class="mb-8">
+	<p>
 		Turneringen startar under våren, och pågår under några månader. Alla lag delas in i divisioner
 		där de först spelar 3 gruppspelsmatcher för att bestämma seeding, och sedan ger sig in i ett
 		slutspel för att avgöra säsongens vinnare. Under säsongens gång kommenteras matcher
