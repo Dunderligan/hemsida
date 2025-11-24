@@ -123,7 +123,6 @@
 
 	.hero-content :global(.hero-highlight) {
 		animation: fadeInUp 0.8s ease-out 0.3s both;
-		text-decoration-thickness: 4px;
 	}
 
 	.hero-content {
