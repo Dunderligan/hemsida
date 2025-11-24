@@ -6,7 +6,7 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import StandingsTable from '$lib/components/table/StandingsTable.svelte';
 	import Tabs from '$lib/components/ui/Tabs.svelte';
-	import { buildBracket } from '$lib/util';
+	import { buildBracket, seasonState } from '$lib/util';
 	import Bracket from '$lib/components/match/Bracket.svelte';
 
 	// const session = authClient.useSession();
@@ -15,7 +15,7 @@
 
 	let { season, divisions } = $derived(data);
 
-	const isOngoing = $derived(season.endedAt === null);
+	const state = $derived(seasonState(season));
 
 	let division = $derived.by(() => {
 		const param = page.url.searchParams.get('div');
@@ -59,16 +59,12 @@
 	<title>{displayMode} - {division.name} - {season.name} | Dunderligan</title>
 	<meta
 		name="description"
-		content="{displayMode} för {division.name} i {season.name} av Dunderligan, sveriges främsta Overwatchliga.
-			Säsongen inleddes {season.startedAt}{season.endedAt
-			? ` och avslutades ${season.endedAt}`
-			: ' och pågår fortfarande'}.
-			I divisionen tävlar {division.rosters.map((roster) => roster.name).join(', ')}."
+		content="Se tabellen och resultaten för {division.name} i {season.name} av Dunderligan."
 	/>
 
 	<meta
 		property="og:description"
-		content="{displayMode}, {division.name} i {season.name} av Dunderligan."
+		content="Se tabellen och resultaten för {division.name} i {season.name} av Dunderligan."
 	/>
 </svelte:head>
 
@@ -80,25 +76,43 @@
 	<div class="flex items-center justify-center gap-1 sm:justify-start">
 		<div
 			class={[
-				isOngoing
-					? 'bg-green-200 font-semibold text-green-800'
-					: 'bg-gray-200 font-medium text-gray-600',
-				'mr-1 flex max-w-max items-center gap-1 rounded-full px-4 py-1.5 text-sm'
+				{
+					upcoming: 'bg-yellow-200 font-semibold text-yellow-800',
+					ongoing: 'bg-green-200 font-semibold text-green-800',
+					ended: 'bg-gray-200 font-medium text-gray-600'
+				}[state],
+				'flex max-w-max items-center gap-1 rounded-full px-4 py-1.5 text-sm'
 			]}
 		>
-			<Icon icon={isOngoing ? 'ph:circle' : 'ph:stop'} class="text-xl" />
+			<Icon
+				class="mr-1 text-lg"
+				icon={{
+					upcoming: 'ph:clock-clockwise',
+					ongoing: 'ph:circle',
+					ended: 'ph:check'
+				}[state]}
+			/>
 
-			{isOngoing ? 'Pågående' : 'Avslutad'}
+			{{
+				upcoming: 'Kommande',
+				ongoing: 'Pågående',
+				ended: 'Avslutad'
+			}[state]}
 		</div>
 
 		<div class="font-medium text-gray-500">
-			•
+			<span class="mx-2">•</span>
 
-			{#if isOngoing}
-				Startade {formatDateWithoutYear(season.startedAt)}
+			{#if state === 'upcoming'}
+				Startar {formatDateWithoutYear(season.startedAt)} {season.startedAt.getFullYear()}
+			{:else if state === 'ongoing'}
+				<span>Inleddes {formatDateWithoutYear(season.startedAt)}</span>
+				{#if season.endedAt}
+					<span>och avslutas {formatDateWithoutYear(season.endedAt)}</span>
+				{/if}
 			{:else}
 				Pågick mellan {formatDateWithoutYear(season.startedAt)} och {formatDateWithoutYear(
-					season.endedAt ?? new Date()
+					season.endedAt!
 				)}
 				{season.startedAt.getFullYear()}
 			{/if}

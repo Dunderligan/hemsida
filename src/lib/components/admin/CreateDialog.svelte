@@ -6,6 +6,7 @@
 		title: string;
 		open?: boolean;
 		disabled?: boolean;
+		description?: string | Snippet;
 		createLabel?: string;
 		oncreate?: () => Promise<void>;
 		onclose?: () => void;
@@ -16,6 +17,7 @@
 		title,
 		open = $bindable(false),
 		disabled,
+		description,
 		createLabel = 'Skapa',
 		oncreate,
 		onclose,
@@ -41,6 +43,7 @@
 
 <Dialog
 	{title}
+	{description}
 	bind:open
 	onsubmit={() => {
 		if (!loading && !disabled) create();

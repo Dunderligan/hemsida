@@ -7,10 +7,13 @@
 	<title>Om oss | Dunderligan</title>
 	<meta
 		name="description"
-		content="Information om Dunderligan, Sveriges största återkommande Overwatchturnering."
+		content="Om Dunderligan, Sveriges största återkommande Overwatchturnering."
 	/>
 
-	<meta property="og:description" content="Om Dunderligan." />
+	<meta
+		property="og:description"
+		content="Om Dunderligan, Sveriges största återkommande Overwatchturnering."
+	/>
 </svelte:head>
 
 <PageHeader>
@@ -30,6 +33,6 @@
 		Turneringen startar under våren, och pågår under några månader. Alla lag delas in i divisioner
 		där de först spelar 3 gruppspelsmatcher för att bestämma seeding, och sedan ger sig in i ett
 		slutspel för att avgöra säsongens vinnare. Under säsongens gång kommenteras matcher
-		kontinuerligt, både live och i efterhand, för att ge spelare en chans att visa upp sig själv. 
+		kontinuerligt, både live och i efterhand, för att ge spelare en chans att visa upp sig själv.
 	</p>
 </PageSection>

@@ -41,7 +41,7 @@ export const load = async ({ params }) => {
 							slug: true
 						},
 						with: {
-							...nestedGroupQuery
+							group: nestedGroupQuery
 						}
 					}
 				}

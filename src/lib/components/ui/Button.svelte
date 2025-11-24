@@ -36,7 +36,7 @@
 	}: Props = $props();
 
 	const disabled = $derived(disabledProp || loading);
-	const icon = $derived(loading ? 'ph:spinner-gap' : iconProp);
+	const icon = $derived(loading ? 'ph:spinner' : iconProp);
 
 	const typeClass = $derived(
 		disabled

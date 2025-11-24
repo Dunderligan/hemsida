@@ -3,6 +3,7 @@
 	import { Combobox } from 'bits-ui';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import { queryTeams } from '$lib/remote/team.remote';
+	import Icon from '../ui/Icon.svelte';
 
 	type Props = {
 		value?: string;
@@ -78,7 +79,9 @@
 	{#if searchQuery.length >= 2}
 		<Combobox.Content class="floating w-[var(--bits-combobox-anchor-width)]">
 			{#if loading}
-				<div class="py-2 text-center font-medium text-gray-400">Laddar...</div>
+				<div class="py-2 text-center font-medium text-gray-500">
+					<Icon icon="ph:spinner" class="animate-spin" />
+				</div>
 			{:else if teams.size === 0}
 				<div class="py-2 text-center font-medium text-gray-600">Inga lag hittades</div>
 			{:else}

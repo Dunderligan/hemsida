@@ -35,7 +35,7 @@ export const load = async ({ params }) => {
 						}
 					},
 					groups: {
-						orderBy: schema.division.name,
+						orderBy: schema.group.name,
 						columns: {
 							id: true,
 							name: true,

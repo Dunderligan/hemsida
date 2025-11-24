@@ -4,6 +4,7 @@
 	import { fade, fly, scale } from 'svelte/transition';
 	import type { ButtonKind } from '$lib/types';
 	import Button from './Button.svelte';
+	import type { Snippet } from 'svelte';
 
 	type ButtonType = {
 		label: string;
@@ -17,12 +18,14 @@
 	type Props = {
 		title: string;
 		buttons?: ButtonType[];
+		description?: string | Snippet;
 		onsubmit?: () => void;
 	} & DialogRootProps;
 
 	let {
 		title,
 		buttons,
+		description,
 		open = $bindable(false),
 		children,
 		onsubmit,
@@ -56,9 +59,22 @@
 						}}
 						{...props}
 					>
-						<Dialog.Title class="mb-4 text-center font-display text-2xl font-bold text-gray-900"
-							>{title}</Dialog.Title
+						<Dialog.Title
+							class={[
+								description ? 'mb-2' : 'mb-4',
+								'text-center font-display text-2xl font-bold text-gray-900'
+							]}>{title}</Dialog.Title
 						>
+
+						{#if description}
+							<Dialog.Description class="mb-6 text-center font-medium text-gray-600">
+								{#if typeof description === 'string'}
+									{description}
+								{:else}
+									{@render description()}
+								{/if}
+							</Dialog.Description>
+						{/if}
 
 						{@render children?.()}
 

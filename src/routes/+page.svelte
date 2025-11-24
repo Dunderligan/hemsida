@@ -2,23 +2,27 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Match from '$lib/components/match/Match.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
-	import type { ResolvedMatch } from '$lib/types';
+	import type { ResolvedMatchWithContext } from '$lib/types';
 	import { cdnSrc } from '$lib/util';
+	import Subheading from '$lib/components/ui/Subheading.svelte';
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
 	<title>Dunderligan</title>
-	<meta name="description" content="Sveriges största återkommande Overwatchturnering." />
+	<meta
+		name="description"
+		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
+	/>
 
-	<meta property="og:description" content="Sveriges största återkommande Overwatchturnering!" />
+	<meta
+		property="og:description"
+		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
+	/>
 </svelte:head>
 
 <header class="relative h-[50rem] w-full px-4 sm:h-[45rem]">
-	<!-- <div id="color-overlay" class="fixed top-0 bottom-0 left-0 -z-10 w-full"></div> -->
-	<!-- <div id="background" class="absolute top-0 bottom-0 left-0 -z-20 w-full"></div> -->
-
 	<video
 		src={cdnSrc('/dunderligan/trailer.mp4')}
 		class="absolute top-0 left-0 -z-10 h-full w-full bg-accent-800 object-cover brightness-50"
@@ -50,12 +54,12 @@
 </header>
 
 <PageSection topMargin={false} class="space-y-10">
-	{@render matchList('Senaste matcher', data.matches.latest)}
 	{@render matchList('Kommande matcher', data.matches.upcoming)}
+	{@render matchList('Senaste matcherna', data.matches.latest)}
 </PageSection>
 
-{#snippet matchList(title: string, matches: Promise<ResolvedMatch[]>)}
-	<h2 class="mb-4 font-display text-2xl font-bold text-gray-700">{title}</h2>
+{#snippet matchList(title: string, matches: Promise<ResolvedMatchWithContext[]>)}
+	<Subheading>{title}</Subheading>
 
 	<div class="max-w-2xl space-y-2">
 		{#await matches}
@@ -64,25 +68,15 @@
 			{/each}
 		{:then matches}
 			{#each matches as match (match.id)}
-				<Match seasonSlug={match.rosterA?.seasonSlug ?? match.rosterB?.seasonSlug ?? ''} {match} />
+				{@const seasonSlug = match.division?.season.slug ?? match.group!.division.season.slug}
+
+				<Match {seasonSlug} {match} />
 			{/each}
 		{/await}
 	</div>
 {/snippet}
 
 <style>
-	/* #color-overlay {
-		mix-blend-mode: color;
-		background-image: linear-gradient(to bottom, var(--color-accent-900), var(--color-accent-600));
-		filter: saturate(75%);
-	}
-
-	#background {
-		background-image: url('/hero.png');
-		filter: contrast(110%) brightness(50%);
-		background-size: cover;
-	} */
-
 	h1 {
 		line-height: 110%;
 	}

@@ -343,6 +343,11 @@
 	bind:open={linkTeamOpen}
 	disabled={!linkTeamId}
 >
+	{#snippet description()}
+		Välj vilket lag du vill länka {roster.name} till. Tänk på att det inte går att länka två rosters
+		från samma säsong.
+	{/snippet}
+
 	<Label label="Lag">
 		<TeamSelect excludeSeasonId={season.id} bind:value={linkTeamId} />
 	</Label>

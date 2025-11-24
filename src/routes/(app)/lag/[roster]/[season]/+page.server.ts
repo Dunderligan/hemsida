@@ -1,4 +1,4 @@
-import { nestedGroupQuery } from '$lib/server/db/helpers';
+import { matchRosterQuery, nestedGroupQuery } from '$lib/server/db/helpers';
 import { db, schema } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import { eq, and, desc, or } from 'drizzle-orm';
@@ -43,7 +43,7 @@ export const load = async ({ params }) => {
 							slug: true
 						},
 						with: {
-							...nestedGroupQuery
+							group: nestedGroupQuery
 						}
 					}
 				}
@@ -57,7 +57,7 @@ export const load = async ({ params }) => {
 
 	const matches = await db.query.match.findMany({
 		where: and(
-			// eq(schema.match.played, true),
+			eq(schema.match.played, true),
 			or(eq(schema.match.rosterAId, data.id), eq(schema.match.rosterBId, data.id))
 		),
 		limit: 5,
@@ -73,21 +73,8 @@ export const load = async ({ params }) => {
 			vodUrl: true
 		},
 		with: {
-			rosterA: {
-				columns: {
-					id: true,
-					name: true,
-					slug: true,
-					seasonSlug: true
-				}
-			},
-			rosterB: {
-				columns: {
-					id: true,
-					name: true,
-					slug: true
-				}
-			}
+			rosterA: matchRosterQuery,
+			rosterB: matchRosterQuery
 		}
 	});
 

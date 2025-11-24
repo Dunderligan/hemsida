@@ -22,14 +22,12 @@
 		{@render children?.()}
 	</div>
 
-	<div
-		class="halftone pointer-events-none absolute bottom-0 -z-10 h-[600px] w-full"
-		style="mask-image: url('{cdnImageSrc('/dunderligan/halftone.png', { width: 512 })}');"
-	></div>
+	<div class="halftone pointer-events-none absolute bottom-0 -z-10 h-[600px] w-full"></div>
 </main>
 
 <style>
 	.halftone {
+		mask-image: url('/halftone.png');
 		mask-size: cover;
 		mask-repeat: no-repeat;
 		background-image: linear-gradient(

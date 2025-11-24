@@ -36,16 +36,31 @@ export enum MatchType {
 	BRACKET = 'bracket'
 }
 
-export type BaseGroupInfo = {
+export type BaseLeague = {
 	name: string;
 	slug: string;
 };
 
-export type NestedGroup<S, D, G> = G & {
-	division: D & { season: S };
+export type NestedSeason<S = BaseLeague> = S;
+export type NestedDivision<S = BaseLeague, D = S> = D & {
+	season: S;
+};
+export type NestedGroup<S = BaseLeague, D = S, G = S> = G & {
+	division: NestedDivision<S, D>;
 };
 
-export type BaseNestedGroup = NestedGroup<BaseGroupInfo, BaseGroupInfo, BaseGroupInfo>;
+export type FlattenedSeason<S = BaseLeague> = {
+	season: S;
+};
+export type FlattenedDivision<S = BaseLeague, D = S> = {
+	season: S;
+	division: D;
+};
+export type FlattenedGroup<S = BaseLeague, D = S, G = S> = {
+	season: S;
+	division: D;
+	group: G;
+};
 
 export type Member = {
 	rank: Rank;
@@ -64,15 +79,12 @@ export type Roster = {
 	slug: string;
 };
 
-export type FullRoster = Roster & {
-	seasonSlug: string;
-	group: BaseNestedGroup;
-	members: Member[];
-	team?: never;
+export type RosterWithGroup = Roster & {
+	group: NestedGroup;
 };
 
-export type RosterWithGroup = Roster & {
-	group: BaseNestedGroup;
+export type FullRoster = RosterWithGroup & {
+	members: Member[];
 };
 
 export type TeamSocial = {
@@ -110,8 +122,6 @@ export type ResolvedMatch = {
 	rosterB?: MatchRoster | null;
 	playedAt?: Date | null;
 	scheduledAt?: Date | null;
-	groupId?: string | null;
-	divisionId?: string | null;
 	vodUrl?: string | null;
 };
 
@@ -119,7 +129,11 @@ export type MatchRoster = {
 	id: string;
 	name: string;
 	slug: string;
-	seasonSlug?: string | null;
+};
+
+export type ResolvedMatchWithContext<G = NestedGroup, D = NestedDivision> = ResolvedMatch & {
+	group: G | null;
+	division: D | null;
 };
 
 export type ButtonKind = 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'negative';

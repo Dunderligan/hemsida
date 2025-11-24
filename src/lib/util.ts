@@ -5,7 +5,8 @@ import {
 	type NestedGroup,
 	type Rank,
 	type Role,
-	type FullMatch
+	type FullMatch,
+	type NestedDivision
 } from './types';
 // import { PUBLIC_CDN_ENDPOINT } from '$env/static/public';
 
@@ -62,9 +63,14 @@ export function formatSocialPlatform(platform: SocialPlatform) {
 	}
 }
 
+export function flattenDivision<S, D>(nestedDivision: NestedDivision<S, D>) {
+	const { season, ...division } = nestedDivision;
+	return { season, division };
+}
+
 export function flattenGroup<S, D, G>(nestedGroup: NestedGroup<S, D, G>) {
 	const { division: nestedDivision, ...group } = nestedGroup;
-	const { season, ...division } = nestedDivision;
+	const { season, division } = flattenDivision(nestedDivision);
 
 	return { season, division, group };
 }
@@ -245,4 +251,21 @@ export function enumToPgEnum<T extends Record<string, any>>(
 	myEnum: T
 ): [T[keyof T], ...T[keyof T][]] {
 	return Object.values(myEnum).map((value: any) => `${value}`) as any;
+}
+
+export function seasonState({
+	startedAt,
+	endedAt
+}: {
+	startedAt: Date;
+	endedAt?: Date | null;
+}): 'upcoming' | 'ongoing' | 'ended' {
+	const now = new Date();
+	if (startedAt && now < startedAt) {
+		return 'upcoming';
+	}
+	if (endedAt && now > endedAt) {
+		return 'ended';
+	}
+	return 'ongoing';
 }

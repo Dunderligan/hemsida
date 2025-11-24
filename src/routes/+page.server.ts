@@ -1,13 +1,16 @@
 import { db, schema } from '$lib/server/db';
-import session from '$lib/server/session.js';
-import { fail, redirect } from '@sveltejs/kit';
-import { asc, desc, eq, SQL } from 'drizzle-orm';
+import { matchRosterQuery, nestedDivisionQuery, nestedGroupQuery } from '$lib/server/db/helpers';
+import { and, asc, desc, eq, isNull, not, SQL } from 'drizzle-orm';
 
 const getMatches = async ({ played, orderBy }: { played: boolean; orderBy: SQL }) => {
 	return await db.query.match.findMany({
 		limit: 3,
 		orderBy,
-		where: eq(schema.match.played, played),
+		where: and(
+			eq(schema.match.played, played),
+			not(isNull(schema.match.rosterAId)),
+			not(isNull(schema.match.rosterBId))
+		),
 		columns: {
 			id: true,
 			teamAScore: true,
@@ -19,22 +22,10 @@ const getMatches = async ({ played, orderBy }: { played: boolean; orderBy: SQL }
 			vodUrl: true
 		},
 		with: {
-			rosterA: {
-				columns: {
-					id: true,
-					name: true,
-					slug: true,
-					seasonSlug: true
-				}
-			},
-			rosterB: {
-				columns: {
-					id: true,
-					name: true,
-					slug: true,
-					seasonSlug: true
-				}
-			}
+			group: nestedGroupQuery,
+			division: nestedDivisionQuery,
+			rosterA: matchRosterQuery,
+			rosterB: matchRosterQuery
 		}
 	});
 };

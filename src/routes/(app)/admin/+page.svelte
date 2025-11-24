@@ -11,6 +11,8 @@
 	import { SaveContext } from '$lib/state/save.svelte';
 	import DateInput from '$lib/components/ui/DateInput.svelte';
 	import { createSeason } from '$lib/remote/season.remote';
+	import { seasonState } from '$lib/util.js';
+	import Icon from '$lib/components/ui/Icon.svelte';
 
 	let { data } = $props();
 
@@ -47,9 +49,10 @@
 		</AdminEmptyNotice>
 	{:else}
 		<div class="space-y-1 overflow-hidden rounded-lg">
-			{#each seasons as { id, name } (id)}
+			{#each seasons as { id, name, startedAt } (id)}
 				<AdminLink href="/admin/sasong/{id}">
-					{name}
+					<span>{name}</span>
+					<span class="ml-2 text-base font-medium text-gray-700">{startedAt.getFullYear()}</span>
 				</AdminLink>
 			{/each}
 		</div>

@@ -31,7 +31,9 @@
 	const season = $state(division.season);
 
 	RosterContext.set(new RosterContext(data.division.groups.flatMap((group) => group.rosters)));
-	SaveContext.set(new SaveContext({ save, href: `/sasong/${season.slug}?div=${division.slug}` }));
+	SaveContext.set(
+		new SaveContext({ save, href: `/stallningar/${season.slug}?div=${division.slug}` })
+	);
 
 	const saveCtx = SaveContext.get();
 	const confirmCtx = ConfirmContext.get();
