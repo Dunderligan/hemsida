@@ -47,7 +47,7 @@
 			<div class="mb-2 text-xl font-semibold text-white">Navigation</div>
 
 			<a href="/" class="block text-lg hover:text-accent-400 hover:underline">Startsida</a>
-			<a href="/sasong/test" class="block text-lg hover:text-accent-400 hover:underline"
+			<a href="/stallningar" class="block text-lg hover:text-accent-400 hover:underline"
 				>Ställningar</a
 			>
 			<a href="/arkiv" class="block text-lg hover:text-accent-400 hover:underline">Arkiv</a>

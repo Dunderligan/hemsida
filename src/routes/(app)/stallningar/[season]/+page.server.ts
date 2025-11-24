@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.season.findFirst({
-		where: eq(schema.season.slug, params.slug),
+		where: eq(schema.season.slug, params.season),
 		columns: {
 			name: true,
 			slug: true,

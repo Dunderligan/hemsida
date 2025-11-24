@@ -14,5 +14,5 @@ export const GET: RequestHandler = async () => {
 		error(404);
 	}
 
-	redirect(303, `/sasong/${latestSeason.slug}`);
+	redirect(303, `/stallningar/${latestSeason.slug}`);
 };

@@ -14,7 +14,7 @@
 
 	const links = [
 		{
-			href: '/sasong/test',
+			href: '/stallningar/test',
 			label: 'Ställningar'
 		},
 		{

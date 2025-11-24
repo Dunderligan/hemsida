@@ -29,7 +29,7 @@
 	SaveContext.set(
 		new SaveContext({
 			save,
-			href: `/sasong/${season.slug}?div=${division.slug}`
+			href: `/stallningar/${season.slug}?div=${division.slug}`
 		})
 	);
 

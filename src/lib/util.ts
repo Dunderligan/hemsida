@@ -83,19 +83,31 @@ export type TableScore = {
 	matchesPlayed: number;
 };
 
+type ExtraTableInfo = {
+	wonAgainst: Set<string>;
+	lostAgainst: Set<string>;
+};
+
 export type MatchWithoutIds = Omit<FullMatch, 'id' | 'groupId' | 'divisionId' | 'played' | 'order'>;
 
-export function calculateStandings(
-	rosters: { id: string }[],
+export function calculateStandings<R extends { id: string }>(
+	rosters: R[],
 	matches: MatchWithoutIds[]
 ): {
 	rosterId: string;
 	score: TableScore;
 }[] {
-	const rosterScores = new Map<string, TableScore>();
+	const rosterScores = new Map<string, TableScore & ExtraTableInfo>();
 
 	for (const roster of rosters) {
-		rosterScores.set(roster.id, { mapWins: 0, mapLosses: 0, mapDraws: 0, matchesPlayed: 0 });
+		rosterScores.set(roster.id, {
+			mapWins: 0,
+			mapLosses: 0,
+			mapDraws: 0,
+			matchesPlayed: 0,
+			wonAgainst: new Set(),
+			lostAgainst: new Set()
+		});
 	}
 
 	for (const match of matches) {
@@ -109,36 +121,52 @@ export function calculateStandings(
 			continue;
 		}
 
-		teamA.mapWins += match.teamAScore ?? 0;
-		teamA.mapLosses += match.teamBScore ?? 0;
-		teamA.mapDraws += match.draws ?? 0;
+		let teamAScore = match.teamAScore ?? 0;
+		let teamBScore = match.teamBScore ?? 0;
+		let draws = match.draws ?? 0;
 
-		teamB.mapWins += match.teamBScore ?? 0;
-		teamB.mapLosses += match.teamAScore ?? 0;
-		teamB.mapDraws += match.draws ?? 0;
+		if (teamAScore > teamBScore) {
+			teamA.wonAgainst.add(match.rosterBId);
+			teamB.lostAgainst.add(match.rosterAId);
+		} else if (teamBScore > teamAScore) {
+			teamB.wonAgainst.add(match.rosterAId);
+			teamA.lostAgainst.add(match.rosterBId);
+		}
+
+		teamA.mapWins += teamAScore;
+		teamA.mapLosses += teamBScore;
+		teamA.mapDraws += draws;
+
+		teamB.mapWins += teamBScore;
+		teamB.mapLosses += teamAScore;
+		teamB.mapDraws += draws;
 
 		teamA.matchesPlayed += 1;
 		teamB.matchesPlayed += 1;
 	}
 
-	const sortedRosters = [...rosterScores]
-		.map(([rosterId, score]) => ({
+	const sortedScores = [...rosterScores]
+		.sort((a, b) => compareSeed(a[1], b[1]))
+		.map(([rosterId, { wonAgainst, lostAgainst, ...score }]) => ({
 			rosterId,
 			score
-		}))
-		.sort(
-			(b, a) => a.score.mapWins - b.score.mapWins || a.score.matchesPlayed - b.score.matchesPlayed
-		);
+		}));
 
-	return sortedRosters;
+	return sortedScores;
 }
 
-export function sortBySeed(rosters: { id: string }[], matches: MatchWithoutIds[]) {
+function compareSeed(a: TableScore & ExtraTableInfo, b: TableScore & ExtraTableInfo): number {
+	return (
+		b.mapWins - a.mapWins || a.mapLosses - b.mapLosses || b.wonAgainst.size - a.wonAgainst.size
+	);
+}
+
+export function sortBySeed<R extends { id: string }>(rosters: R[], matches: MatchWithoutIds[]) {
 	const seeds = new Map(
 		calculateStandings(rosters, matches).map((row, seed) => [row.rosterId, seed])
 	);
 
-	return rosters.sort((a, b) => seeds.get(a.id)! - seeds.get(b.id)!);
+	rosters.sort((a, b) => seeds.get(a.id)! - seeds.get(b.id)!);
 }
 
 export function buildBracket<T extends { id: string; nextMatchId?: string | null }>(matches: T[]) {
