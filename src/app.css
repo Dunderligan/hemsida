@@ -3,6 +3,10 @@
 @import 'tailwindcss';
 
 @layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
 	button:enabled {
 		cursor: pointer;
 	}
@@ -11,6 +15,17 @@
 		display: inline-block;
 		width: 1em;
 		height: 1em;
+	}
+
+	* {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	a {
+		transition:
+			color 150ms ease-in-out,
+			background-color 150ms ease-in-out;
 	}
 }
 
