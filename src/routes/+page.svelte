@@ -48,7 +48,7 @@
 			icon="ph:arrow-right"
 			class="max-w-max shadow-lg"
 			label="Se ställningar"
-			href="/stallningar/test"
+			href="/stallningar/test-sasong"
 		/>
 	</div>
 </header>

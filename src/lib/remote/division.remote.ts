@@ -94,7 +94,8 @@ async function aggregateGroups(divisionId: string) {
 		with: {
 			rosters: {
 				columns: {
-					id: true
+					id: true,
+					name: true
 				}
 			},
 			matches: {

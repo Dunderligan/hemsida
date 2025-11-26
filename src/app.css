@@ -3,6 +3,10 @@
 @import 'tailwindcss';
 
 @layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
 	button:enabled {
 		cursor: pointer;
 	}
@@ -11,6 +15,17 @@
 		display: inline-block;
 		width: 1em;
 		height: 1em;
+	}
+
+	* {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;	
+	}
+
+	*:focus-visible {
+		outline: 2px solid var(--color-accent-600);
+		border-radius: 4px;
+		outline-offset: 2px;
 	}
 }
 
@@ -55,8 +70,6 @@
 @theme {
 	--default-font-family: 'Rajdhani', sans-serif;
 	--font-display: 'Inter', 'Rajdhani', sans-serif;
-
-	--default-transition-duration: 150ms;
 
 	--color-*: initial;
 

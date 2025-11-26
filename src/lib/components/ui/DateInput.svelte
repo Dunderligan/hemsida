@@ -39,7 +39,7 @@
 	}
 	class={[
 		classProp,
-		'min-w-0 grow rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-800 placeholder-gray-400 transition-shadow duration-75 focus:ring-2 focus:ring-accent-600 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500'
+		'min-w-0 grow rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-800 placeholder-gray-400 transition-shadow focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500'
 	]}
 	{oninput}
 	{disabled}

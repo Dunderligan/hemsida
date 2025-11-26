@@ -31,28 +31,30 @@
 	{#snippet row({ index, value: { rosterId, score } })}
 		{@const { id, name, slug } = rosters.find((roster) => roster.id === rosterId)!}
 
-		<div class="flex items-center justify-center bg-gray-100 text-lg font-semibold">
-			{index + 1}
-		</div>
+		<div class="group contents text-lg font-medium">
+			<div class="flex items-center justify-center bg-gray-100">
+				{index + 1}
+			</div>
 
-		<div class="flex min-w-0 items-center gap-2 bg-gray-100 py-2 text-lg font-semibold">
-			<RosterLogo {id} class="size-12" />
+			<div class="flex min-w-0 items-center gap-2 bg-gray-100 py-2 font-semibold">
+				<RosterLogo {id} class="size-12" />
 
-			<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:text-accent-600 hover:underline"
-				>{name}</a
-			>
-		</div>
+				<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:text-accent-600 hover:underline"
+					>{name}</a
+				>
+			</div>
 
-		<div class="flex items-center justify-center bg-gray-100 text-xl font-semibold">
-			{score.mapWins}
-		</div>
+			<div class="flex items-center justify-center bg-gray-100 text-xl font-semibold">
+				{score.mapWins}
+			</div>
 
-		<div class="flex items-center justify-center bg-gray-100 text-lg font-medium">
-			{score.mapWins}/{score.mapLosses}/{score.mapDraws}
-		</div>
+			<div class="flex items-center justify-center bg-gray-100">
+				{score.mapWins}/{score.mapLosses}/{score.mapDraws}
+			</div>
 
-		<div class="flex items-center justify-center bg-gray-100 text-lg font-medium">
-			{score.matchesPlayed}
+			<div class="flex items-center justify-center bg-gray-100">
+				{score.matchesPlayed}
+			</div>
 		</div>
 	{/snippet}
 </Table>

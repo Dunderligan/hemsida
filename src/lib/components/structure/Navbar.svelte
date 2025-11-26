@@ -14,7 +14,7 @@
 
 	const links = [
 		{
-			href: '/stallningar/test',
+			href: '/stallningar/test-sasong',
 			label: 'Ställningar'
 		},
 		{
@@ -42,7 +42,7 @@
 <nav
 	class={[
 		dark ? 'to-gray-900/30 text-gray-200' : 'to-gray-300/80 text-gray-800',
-		'fixed z-30 h-18 w-screen bg-gradient-to-t px-8 pt-4 backdrop-blur-[2px]'
+		'fixed z-30 h-18 w-screen bg-gradient-to-t px-8 pt-4'
 	]}
 >
 	<div class="mx-auto flex h-full max-w-3xl items-center justify-between gap-2">

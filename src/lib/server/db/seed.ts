@@ -102,7 +102,7 @@ export async function seed(db: PostgresJsDatabase<typeof schema>) {
 
 	let [season] = await db
 		.insert(schema.season)
-		.values({ name: 'Test Säsong', slug: 'test', startedAt: new Date() })
+		.values({ name: 'Test Säsong', slug: 'test-sasong', startedAt: new Date() })
 		.returning();
 
 	let divisions = await Promise.all(

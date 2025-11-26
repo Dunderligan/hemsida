@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { sortBySeed, type MatchWithoutIds } from './util';
-import type { schema } from './server/db';
 import type { FullMatch } from './types';
 
 export function createBracket<R extends { id: string }, M extends MatchWithoutIds>(
@@ -35,42 +34,65 @@ export function createBracket<R extends { id: string }, M extends MatchWithoutId
 		rounds.push(round);
 	}
 
-	const firstRound = rounds[rounds.length - 1];
-
 	sortBySeed(rosters, groupMatches);
 
-	const halfpoint = Math.ceil(rosters.length / 2);
-	const topRosters = rosters.slice(0, halfpoint);
-	const bottomRosters = rosters.slice(halfpoint);
+	const matchOrder = getMatchOrder(numberOfRounds);
 
-	// populate first round with teams
-	for (let i = 0; i < firstRound.length; i++) {
-		const match = firstRound[i];
+	const firstRound = rounds[rounds.length - 1];
 
-		const roster = topRosters.shift()!;
-		match.rosterAId = roster.id;
+	for (const matchIndex of matchOrder) {
+		const match = firstRound[matchIndex];
 
-		if (i >= emptySlots - 1) {
-			match.rosterBId = bottomRosters.pop()!.id;
-		} else {
-			// other slot is empty; automatically promote team
-			match.teamAScore = 3;
-			match.played = true;
+		const rosterA = rosters.shift()!;
+		match.rosterAId = rosterA.id;
 
-			const nextRound = rounds[rounds.length - 2];
-			const nextMatch = nextRound[Math.floor(i / 2)];
-
-			if (nextMatch.rosterAId) {
-				nextMatch.rosterBId = roster.id;
-			} else {
-				nextMatch.rosterAId = roster.id;
+		// find the last in rosters that is compatible
+		for (let i = rosters.length - 1; i >= 0; i--) {
+			const otherRoster = rosters[i];
+			console.log(otherRoster);
+			if (groupMatches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))) {
+				console.log('these have played:', rosterA, otherRoster);
+				continue;
 			}
+
+			const [rosterB] = rosters.splice(i, 1);
+			match.rosterBId = rosterB.id;
+			break;
 		}
 	}
 
 	rounds.reverse();
 
 	return rounds;
+}
+
+function isMatchBetween(match: MatchWithoutIds, aId: string, bId: string): boolean {
+	return (
+		(match.rosterAId == aId && match.rosterBId == bId) ||
+		(match.rosterAId == bId && match.rosterBId == aId)
+	);
+}
+
+function getMatchOrder(rounds: number): number[] {
+	let layer = [0];
+	for (let i = 0; i < rounds - 1; i++) {
+		layer = nextLayer(layer);
+	}
+	const indexOrder = layer
+		.map((x, i) => [x, i])
+		.sort((a, b) => a[0] - b[0])
+		.map((a) => a[1]);
+	return indexOrder;
+
+	function nextLayer(lastLayer: number[]): number[] {
+		const nextLayer: number[] = [];
+		const newLength = lastLayer.length * 2 - 1;
+		for (const item of lastLayer) {
+			nextLayer.push(item);
+			nextLayer.push(newLength - item);
+		}
+		return nextLayer;
+	}
 }
 
 function createMatch(order: number, nextMatchId?: string): FullMatch {

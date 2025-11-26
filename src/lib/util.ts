@@ -94,7 +94,7 @@ type ExtraTableInfo = {
 	lostAgainst: Set<string>;
 };
 
-export type MatchWithoutIds = Omit<FullMatch, 'id' | 'groupId' | 'divisionId' | 'played' | 'order'>;
+export type MatchWithoutIds = Omit<FullMatch, 'id' | 'played' | 'order'>;
 
 export function calculateStandings<R extends { id: string }>(
 	rosters: R[],
