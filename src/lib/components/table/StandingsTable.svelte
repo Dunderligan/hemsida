@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { TableScore } from '$lib/table';
 	import type { Roster } from '$lib/types';
-	import type { TableScore } from '$lib/util';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import Table from './Table.svelte';
 

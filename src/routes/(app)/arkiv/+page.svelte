@@ -20,7 +20,7 @@
 </PageHeader>
 
 <PageSection>
-	<Subheading>Säsonger</Subheading>
+	<Subheading class="mb-4">Säsonger</Subheading>
 
 	<div class="space-y-1 overflow-hidden rounded-lg">
 		{#each data.seasons as { id, name, slug, startedAt } (id)}

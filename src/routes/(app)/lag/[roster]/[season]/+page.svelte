@@ -11,6 +11,7 @@
 	import type { ClassValue } from '$lib/types';
 	import { averageRank, cdnImageSrc, sortRole as compareRole, flattenGroup } from '$lib/util';
 	import { page } from '$app/state';
+	import Subheading from '$lib/components/ui/Subheading.svelte';
 
 	let { data } = $props();
 
@@ -19,6 +20,9 @@
 
 	let sortedMembers = $derived(roster.members.toSorted((a, b) => compareRole(a.role, b.role)));
 	let average = $derived(averageRank(roster.members));
+
+	const upcomingMatches = $derived(roster.matches.filter((match) => !match.played));
+	const latestMatches = $derived(roster.matches.filter((match) => match.played));
 
 	const rosterTabItems = $derived(
 		team.rosters.map((roster) => {
@@ -31,6 +35,8 @@
 			};
 		})
 	);
+
+	$inspect(data);
 </script>
 
 <svelte:head>
@@ -74,22 +80,30 @@
 				<Tabs class="grow" items={rosterTabItems} selected={roster.id} />
 			</div>
 		{:else}
-			<div class="mb-4 text-lg font-medium text-gray-700">
+			<div class="mb-6 text-lg font-medium text-gray-700">
 				Spelar i <a
 					href="/stallningar/{season.slug}?div={division.slug}"
 					class="font-bold text-accent-600 hover:text-accent-700 hover:underline"
-					>{season.name}, {division.name}</a
+					>{division.name}, {season.name}</a
 				>.
 			</div>
 		{/if}
 
 		<MembersTable members={sortedMembers} />
 
-		<h2 class="mt-8 mb-4 font-display text-2xl font-bold text-gray-700">Senaste matcher</h2>
+		<Subheading class="mt-10 mb-4">Senaste matcherna</Subheading>
 
 		<div class="space-y-2">
-			{#each roster.matches as match (match.id)}
-				<Match seasonSlug={season.slug} {match} />
+			{#each latestMatches as match (match.id)}
+				<Match seasonSlug={season.slug} {match} flipped={match.rosterB?.id === roster.id} />
+			{/each}
+		</div>
+
+		<Subheading class="mt-10 mb-4">Kommande matcher</Subheading>
+
+		<div class="space-y-2">
+			{#each upcomingMatches as match (match.id)}
+				<Match seasonSlug={season.slug} {match} flipped={match.rosterB?.id === roster.id} />
 			{/each}
 		</div>
 	</section>

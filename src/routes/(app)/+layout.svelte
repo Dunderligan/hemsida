@@ -5,10 +5,10 @@
 <div id="background" class="fixed top-0 min-h-[35rem] w-full min-w-lg"></div>
 
 <div class="relative flex min-h-screen flex-col overflow-hidden">
-	<!-- <div
+	<div
 		class="pointer-events-none fixed top-32 left-[-50rem] size-[100rem] rounded-full bg-accent-400/20"
 		id="splotch"
-	></div> -->
+	></div>
 
 	<div class="mb-12 h-18"></div>
 

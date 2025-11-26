@@ -83,7 +83,7 @@ function deleteTokenCookie(cookies: Cookies) {
 }
 
 export default {
-	SESSION_COOKIE_NAME: TOKEN_COOKIE_NAME,
+	TOKEN_COOKIE_NAME,
 	generateToken,
 	create,
 	validateToken,

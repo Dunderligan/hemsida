@@ -1,29 +1,33 @@
 <script lang="ts">
-	import type { ResolvedMatch, MatchRoster, ClassValue } from '$lib/types';
+	import {
+		matchWinner,
+		matchRoster,
+		isWinner,
+		matchScoreOrZero,
+		type MatchSide,
+		matchScore
+	} from '$lib/match';
+	import type { ResolvedMatch, ClassValue } from '$lib/types';
 	import Icon from '../ui/Icon.svelte';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 
 	type Props = {
 		match: ResolvedMatch;
 		seasonSlug: string;
+		flipped?: boolean;
 	};
 
-	let { match, seasonSlug }: Props = $props();
+	let { match, seasonSlug, flipped = false }: Props = $props();
 
-	const teamAWon =
-		match.played === false ? null : (match.teamAScore ?? 0) > (match.teamBScore ?? 0);
+	const winner = $derived(matchWinner(match));
 </script>
 
 <div class="relative overflow-hidden rounded-lg bg-gray-100 px-6 py-3">
-	<div class="flex items-center gap-4 pb-2 text-sm font-medium text-gray-600 sm:justify-center">
+	<div class="flex items-center gap-4 pb-1 text-sm font-medium text-gray-600 sm:justify-center">
 		{#if match.played}
-			{#if match.playedAt}
-				<div>
-					Spelad
-
-					{match.playedAt.toLocaleDateString()}
-				</div>
-			{/if}
+			<div>
+				{match.playedAt?.toLocaleDateString() ?? 'Okänt datum'}
+			</div>
 
 			{#if match.vodUrl}
 				<a class="hover:underline" href={match.vodUrl}>
@@ -43,64 +47,66 @@
 		{/if}
 	</div>
 	<div class="flex flex-col items-center gap-2 sm:flex-row">
-		{#if match.rosterA}
-			{@render side(match.rosterA, teamAWon === true, match.teamAScore, {
-				root: 'flex-row sm:flex-row-reverse'
-			})}
-		{/if}
+		{@render side(flipped ? 'B' : 'A', {
+			root: 'flex-row sm:flex-row-reverse'
+		})}
 
-		<div class="mx-2 hidden shrink-0 text-3xl text-gray-600 sm:block">
+		<div class="hidden w-18 shrink-0 text-center text-3xl text-gray-600 sm:block">
 			{#if match.played}
-				<span class={[teamAWon && 'text-accent-600', 'font-extrabold']}
-					>{match.teamAScore ?? 0}
+				<span class={[winner === (flipped ? 'B' : 'A') && 'text-accent-600', 'font-bold']}
+					>{matchScoreOrZero(match, flipped ? 'B' : 'A')}
 				</span>
+
 				<span class="font-bold">-</span>
-				<span class={[!teamAWon && 'text-accent-600', 'font-extrabold']}
-					>{match.teamBScore ?? 0}</span
+
+				<span class={[winner === (flipped ? 'A' : 'B') && 'text-accent-600', 'font-bold']}
+					>{matchScoreOrZero(match, flipped ? 'A' : 'B')}</span
 				>
 			{:else}
 				<span class="font-semibold">? - ?</span>
 			{/if}
 		</div>
 
-		{#if match.rosterB}
-			{@render side(match.rosterB, teamAWon === false, match.teamBScore, { root: '' })}
-		{/if}
+		{@render side(flipped ? 'A' : 'B')}
 	</div>
 </div>
 
 {#snippet side(
-	roster: MatchRoster,
-	won: boolean,
-	score?: number | null,
-	classes?: { root?: ClassValue; name?: ClassValue }
+	side: MatchSide,
+	{ root: rootClass, name: nameClass }: { root?: ClassValue; name?: ClassValue } = {}
 )}
-	<div class={[classes?.root, 'flex w-full items-center gap-2']}>
-		<RosterLogo id={roster.id} class="size-10 sm:size-12" />
+	{@const roster = matchRoster(match, side)}
+	{@const won = roster && isWinner(match, side)}
 
-		<a
-			href="/lag/{roster.slug}/{seasonSlug}"
-			class={[
-				classes?.name,
-				'truncate text-lg font-semibold text-gray-700 hover:text-accent-600 hover:underline'
-			]}
-		>
-			{roster.name}
-		</a>
+	<div class={[rootClass, 'flex w-full items-center gap-2']}>
+		{#if roster}
+			<RosterLogo id={roster.id} class="size-10 sm:size-12" />
 
-		{#if won}
-			<Icon icon="ph:crown-simple-fill" class="text-xl text-accent-600" />
-		{/if}
-
-		{#if match.played}
-			<div
+			<a
+				href="/lag/{roster.slug}/{seasonSlug}"
 				class={[
-					won ? 'text-accent-600' : 'text-gray-600',
-					'ml-auto text-3xl font-extrabold sm:hidden'
+					nameClass,
+					won ? 'text-gray-800' : 'text-gray-600',
+					'truncate text-lg font-semibold hover:text-accent-600 hover:underline'
 				]}
 			>
-				{score ?? 0}
-			</div>
+				{roster.name}
+			</a>
+
+			{#if won}
+				<Icon icon="ph:crown-simple-fill" class="text-xl text-accent-600" />
+			{/if}
+
+			{#if match.played}
+				<div
+					class={[
+						won ? 'text-accent-600' : 'text-gray-600',
+						'ml-auto text-3xl font-extrabold sm:hidden'
+					]}
+				>
+					{matchScoreOrZero(match, side)}
+				</div>
+			{/if}
 		{/if}
 	</div>
 {/snippet}

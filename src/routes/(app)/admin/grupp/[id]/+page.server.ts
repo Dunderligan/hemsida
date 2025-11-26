@@ -1,4 +1,5 @@
 import { db, schema } from '$lib/server/db';
+import { matchOrdering } from '$lib/server/db/helpers.js';
 import { flattenGroup } from '$lib/util';
 import { error } from '@sveltejs/kit';
 import { asc, desc, eq } from 'drizzle-orm';
@@ -20,11 +21,7 @@ export const load = async ({ params }) => {
 				}
 			},
 			matches: {
-				orderBy: [
-					asc(schema.match.played), // planned matches first
-					desc(schema.match.playedAt), // played matches by most recent first
-					asc(schema.match.scheduledAt) // order planned by nearest scheduled first
-				],
+				orderBy: matchOrdering,
 				columns: {
 					createdAt: false,
 					order: false

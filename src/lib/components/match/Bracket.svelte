@@ -8,6 +8,8 @@
 	};
 
 	let { rounds, seasonSlug }: Props = $props();
+
+	let hoveredRosterId: string | null = $state(null);
 </script>
 
 <div class="w-full overflow-x-auto rounded-lg p-1">
@@ -16,6 +18,7 @@
 			<div class="flex flex-col justify-around gap-8" style="width: {100 / rounds.length}%;">
 				{#each round as match (match.id)}
 					<BracketMatch
+						bind:hoveredId={hoveredRosterId}
 						{seasonSlug}
 						{match}
 						isFirst={i == 0}

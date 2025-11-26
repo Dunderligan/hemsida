@@ -59,7 +59,7 @@
 </PageSection>
 
 {#snippet matchList(title: string, matches: Promise<ResolvedMatchWithContext[]>)}
-	<Subheading>{title}</Subheading>
+	<Subheading class="mb-4">{title}</Subheading>
 
 	<div class="max-w-2xl space-y-2">
 		{#await matches}

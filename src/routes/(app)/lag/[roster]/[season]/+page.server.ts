@@ -1,4 +1,4 @@
-import { matchRosterQuery, nestedGroupQuery } from '$lib/server/db/helpers';
+import { matchOrdering, matchRosterQuery, nestedGroupQuery } from '$lib/server/db/helpers';
 import { db, schema } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import { eq, and, desc, or } from 'drizzle-orm';
@@ -56,12 +56,9 @@ export const load = async ({ params }) => {
 	}
 
 	const matches = await db.query.match.findMany({
-		where: and(
-			eq(schema.match.played, true),
-			or(eq(schema.match.rosterAId, data.id), eq(schema.match.rosterBId, data.id))
-		),
-		limit: 5,
-		orderBy: desc(schema.match.scheduledAt),
+		where: and(or(eq(schema.match.rosterAId, data.id), eq(schema.match.rosterBId, data.id))),
+		limit: 10,
+		orderBy: matchOrdering,
 		columns: {
 			id: true,
 			teamAScore: true,

@@ -3,7 +3,7 @@ import session from '$lib/server/session';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-	const sessionToken = event.cookies.get(session.SESSION_COOKIE_NAME);
+	const sessionToken = event.cookies.get(session.TOKEN_COOKIE_NAME);
 
 	if (!sessionToken) {
 		event.locals.user = null;

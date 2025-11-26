@@ -17,11 +17,6 @@
 		height: 1em;
 	}
 
-	* {
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
-
 	*:focus-visible {
 		outline: 2px solid var(--color-accent-600);
 		border-radius: 4px;
@@ -72,6 +67,8 @@
 	--font-display: 'Inter', 'Rajdhani', sans-serif;
 
 	--color-*: initial;
+
+	--default-transition-duration: 150ms;
 
 	--color-transparent: rgba(0, 0, 0, 0);
 	--color-black: rgb(0, 0, 0);

@@ -11,10 +11,10 @@ import {
 	type AnyPgColumn,
 	check
 } from 'drizzle-orm/pg-core';
-import { timestamps } from '../helpers';
+import { timestamps } from './util';
 import { relations, sql } from 'drizzle-orm';
-import { MatchType, Rank, Role, SocialPlatform } from '../../../types';
-import { enumToPgEnum } from '../../../util';
+import { MatchType, Rank, Role, SocialPlatform } from '$lib/types';
+import { enumToPgEnum } from '$lib/util';
 
 export const season = pgTable('season', {
 	id: uuid().primaryKey().defaultRandom(),
