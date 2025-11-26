@@ -1,7 +1,7 @@
 import { db, schema } from '$lib/server/db';
 import { flattenGroup } from '$lib/util';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { asc, desc, eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.group.findFirst({
@@ -20,7 +20,11 @@ export const load = async ({ params }) => {
 				}
 			},
 			matches: {
-				orderBy: schema.match.playedAt,
+				orderBy: [
+					asc(schema.match.played), // planned matches first
+					desc(schema.match.playedAt), // played matches by most recent first
+					asc(schema.match.scheduledAt) // order planned by nearest scheduled first
+				],
 				columns: {
 					createdAt: false,
 					order: false

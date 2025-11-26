@@ -136,4 +136,12 @@ export type ResolvedMatchWithContext<G = NestedGroup, D = NestedDivision> = Reso
 	division: D | null;
 };
 
+export type LogicalMatch = {
+	rosterAId?: string | null;
+	rosterBId?: string | null;
+	teamAScore?: number | null;
+	teamBScore?: number | null;
+	draws?: number | null;
+};
+
 export type ButtonKind = 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'negative';

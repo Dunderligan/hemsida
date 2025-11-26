@@ -189,9 +189,9 @@ export const matchType = pgEnum('match_type', enumToPgEnum(MatchType));
 
 export const match = pgTable('match', {
 	id: uuid().primaryKey().defaultRandom(),
-	// for group matches
+	/** The match's group. Must be set for group-stage matches, null otherwise. */
 	groupId: uuid().references(() => group.id, { onDelete: 'cascade' }),
-	// for bracket matches
+	/** The match's division. Must be set for bracket matches, null otherwise. */
 	divisionId: uuid().references(() => division.id, { onDelete: 'cascade' }),
 	rosterAId: uuid().references(() => roster.id, { onDelete: 'set null' }),
 	rosterBId: uuid().references(() => roster.id, { onDelete: 'set null' }),
@@ -202,7 +202,9 @@ export const match = pgTable('match', {
 	playedAt: timestamp(),
 	scheduledAt: timestamp(),
 	vodUrl: text(),
+	/** The next match in the bracket, if any. */
 	nextMatchId: uuid().references((): AnyPgColumn => match.id, { onDelete: 'set null' }),
+	/** The vertical order to display this match in a bracket. Ignored for group-stage matches. */
 	order: integer().notNull().default(0),
 	...timestamps
 });

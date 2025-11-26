@@ -6,8 +6,9 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import StandingsTable from '$lib/components/table/StandingsTable.svelte';
 	import Tabs from '$lib/components/ui/Tabs.svelte';
-	import { buildBracket, seasonState } from '$lib/util';
+	import { seasonState } from '$lib/util';
 	import Bracket from '$lib/components/match/Bracket.svelte';
+	import { buildBracketRounds } from '$lib/bracket.js';
 
 	// const session = authClient.useSession();
 
@@ -87,7 +88,7 @@
 			<Icon
 				class="mr-1 text-lg"
 				icon={{
-					upcoming: 'ph:clock-clockwise',
+					upcoming: 'ph:calendar-blank',
 					ongoing: 'ph:circle',
 					ended: 'ph:check'
 				}[state]}
@@ -158,7 +159,7 @@
 		{:else}
 			<Bracket
 				seasonSlug={season.slug}
-				rounds={buildBracket(
+				rounds={buildBracketRounds(
 					division.matches.map((match) => {
 						// resolve match rosters
 						const rosterA = division.rosters.find((roster) => roster.id === match.rosterAId);

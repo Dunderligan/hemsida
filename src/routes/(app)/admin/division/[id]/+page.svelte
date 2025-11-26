@@ -16,7 +16,6 @@
 	import { RosterContext } from '$lib/state/rosters.svelte';
 	import { SaveContext } from '$lib/state/save.svelte';
 	import type { FullMatch } from '$lib/types';
-	import { buildBracket } from '$lib/util';
 	import { createGroup } from '$lib/remote/group.remote';
 	import {
 		deleteBracket,
@@ -24,6 +23,7 @@
 		generateBracket,
 		updateDivision
 	} from '$lib/remote/division.remote';
+	import { buildBracketRounds } from '$lib/bracket.js';
 
 	const { data } = $props();
 
@@ -92,7 +92,7 @@
 	}
 
 	$effect(() => {
-		rounds = buildBracket(data.matches);
+		rounds = buildBracketRounds(data.matches);
 	});
 
 	$effect(() => {

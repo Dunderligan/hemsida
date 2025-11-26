@@ -17,8 +17,9 @@
 </script>
 
 <Dialog
-	title="Redigera match"
 	{open}
+	wide
+	title="Redigera match"
 	buttons={[
 		{
 			label: 'Klar',
@@ -46,7 +47,7 @@
 				onValueChange={saveCtx.setDirty}
 			/>
 			<InputField
-				class="w-1/4 min-w-0"
+				class="w-1/3 min-w-0"
 				bind:value={match.teamAScore}
 				onchange={saveCtx.setDirty}
 				type="number"
@@ -60,32 +61,35 @@
 				onValueChange={saveCtx.setDirty}
 			/>
 			<InputField
-				class="w-1/4 min-w-0"
+				class="w-1/3 min-w-0"
 				bind:value={match.teamBScore}
 				onchange={saveCtx.setDirty}
 				type="number"
 				placeholder="Poäng"
 			/>
 		</div>
-
-		<div class="mt-4 space-y-1">
-			<Label label="Planerad">
-				<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
-			</Label>
-			<Label label="Spelad">
-				<DateInput
-					bind:value={match.playedAt}
-					oninput={saveCtx.setDirty}
-					disabled={!match.played}
-				/>
-			</Label>
-			<Label label="VOD">
-				<InputField
-					bind:value={match.vodUrl}
-					onchange={saveCtx.setDirty}
-					placeholder="https://youtube.com/..."
-				/>
-			</Label>
+		<div class="mb-6 flex gap-2">
+			<InputField
+				bind:value={match.draws}
+				onchange={saveCtx.setDirty}
+				type="number"
+				placeholder="Antal draws"
+				class="ml-auto w-1/3 min-w-0 shrink grow-0"
+			/>
 		</div>
+
+		<Label label="Planerad">
+			<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
+		</Label>
+		<Label label="Spelad">
+			<DateInput bind:value={match.playedAt} oninput={saveCtx.setDirty} disabled={!match.played} />
+		</Label>
+		<Label label="VOD">
+			<InputField
+				bind:value={match.vodUrl}
+				onchange={saveCtx.setDirty}
+				placeholder="https://youtube.com/..."
+			/>
+		</Label>
 	{/if}
 </Dialog>

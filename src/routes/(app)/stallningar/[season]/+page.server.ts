@@ -1,5 +1,6 @@
 import { db, schema } from '$lib/server/db';
-import { aggregateGroups, calculateStandings } from '$lib/util.js';
+import { calculateStandings } from '$lib/table';
+import { aggregateGroups } from '$lib/util';
 import { error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 

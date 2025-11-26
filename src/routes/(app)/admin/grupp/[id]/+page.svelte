@@ -17,7 +17,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import CreateRosterDialog from '$lib/components/admin/CreateRosterDialog.svelte';
 	import { deleteGroup, updateGroup } from '$lib/remote/group.remote';
-	import { createAndAddRoster } from '$lib/remote/roster.remote';
+	import { createRoster } from '$lib/remote/roster.remote';
 
 	const { data } = $props();
 
@@ -68,7 +68,7 @@
 	}
 
 	async function submitNewRoster(name: string, teamId?: string) {
-		const { roster } = await createAndAddRoster({
+		const { roster } = await createRoster({
 			groupId: group.id,
 			seasonSlug: season.slug,
 			name: name,

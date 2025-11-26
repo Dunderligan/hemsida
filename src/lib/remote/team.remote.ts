@@ -29,7 +29,7 @@ export const queryTeams = query(
 						id: true
 					}
 				},
-				...nestedGroupQuery
+				group: nestedGroupQuery
 			}
 		});
 
@@ -37,11 +37,12 @@ export const queryTeams = query(
 		const teams = new Map<string, RosterWithGroup[]>();
 
 		for (const { team, ...roster } of rosters) {
+			// drizzle relational queryies don't support filtering on nested relations, so we have to do it manually here
 			if (roster.group.division.season.id === excludeSeasonId) continue;
 
-			const rosters = teams.get(team.id) ?? [];
-			rosters.push(roster);
-			teams.set(team.id, rosters);
+			const teamRosters = teams.get(team.id) ?? [];
+			teamRosters.push(roster);
+			teams.set(team.id, teamRosters);
 
 			// return max 5 unique teams
 			if (teams.size >= 5) break;

@@ -13,7 +13,7 @@
 	import { SaveContext } from '$lib/state/save.svelte';
 	import DateInput from '$lib/components/ui/DateInput.svelte';
 	import { createDivision } from '$lib/remote/division.remote';
-	import { deleteSeason, editSeason } from '$lib/remote/season.remote';
+	import { deleteSeason, updateSeason } from '$lib/remote/season.remote';
 
 	const { data } = $props();
 
@@ -37,7 +37,7 @@
 	}
 
 	async function save() {
-		await editSeason({
+		await updateSeason({
 			id: season.id,
 			startedAt: season.startedAt,
 			endedAt: season.endedAt

@@ -27,7 +27,7 @@
 			return dateString;
 		}
 
-		return `${dateString}-T-${pad(date.getHours())}:${pad(date.getMinutes())}`;
+		return `${dateString}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 	}
 </script>
 

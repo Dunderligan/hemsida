@@ -1,16 +1,18 @@
 import { command, form } from '$app/server';
-import { PUBLIC_S3_BUCKET_NAME } from '$env/static/public';
+import { S3_BUCKET_NAME } from '$env/static/private';
 import { db, schema } from '$lib/server/db';
-import { nestedGroupQuery, type Transaction } from '$lib/server/db/helpers';
+import { type Transaction } from '$lib/server/db/helpers';
 import S3 from '$lib/server/s3';
 import { Rank, Role, SocialPlatform, type Member, type TeamSocial } from '$lib/types';
-import { flattenGroup, toSlug } from '$lib/util';
+import { toSlug } from '$lib/util';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { error } from '@sveltejs/kit';
 import { and, eq, inArray, not, sql } from 'drizzle-orm';
 import z from 'zod';
+import { adminGuard } from './auth.remote';
 
-export const createAndAddRoster = command(
+/// Create a roster and add it to a group. If an associated teamId is not provided, a new team will be created.
+export const createRoster = command(
 	z.object({
 		groupId: z.uuidv4(),
 		seasonSlug: z.string(),
@@ -18,6 +20,8 @@ export const createAndAddRoster = command(
 		teamId: z.uuidv4().nullable().optional()
 	}),
 	async ({ groupId, seasonSlug, name, teamId }) => {
+		await adminGuard();
+
 		if (!teamId) {
 			const [team] = await db.insert(schema.team).values({}).returning();
 			teamId = team.id;
@@ -40,28 +44,23 @@ export const createAndAddRoster = command(
 	}
 );
 
-export const uploadRosterLogo = form(async (data) => {
-	const file = data.get('file') as File;
-	if (!file) {
-		error(400, 'No file provided');
+export const deleteRoster = command(
+	z.object({
+		id: z.uuid()
+	}),
+	async ({ id }) => {
+		await adminGuard();
+
+		await db.delete(schema.roster).where(eq(schema.roster.id, id));
+
+		const command = new DeleteObjectCommand({
+			Bucket: S3_BUCKET_NAME,
+			Key: `logos/${id}.png`
+		});
+
+		await S3.send(command);
 	}
-
-	const rosterId = data.get('rosterId') as string;
-	if (!rosterId) {
-		error(400, 'No rosterId provided');
-	}
-
-	const buffer = Buffer.from(await file.arrayBuffer());
-
-	const command = new PutObjectCommand({
-		Bucket: PUBLIC_S3_BUCKET_NAME,
-		Key: `logos/${rosterId}.png`,
-		Body: buffer,
-		ContentType: `image/png`
-	});
-
-	await S3.send(command);
-});
+);
 
 export const editRoster = command(
 	z.object({
@@ -88,6 +87,8 @@ export const editRoster = command(
 		)
 	}),
 	async ({ id, teamId, name, members, socials }) => {
+		await adminGuard();
+
 		const newSlug = toSlug(name);
 
 		await db.transaction(async (tx) => {
@@ -181,49 +182,30 @@ async function updateSocials(tx: Transaction, teamId: string, socials: TeamSocia
 		});
 }
 
-export const createRoster = command(
-	z.object({
-		name: z.string(),
-		teamId: z.uuid(),
-		groupId: z.uuid()
-	}),
-	async ({ name, teamId, groupId }) => {
-		const group = await db.query.group.findFirst({
-			where: eq(schema.group.id, groupId),
-			...nestedGroupQuery.group
-		});
+export const uploadRosterLogo = form(async (data) => {
+	await adminGuard();
 
-		if (!group) {
-			error(400);
-		}
-
-		const { season } = flattenGroup(group);
-
-		await db.insert(schema.roster).values({
-			name,
-			slug: toSlug(name),
-			teamId,
-			groupId,
-			seasonSlug: season.slug
-		});
+	const file = data.get('file') as File;
+	if (!file) {
+		error(400, 'No file provided');
 	}
-);
 
-export const deleteRoster = command(
-	z.object({
-		id: z.uuid()
-	}),
-	async ({ id }) => {
-		await db.delete(schema.roster).where(eq(schema.roster.id, id));
-
-		const command = new DeleteObjectCommand({
-			Bucket: PUBLIC_S3_BUCKET_NAME,
-			Key: `logos/${id}.png`
-		});
-
-		await S3.send(command);
+	const rosterId = data.get('rosterId') as string;
+	if (!rosterId) {
+		error(400, 'No rosterId provided');
 	}
-);
+
+	const buffer = Buffer.from(await file.arrayBuffer());
+
+	const command = new PutObjectCommand({
+		Bucket: S3_BUCKET_NAME,
+		Key: `logos/${rosterId}.png`,
+		Body: buffer,
+		ContentType: `image/png`
+	});
+
+	await S3.send(command);
+});
 
 export const editRosterTeam = command(
 	z.object({
@@ -231,6 +213,8 @@ export const editRosterTeam = command(
 		teamId: z.uuid()
 	}),
 	async ({ teamId, rosterId }) => {
+		await adminGuard();
+
 		await db.update(schema.roster).set({ teamId }).where(eq(schema.roster.id, rosterId));
 	}
 );

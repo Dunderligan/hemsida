@@ -6,7 +6,8 @@ import {
 	type Rank,
 	type Role,
 	type FullMatch,
-	type NestedDivision
+	type NestedDivision,
+	type LogicalMatch
 } from './types';
 // import { PUBLIC_CDN_ENDPOINT } from '$env/static/public';
 
@@ -82,124 +83,6 @@ export function toSlug(str: string) {
 	});
 }
 
-export type TableScore = {
-	mapWins: number;
-	mapLosses: number;
-	mapDraws: number;
-	matchesPlayed: number;
-};
-
-type ExtraTableInfo = {
-	wonAgainst: Set<string>;
-	lostAgainst: Set<string>;
-};
-
-export type MatchWithoutIds = Omit<FullMatch, 'id' | 'played' | 'order'>;
-
-export function calculateStandings<R extends { id: string }>(
-	rosters: R[],
-	matches: MatchWithoutIds[]
-): {
-	rosterId: string;
-	score: TableScore;
-}[] {
-	const rosterScores = new Map<string, TableScore & ExtraTableInfo>();
-
-	for (const roster of rosters) {
-		rosterScores.set(roster.id, {
-			mapWins: 0,
-			mapLosses: 0,
-			mapDraws: 0,
-			matchesPlayed: 0,
-			wonAgainst: new Set(),
-			lostAgainst: new Set()
-		});
-	}
-
-	for (const match of matches) {
-		if (!match.rosterAId || !match.rosterBId) continue;
-
-		const teamA = rosterScores.get(match.rosterAId);
-		const teamB = rosterScores.get(match.rosterBId);
-
-		if (!teamA || !teamB) {
-			console.warn('Roster not found in group', match);
-			continue;
-		}
-
-		let teamAScore = match.teamAScore ?? 0;
-		let teamBScore = match.teamBScore ?? 0;
-		let draws = match.draws ?? 0;
-
-		if (teamAScore > teamBScore) {
-			teamA.wonAgainst.add(match.rosterBId);
-			teamB.lostAgainst.add(match.rosterAId);
-		} else if (teamBScore > teamAScore) {
-			teamB.wonAgainst.add(match.rosterAId);
-			teamA.lostAgainst.add(match.rosterBId);
-		}
-
-		teamA.mapWins += teamAScore;
-		teamA.mapLosses += teamBScore;
-		teamA.mapDraws += draws;
-
-		teamB.mapWins += teamBScore;
-		teamB.mapLosses += teamAScore;
-		teamB.mapDraws += draws;
-
-		teamA.matchesPlayed += 1;
-		teamB.matchesPlayed += 1;
-	}
-
-	const sortedScores = [...rosterScores]
-		.sort((a, b) => compareSeed(a[1], b[1]))
-		.map(([rosterId, { wonAgainst, lostAgainst, ...score }]) => ({
-			rosterId,
-			score
-		}));
-
-	return sortedScores;
-}
-
-function compareSeed(a: TableScore & ExtraTableInfo, b: TableScore & ExtraTableInfo): number {
-	return (
-		b.mapWins - a.mapWins || a.mapLosses - b.mapLosses || b.wonAgainst.size - a.wonAgainst.size
-	);
-}
-
-export function sortBySeed<R extends { id: string }>(rosters: R[], matches: MatchWithoutIds[]) {
-	const seeds = new Map(
-		calculateStandings(rosters, matches).map((row, seed) => [row.rosterId, seed])
-	);
-
-	rosters.sort((a, b) => seeds.get(a.id)! - seeds.get(b.id)!);
-}
-
-export function buildBracket<T extends { id: string; nextMatchId?: string | null }>(matches: T[]) {
-	const finalMatch = matches.find((match) => !match.nextMatchId);
-
-	if (!finalMatch) {
-		console.warn('No final match found!');
-		return [];
-	}
-
-	const rounds: T[][] = [];
-	let currentRound = [finalMatch];
-
-	while (currentRound.length > 0) {
-		rounds.unshift(currentRound);
-
-		const nextRoundIds = new Set(currentRound.map((match) => match.id));
-		const prevRound = matches.filter(
-			(match) => match.nextMatchId && nextRoundIds.has(match.nextMatchId)
-		);
-
-		currentRound = prevRound;
-	}
-
-	return rounds;
-}
-
 export function cdnSrc(path: string) {
 	return `${PUBLIC_CDN_ENDPOINT}${path}`;
 }
@@ -235,6 +118,7 @@ export function roleIcon(role: Role): string {
 	return 'ph:question-mark';
 }
 
+/** Aggregate a number of groups into single collections of rosters and matches. */
 export function aggregateGroups<R, M>(groups: { rosters: R[]; matches: M[] }[]) {
 	return {
 		rosters: groups.flatMap((group) => group.rosters),
@@ -268,4 +152,24 @@ export function seasonState({
 		return 'ended';
 	}
 	return 'ongoing';
+}
+
+export function formatDate(date: Date): string {
+	// format as YYYY-MM-DD in sv-SE locale
+	return date.toLocaleDateString('sv-SE', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit'
+	});
+}
+
+export function formatDateTime(date: Date): string {
+	// format as YYYY-MM-DD HH:mm in sv-SE locale
+	return date.toLocaleDateString('sv-SE', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit'
+	});
 }

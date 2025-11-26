@@ -1,8 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import { sortBySeed, type MatchWithoutIds } from './util';
-import type { FullMatch } from './types';
+import type { FullMatch, LogicalMatch } from './types';
+import { sortBySeed } from './table';
+import { isMatchBetween } from './match';
 
-export function createBracket<R extends { id: string }, M extends MatchWithoutIds>(
+/**
+ * Generates a bracket structure based on the seeds given by aggregating `groupMatches`.
+ */
+export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rosters: R[],
 	groupMatches: M[]
 ): FullMatch[][] {
@@ -11,7 +15,7 @@ export function createBracket<R extends { id: string }, M extends MatchWithoutId
 	}
 
 	const numberOfRounds = Math.ceil(Math.log2(rosters.length));
-	const emptySlots = Math.pow(numberOfRounds, 2) - rosters.length;
+	let emptySlots = Math.pow(2, numberOfRounds) - rosters.length;
 
 	const rounds = [];
 	let order = 0;
@@ -34,10 +38,12 @@ export function createBracket<R extends { id: string }, M extends MatchWithoutId
 		rounds.push(round);
 	}
 
+	// don't mutate the original rosters array
+	rosters = [...rosters];
 	sortBySeed(rosters, groupMatches);
 
+	// fill the first round according to seeding
 	const matchOrder = getMatchOrder(numberOfRounds);
-
 	const firstRound = rounds[rounds.length - 1];
 
 	for (const matchIndex of matchOrder) {
@@ -46,12 +52,22 @@ export function createBracket<R extends { id: string }, M extends MatchWithoutId
 		const rosterA = rosters.shift()!;
 		match.rosterAId = rosterA.id;
 
-		// find the last in rosters that is compatible
+		if (emptySlots > 0) {
+			emptySlots--;
+
+			// automatically advance this roster
+			match.played = true;
+			match.teamAScore = 3;
+
+			continue;
+		}
+
+		// find the lowest seeded viable opponent
 		for (let i = rosters.length - 1; i >= 0; i--) {
 			const otherRoster = rosters[i];
-			console.log(otherRoster);
+
+			// if they have played each other in the group stage, skip
 			if (groupMatches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))) {
-				console.log('these have played:', rosterA, otherRoster);
 				continue;
 			}
 
@@ -59,39 +75,53 @@ export function createBracket<R extends { id: string }, M extends MatchWithoutId
 			match.rosterBId = rosterB.id;
 			break;
 		}
+
+		// TODO: what to do if no valid opponent is found?
 	}
 
-	rounds.reverse();
-
-	return rounds;
+	return rounds.reverse();
 }
 
-function isMatchBetween(match: MatchWithoutIds, aId: string, bId: string): boolean {
-	return (
-		(match.rosterAId == aId && match.rosterBId == bId) ||
-		(match.rosterAId == bId && match.rosterBId == aId)
-	);
-}
-
+/** Get the order of which matches in the first round of the bracket should be visited.
+ * E.g. for 8 teams, the order is [0, 2, 3, 1]
+ * This ensures that the highest seeded teams don't meet until the later rounds.
+ */
 function getMatchOrder(rounds: number): number[] {
-	let layer = [0];
+	let round = [0];
 	for (let i = 0; i < rounds - 1; i++) {
-		layer = nextLayer(layer);
+		round = nextRound(round);
 	}
-	const indexOrder = layer
-		.map((x, i) => [x, i])
-		.sort((a, b) => a[0] - b[0])
-		.map((a) => a[1]);
-	return indexOrder;
 
-	function nextLayer(lastLayer: number[]): number[] {
-		const nextLayer: number[] = [];
-		const newLength = lastLayer.length * 2 - 1;
-		for (const item of lastLayer) {
-			nextLayer.push(item);
-			nextLayer.push(newLength - item);
+	// we now have an array of match order where each index represents which
+	// order the match at that index should be visited
+
+	// we need to convert it to an a array where the value is the match index,
+	// and the index is the order
+
+	// example for 8 teams (4 matches):
+
+	// round = [0, 3, 1, 2]
+	// - visit match 0 at #0, match 1 at #3, match 2 at #2, match 3 at #1
+	// => to:
+	// index order = [0, 2, 3, 1]
+	// - visit match 0, then 2, 3, 1
+	const visitOrder = round
+		.map((matchIndex, visitIndex) => [matchIndex, visitIndex])
+		.sort((a, b) => a[0] - b[0]) // sort by match index
+		.map((a) => a[1]); // take the visit index
+
+	return visitOrder;
+
+	function nextRound(lastRound: number[]): number[] {
+		const nextRound: number[] = [];
+		const newLength = lastRound.length * 2 - 1;
+
+		for (const item of lastRound) {
+			nextRound.push(item);
+			nextRound.push(newLength - item);
 		}
-		return nextLayer;
+
+		return nextRound;
 	}
 }
 
@@ -102,4 +132,34 @@ function createMatch(order: number, nextMatchId?: string): FullMatch {
 		order,
 		played: false
 	};
+}
+
+/** Takes a flat array of matches and builds the bracket structure as an array of rounds. */
+export function buildBracketRounds<T extends { id: string; nextMatchId?: string | null }>(
+	matches: T[]
+): T[][] {
+	// the final match is the one without a nextMatchId
+	const finalMatch = matches.find((match) => !match.nextMatchId);
+
+	if (!finalMatch) {
+		return [];
+	}
+
+	const rounds: T[][] = [];
+	let currentRound = [finalMatch];
+
+	// go backwards through the rounds
+	while (currentRound.length > 0) {
+		rounds.unshift(currentRound);
+
+		// find the matches in the previous round that point to matches in the current round
+		const nextRoundIds = new Set(currentRound.map((match) => match.id));
+		const prevRound = matches.filter(
+			(match) => match.nextMatchId && nextRoundIds.has(match.nextMatchId)
+		);
+
+		currentRound = prevRound;
+	}
+
+	return rounds;
 }
