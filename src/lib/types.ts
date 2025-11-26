@@ -136,6 +136,10 @@ export type ResolvedMatchWithContext<G = NestedGroup, D = NestedDivision> = Reso
 	division: D | null;
 };
 
+/**
+ * A subset of the full match type used for logical operations,
+ * e.g., calculating seeds and generating brackets.
+ */
 export type LogicalMatch = {
 	rosterAId?: string | null;
 	rosterBId?: string | null;

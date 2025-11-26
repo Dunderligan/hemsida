@@ -59,8 +59,18 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 			match.played = true;
 			match.teamAScore = 3;
 
+			const nextRound = rounds[rounds.length - 2];
+			const nextMatch = nextRound[Math.floor(matchIndex / 2)];
+			if (!nextMatch.rosterAId) {
+				nextMatch.rosterAId = rosterA.id;
+			} else {
+				nextMatch.rosterBId = rosterA.id;
+			}
+
 			continue;
 		}
+
+		let found = false;
 
 		// find the lowest seeded viable opponent
 		for (let i = rosters.length - 1; i >= 0; i--) {
@@ -73,10 +83,20 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 
 			const [rosterB] = rosters.splice(i, 1);
 			match.rosterBId = rosterB.id;
+			found = true;
 			break;
 		}
 
-		// TODO: what to do if no valid opponent is found?
+		if (found) continue;
+
+		// if no valid opponent found, fall back to the next in line
+		const rosterB = rosters.shift();
+		if (rosterB) {
+			match.rosterBId = rosterB.id;
+		} else {
+			// this should never happen
+			throw new Error('Not enough rosters to fill the bracket');
+		}
 	}
 
 	return rounds.reverse();

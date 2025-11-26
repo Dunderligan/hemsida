@@ -75,13 +75,13 @@ export const generateBracket = command(
 
 		const rounds = createBracket(rosters, groupMatches);
 
-		const matches = rounds.flatMap((round) =>
+		const matchInserts = rounds.flatMap((round) =>
 			round.map((match) => ({
 				divisionId,
 				...match
 			}))
 		);
-		await db.insert(schema.match).values(matches);
+		await db.insert(schema.match).values(matchInserts);
 
 		return { rounds };
 	}
@@ -99,6 +99,7 @@ async function aggregateGroups(divisionId: string) {
 				}
 			},
 			matches: {
+				where: eq(schema.match.played, true),
 				columns: {
 					id: true,
 					rosterAId: true,

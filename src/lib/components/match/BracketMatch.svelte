@@ -21,12 +21,12 @@
 <div
 	class={[!isFirst && 'not-first-match', !isLast && 'not-last-match', 'relative flex h-[100px]']}
 >
-	<div class="grow overflow-hidden rounded-lg">
-		{@render side(match.rosterA, teamAWon === true, match.teamAScore)}
+	<div class="grow">
+		{@render side(match.rosterA, teamAWon === true, match.teamAScore, 'rounded-t-lg')}
 
 		<div class="h-[2px] w-full bg-gray-200"></div>
 
-		{@render side(match.rosterB, teamAWon === false, match.teamBScore)}
+		{@render side(match.rosterB, teamAWon === false, match.teamBScore, 'rounded-b-lg')}
 	</div>
 
 	{#if !isFirst}
@@ -37,11 +37,17 @@
 	{/if}
 </div>
 
-{#snippet side(roster?: MatchRoster | null, won?: boolean | null, score?: number | null)}
+{#snippet side(
+	roster?: MatchRoster | null,
+	won?: boolean | null,
+	score?: number | null,
+	extraClass?: string
+)}
 	<div
 		class={[
-			'flex h-12 items-center overflow-hidden pr-4',
-			match.played ? (won ? 'bg-gray-200' : 'bg-gray-50') : 'bg-gray-100'
+			'flex h-12 items-center pr-4 ring-accent-600 hover:ring-2',
+			match.played ? (won ? 'bg-gray-200' : 'bg-gray-50') : 'bg-gray-100',
+			extraClass
 		]}
 	>
 		{#if roster}
