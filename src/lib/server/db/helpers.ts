@@ -35,6 +35,20 @@ export const matchOrdering = [
 	asc(schema.match.scheduledAt) // order planned by nearest scheduled first
 ];
 
+export const fullMatchQuery = {
+	id: true,
+	teamAScore: true,
+	teamBScore: true,
+	draws: true,
+	rosterAId: true,
+	rosterBId: true,
+	nextMatchId: true,
+	played: true,
+	vodUrl: true,
+	playedAt: true,
+	scheduledAt: true
+} as const;
+
 export type Transaction = PgTransaction<
 	PostgresJsQueryResultHKT,
 	typeof schema,

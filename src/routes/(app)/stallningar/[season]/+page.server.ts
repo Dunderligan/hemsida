@@ -1,5 +1,5 @@
 import { db, schema } from '$lib/server/db';
-import { matchOrdering } from '$lib/server/db/helpers.js';
+import { fullMatchQuery, matchOrdering } from '$lib/server/db/helpers.js';
 import { calculateStandings } from '$lib/table';
 import { aggregateGroups } from '$lib/util';
 import { error } from '@sveltejs/kit';
@@ -25,19 +25,7 @@ export const load = async ({ params }) => {
 				with: {
 					matches: {
 						orderBy: schema.match.order,
-						columns: {
-							id: true,
-							teamAScore: true,
-							teamBScore: true,
-							draws: true,
-							rosterAId: true,
-							rosterBId: true,
-							nextMatchId: true,
-							played: true,
-							vodUrl: true,
-							playedAt: true,
-							scheduledAt: true
-						}
+						columns: fullMatchQuery
 					},
 					groups: {
 						orderBy: schema.group.name,
@@ -56,18 +44,7 @@ export const load = async ({ params }) => {
 							},
 							matches: {
 								orderBy: matchOrdering,
-								columns: {
-									id: true,
-									teamAScore: true,
-									teamBScore: true,
-									draws: true,
-									rosterAId: true,
-									rosterBId: true,
-									played: true,
-									vodUrl: true,
-									playedAt: true,
-									scheduledAt: true
-								}
+								columns: fullMatchQuery
 							}
 						}
 					}
@@ -88,8 +65,8 @@ export const load = async ({ params }) => {
 			const { rosters, matches: groupMatches } = aggregateGroups(groups);
 			const table = calculateStandings(rosters, groupMatches);
 
-			const latestMatches = groupMatches.filter((match) => match.played).slice(0, 100);
-			const upcomingMatches = groupMatches.filter((match) => !match.played).slice(0, 100);
+			const latestMatches = groupMatches.filter((match) => match.played).slice(0, 3);
+			const upcomingMatches = groupMatches.filter((match) => !match.played).slice(0, 3);
 
 			return {
 				rosters,

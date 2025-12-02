@@ -144,7 +144,7 @@
 				items={divisions.map((division) => ({
 					label: division.name,
 					value: division.id,
-					href: `?div=${division.slug}`
+					href: `?div=${division.slug}&visa=${mode === 'group' ? 'grupp' : 'slutspel'}`
 				}))}
 			/>
 

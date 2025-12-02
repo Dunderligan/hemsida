@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @font-face {
+	font-display: swap;
 	font-family: Inter;
 	src:
 		url('/fonts/Inter/Inter.woff2') format('woff2'),
@@ -8,6 +9,7 @@
 }
 
 @font-face {
+	font-display: swap;
 	font-family: Rajdhani;
 	font-weight: 300;
 	src:
@@ -16,6 +18,7 @@
 }
 
 @font-face {
+	font-display: swap;
 	font-family: Rajdhani;
 	font-weight: 400;
 	src:
@@ -24,6 +27,7 @@
 }
 
 @font-face {
+	font-display: swap;
 	font-family: Rajdhani;
 	font-weight: 500;
 	src:
@@ -32,6 +36,7 @@
 }
 
 @font-face {
+	font-display: swap;
 	font-family: Rajdhani;
 	font-weight: 600;
 	src:
@@ -40,6 +45,7 @@
 }
 
 @font-face {
+	font-display: swap;
 	font-family: Rajdhani;
 	font-weight: 700;
 	src:
