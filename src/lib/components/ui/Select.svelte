@@ -29,7 +29,7 @@
 	type Props = WithoutChildren<Select.RootProps> & {
 		placeholder?: string;
 		items: { value: string; label: string; disabled?: boolean }[];
-		triggerClass?: string;
+		class?: string;
 		avoidCollisions?: boolean;
 	} & LabelDecoration &
 		ItemDecoration;
@@ -37,7 +37,7 @@
 	let {
 		open = $bindable(false),
 		value = $bindable(),
-		triggerClass,
+		class: triggerClass,
 		items,
 		placeholder,
 		avoidCollisions,

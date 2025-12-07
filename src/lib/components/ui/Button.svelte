@@ -43,7 +43,7 @@
 			? 'text-gray-500 bg-gray-200 font-medium'
 			: {
 					primary: 'bg-accent-600 hover:bg-accent-700 font-semibold text-white',
-					secondary: 'bg-gray-500 hover:bg-gray-600 font-semibold text-white',
+					secondary: 'bg-gray-200 hover:bg-gray-300 font-semibold text-gray-800',
 					tertiary: 'text-gray-600 font-medium hover:bg-gray-50',
 					transparent: 'text-accent-800 hover:bg-accent-100 active:bg-accent-200',
 					negative: 'bg-red-700 hover:bg-red-600 font-semibold text-red-100 hover:text-white'

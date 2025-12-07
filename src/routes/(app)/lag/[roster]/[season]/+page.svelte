@@ -29,8 +29,6 @@
 		season.legacyRanks ? averageLegacyRank(roster.members) : averageRank(roster.members)
 	);
 
-	$inspect(roster.members);
-
 	const upcomingMatches = $derived(roster.matches.filter((match) => !match.played));
 	const latestMatches = $derived(roster.matches.filter((match) => match.played));
 
@@ -45,8 +43,6 @@
 			};
 		})
 	);
-
-	$inspect(data);
 </script>
 
 <svelte:head>
@@ -101,7 +97,16 @@
 
 		<MembersTable members={sortedMembers} />
 
-		<Subheading class="mt-10 mb-4">Senaste matcherna</Subheading>
+		<div class="mt-10 mb-4 flex items-center justify-between">
+			<Subheading>Senaste matcherna</Subheading>
+
+			<Button
+				href="/arkiv/matcher?rosterId={roster.id}&spelad=true&prev={page.url.pathname}"
+				label="Se alla"
+				icon="ph:arrow-right"
+				kind="secondary"
+			/>
+		</div>
 
 		<div class="space-y-2">
 			{#each latestMatches as match (match.id)}
@@ -109,7 +114,9 @@
 			{/each}
 		</div>
 
-		<Subheading class="mt-10 mb-4">Kommande matcher</Subheading>
+		<Subheading class="mt-10 mb-4">
+			<span>Kommande matcher</span>
+		</Subheading>
 
 		<div class="space-y-2">
 			{#each upcomingMatches as match (match.id)}

@@ -32,13 +32,13 @@ export const nestedGroupQuery = {
 
 export const matchRosterQuery = leagueQuery;
 
-export const matchOrdering = [
-	asc(schema.match.played), // planned matches first
-	desc(schema.match.playedAt), // played matches by most recent first
-	asc(schema.match.scheduledAt) // order planned by nearest scheduled first
-];
+export const groupMatchOrdering = {
+	played: 'asc', // planned matches first
+	playedAt: 'desc', // played matches by most recent first
+	scheduledAt: 'asc' // order planned by nearest scheduled first
+} as const;
 
-export const fullMatchQuery = {
+export const fullMatchColumns = {
 	id: true,
 	teamAScore: true,
 	teamBScore: true,
@@ -52,8 +52,4 @@ export const fullMatchQuery = {
 	scheduledAt: true
 } as const;
 
-export type Transaction = PgTransaction<
-	PostgresJsQueryResultHKT,
-	typeof schema,
-	ExtractTablesWithRelations<typeof schema>
->;
+export type Transaction = PgTransaction<PostgresJsQueryResultHKT, typeof schema>;

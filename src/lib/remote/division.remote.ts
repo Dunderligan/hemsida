@@ -71,7 +71,7 @@ export const generateBracket = command(
 	async ({ divisionId }) => {
 		await adminGuard();
 
-		const { rosters, groupMatches } = await aggregateGroups(divisionId);
+		const { rosters, groupMatches } = await getDivisionRostersAndGroupMatches(divisionId);
 
 		const rounds = createBracket(rosters, groupMatches);
 
@@ -87,9 +87,11 @@ export const generateBracket = command(
 	}
 );
 
-async function aggregateGroups(divisionId: string) {
+async function getDivisionRostersAndGroupMatches(divisionId: string) {
 	const data = await db.query.group.findMany({
-		where: eq(schema.group.divisionId, divisionId),
+		where: {
+			divisionId
+		},
 		columns: {},
 		with: {
 			rosters: {
@@ -99,14 +101,17 @@ async function aggregateGroups(divisionId: string) {
 				}
 			},
 			matches: {
-				where: eq(schema.match.played, true),
+				where: {
+					played: true
+				},
 				columns: {
 					id: true,
 					rosterAId: true,
 					rosterBId: true,
 					teamAScore: true,
 					teamBScore: true,
-					draws: true
+					draws: true,
+					played: true
 				}
 			}
 		}

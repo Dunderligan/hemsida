@@ -1,11 +1,12 @@
-import { db, schema } from '$lib/server/db';
+import { db } from '$lib/server/db';
 import { nestedGroupQuery } from '$lib/server/db/helpers';
 import { error } from '@sveltejs/kit';
-import { eq, and } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.roster.findFirst({
-		where: and(eq(schema.roster.id, params.id)),
+		where: {
+			id: params.id
+		},
 		with: {
 			members: {
 				columns: {

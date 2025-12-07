@@ -40,7 +40,7 @@
 		<div class="flex items-center bg-gray-200 pr-4">
 			<Select
 				type="single"
-				triggerClass="grow"
+				class="grow"
 				bind:value={member.role}
 				onValueChange={saveCtx.setDirty}
 				itemIcon={(role) => roleIcon(role as Role)}
@@ -77,7 +77,7 @@
 				{:else}
 					<Select
 						type="single"
-						triggerClass="grow"
+						class="grow"
 						onValueChange={saveCtx.setDirty}
 						bind:value={
 							() => member.rank! as string,
@@ -109,7 +109,7 @@
 
 					<Select
 						type="single"
-						triggerClass="w-1/4"
+						class="w-1/4"
 						bind:value={() => member.tier!.toString(), (str) => (member.tier = parseInt(str))}
 						onValueChange={saveCtx.setDirty}
 						items={[1, 2, 3, 4, 5].map((tier) => ({

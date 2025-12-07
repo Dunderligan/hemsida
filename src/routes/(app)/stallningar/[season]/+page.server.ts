@@ -1,5 +1,5 @@
 import { db, schema } from '$lib/server/db';
-import { fullMatchQuery, matchOrdering } from '$lib/server/db/helpers.js';
+import { fullMatchColumns, groupMatchOrdering } from '$lib/server/db/helpers.js';
 import { calculateStandings } from '$lib/table';
 import { aggregateGroups } from '$lib/util';
 import { error } from '@sveltejs/kit';
@@ -7,7 +7,9 @@ import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.season.findFirst({
-		where: eq(schema.season.slug, params.season),
+		where: {
+			slug: params.season
+		},
 		columns: {
 			name: true,
 			slug: true,
@@ -16,7 +18,9 @@ export const load = async ({ params }) => {
 		},
 		with: {
 			divisions: {
-				orderBy: schema.division.name,
+				orderBy: {
+					name: 'asc'
+				},
 				columns: {
 					id: true,
 					name: true,
@@ -24,11 +28,15 @@ export const load = async ({ params }) => {
 				},
 				with: {
 					matches: {
-						orderBy: schema.match.order,
-						columns: fullMatchQuery
+						orderBy: {
+							order: 'asc'
+						},
+						columns: fullMatchColumns
 					},
 					groups: {
-						orderBy: schema.group.name,
+						orderBy: {
+							name: 'asc'
+						},
 						columns: {
 							id: true,
 							name: true,
@@ -43,8 +51,8 @@ export const load = async ({ params }) => {
 								}
 							},
 							matches: {
-								orderBy: matchOrdering,
-								columns: fullMatchQuery
+								orderBy: groupMatchOrdering,
+								columns: fullMatchColumns
 							}
 						}
 					}

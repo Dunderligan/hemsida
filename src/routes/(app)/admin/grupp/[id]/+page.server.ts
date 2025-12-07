@@ -1,19 +1,20 @@
-import { db, schema } from '$lib/server/db';
-import { matchOrdering } from '$lib/server/db/helpers.js';
+import { db } from '$lib/server/db';
+import { groupMatchOrdering as groupMatchOrdering } from '$lib/server/db/helpers';
 import { flattenGroup } from '$lib/util';
 import { error } from '@sveltejs/kit';
-import { asc, desc, eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.group.findFirst({
-		where: eq(schema.group.id, params.id),
+		where: {
+			id: params.id
+		},
 		columns: {
 			createdAt: false,
 			divisionId: false
 		},
 		with: {
 			rosters: {
-				orderBy: schema.roster.name,
+				orderBy: { name: 'asc' },
 				columns: {
 					id: true,
 					name: true,
@@ -21,7 +22,7 @@ export const load = async ({ params }) => {
 				}
 			},
 			matches: {
-				orderBy: matchOrdering,
+				orderBy: groupMatchOrdering,
 				columns: {
 					createdAt: false,
 					order: false

@@ -1,16 +1,17 @@
-import { db, schema } from '$lib/server/db';
+import { db } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.season.findFirst({
-		where: eq(schema.season.id, params.id),
+		where: {
+			slug: params.id
+		},
 		columns: {
 			createdAt: false
 		},
 		with: {
 			divisions: {
-				orderBy: schema.division.name,
+				orderBy: { name: 'asc' },
 				columns: {
 					createdAt: false,
 					seasonId: false

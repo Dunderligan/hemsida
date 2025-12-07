@@ -1,8 +1,7 @@
 import { query } from '$app/server';
-import { db, schema } from '$lib/server/db';
+import { db } from '$lib/server/db';
 import { nestedGroupQuery } from '$lib/server/db/helpers';
 import type { RosterWithGroup } from '$lib/types';
-import { ilike } from 'drizzle-orm';
 import z from 'zod';
 import { adminGuard } from './auth.remote';
 
@@ -17,7 +16,7 @@ export const queryTeams = query(
 		// gather rosters that match the query from any team/season
 		const rosters = await db.query.roster.findMany({
 			limit: 15,
-			where: ilike(schema.roster.name, `%${query}%`),
+			where: { name: { ilike: `%${query}%` } },
 			columns: {
 				id: true,
 				name: true,

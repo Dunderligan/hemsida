@@ -4,13 +4,15 @@ import { eq } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.division.findFirst({
-		where: eq(schema.division.id, params.id),
+		where: {
+			id: params.id
+		},
 		columns: {
 			createdAt: false
 		},
 		with: {
 			groups: {
-				orderBy: schema.group.name,
+				orderBy: { name: 'asc' },
 				columns: {
 					createdAt: false,
 					divisionId: false
@@ -30,7 +32,9 @@ export const load = async ({ params }) => {
 					createdAt: false
 				}
 			},
-			matches: {}
+			matches: {
+				orderBy: { order: 'asc' }
+			}
 		}
 	});
 
@@ -38,10 +42,7 @@ export const load = async ({ params }) => {
 		error(404);
 	}
 
-	const matches = await db.query.match.findMany({
-		where: eq(schema.match.divisionId, params.id),
-		orderBy: schema.match.order
-	});
+	const { matches, ...division } = data;
 
-	return { division: data, matches };
+	return { division, matches };
 };

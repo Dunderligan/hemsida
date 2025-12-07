@@ -242,7 +242,7 @@
 	<Label label="Platform">
 		<Select
 			type="single"
-			triggerClass="grow"
+			class="grow"
 			bind:value={newPlatform}
 			itemIcon={(platform) => `ph:${platform}-logo-fill`}
 			items={remainingPlatforms.map((platform) => ({

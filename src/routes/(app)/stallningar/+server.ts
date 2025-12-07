@@ -4,7 +4,9 @@ import { desc } from 'drizzle-orm';
 
 export const GET: RequestHandler = async () => {
 	const latestSeason = await db.query.season.findFirst({
-		orderBy: desc(schema.season.startedAt),
+		orderBy: {
+			startedAt: 'desc'
+		},
 		columns: {
 			slug: true
 		}

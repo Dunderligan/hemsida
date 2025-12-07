@@ -1,9 +1,10 @@
-import { db, schema } from '$lib/server/db';
-import { asc } from 'drizzle-orm';
+import { db } from '$lib/server/db';
 
 export const load = async () => {
 	const seasons = await db.query.season.findMany({
-		orderBy: asc(schema.season.startedAt),
+		orderBy: {
+			startedAt: 'asc'
+		},
 		columns: {
 			createdAt: false
 		}

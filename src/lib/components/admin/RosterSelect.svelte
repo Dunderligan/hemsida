@@ -15,7 +15,7 @@
 
 <Select
 	type="single"
-	triggerClass="w-full"
+	class="w-full"
 	placeholder="Välj lag..."
 	bind:value={selectedId as string | undefined}
 	items={rosters.map

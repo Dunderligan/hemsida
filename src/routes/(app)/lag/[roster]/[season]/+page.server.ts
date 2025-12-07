@@ -1,11 +1,13 @@
-import { matchOrdering, matchRosterQuery, nestedGroupQuery } from '$lib/server/db/helpers';
-import { db, schema } from '$lib/server/db';
+import { groupMatchOrdering, matchRosterQuery, nestedGroupQuery } from '$lib/server/db/helpers';
+import { db } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
-import { eq, and, or } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const data = await db.query.roster.findFirst({
-		where: and(eq(schema.roster.seasonSlug, params.season), eq(schema.roster.slug, params.roster)),
+		where: {
+			seasonSlug: params.season,
+			slug: params.roster
+		},
 		columns: {
 			id: true,
 			name: true,
@@ -57,9 +59,18 @@ export const load = async ({ params }) => {
 	}
 
 	const matches = await db.query.match.findMany({
-		where: and(or(eq(schema.match.rosterAId, data.id), eq(schema.match.rosterBId, data.id))),
+		where: {
+			OR: [
+				{
+					rosterAId: data.id
+				},
+				{
+					rosterBId: data.id
+				}
+			]
+		},
 		limit: 3,
-		orderBy: matchOrdering,
+		orderBy: groupMatchOrdering,
 		columns: {
 			id: true,
 			teamAScore: true,
