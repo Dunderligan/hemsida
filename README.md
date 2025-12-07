@@ -8,7 +8,7 @@ Du hittar en testversion av hemsidan just nu på [dev.dunderligan.se](https://de
 
 Projektet använder [SvelteKit](https://svelte.dev/) för frontend och backend, [PostgreSQL](https://www.postgresql.org/) för databas och [Drizzle ORM](https://orm.drizzle.team/) för att kommunicera med den. För bilder och andra mediefiler används Cloudflares [R2](https://www.cloudflare.com/developer-platform/products/r2/) med [Images](https://www.cloudflare.com/developer-platform/products/cloudflare-images/) framför.
 
-Förutom de två används inga molntjänster, utan hemsidan driftas på hårdvara från Linköping Universitets datorförening [Lysator](https://www.lysator.liu.se/).
+Förutom de två används inga molntjänster, utan hemsidan driftas i en Docker container på hårdvara från Linköping Universitets datorförening [Lysator](https://www.lysator.liu.se/).
 
 ## Utveckling
 
@@ -24,7 +24,7 @@ DATABASE_URL="postgresql://user:password@localhost/dunderligan"
 
 De övriga fälten är inte nödvändiga för kärnfunktionalitet och kan lämnas blanka.
 
-Kör sedan följande kommandon för att installera dependencies, sätta upp databasen, samt starta en dev-session och öppna den i din webbläsare:
+Kör sedan följande kommandon:
 
 ```bash
 pnpm install
@@ -32,14 +32,14 @@ pnpm db:push
 pnpm dev --open
 ```
 
-För att fylla databasen med testdata, skicka `--seed` argumentet:
+För att fylla databasen med testdata, lägg till `--seed` argumentet:
 
 ```bash
 pnpm dev -- -- --seed
 ```
 
 > [!CAUTION]
-> `--seed` rensar den nuvarande databasen helt. Använd den inte på en databas du bryr dig om!
+> `--seed` rensar den nuvarande databasen. Använd den **inte** på data du bryr dig om!
 
 Om du gör ändringar i databas-schemat, kör `db:push` igen för att synka ändringarna med databasen.
 

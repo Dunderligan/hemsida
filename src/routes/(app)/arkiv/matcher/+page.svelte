@@ -5,10 +5,7 @@
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import Label from '$lib/components/ui/Label.svelte';
-	import Select from '$lib/components/ui/Select.svelte';
 	import { queryMatches } from '$lib/remote/match.remote.js';
 	import { flattenGroup } from '$lib/util';
 
