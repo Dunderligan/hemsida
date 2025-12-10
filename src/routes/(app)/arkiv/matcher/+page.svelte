@@ -7,7 +7,6 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { queryMatches } from '$lib/remote/match.remote.js';
-	import { flattenGroup } from '$lib/util';
 
 	let { data } = $props();
 
@@ -22,11 +21,6 @@
 			url.searchParams.set(param, value);
 		}
 		return url.href;
-	}
-
-	async function setQueryParam(param: string, value: any) {
-		const url = queryParamHref(param, value);
-		await goto(url);
 	}
 </script>
 
@@ -71,7 +65,7 @@
 			{/each}
 		{:then results}
 			{#each results.matches.slice(0, data.pageSize) as { group, division, ...match } (match.id)}
-				<Match {match} {group} {division} />
+				<Match {match} {group} {division} flipped={data.query.rosterId === match.rosterBId} />
 			{:else}
 				<div class="text-center py-10 text-gray-700 space-y-2 bg-gray-100 rounded-lg">
 					<Icon icon="ph:ghost" class="text-5xl block mx-auto" />

@@ -82,6 +82,7 @@
 		await updateDivision({
 			id: division.id,
 			name: division.name,
+			playoffLine: division.playoffLine,
 			bracketMatches: rounds.flatMap((round) => round)
 		});
 	}
@@ -172,9 +173,15 @@
 </AdminCard>
 
 <AdminCard title="Inställningar">
-	<Label label="Namn">
-		<InputField bind:value={division.name} oninput={saveCtx.setDirty} />
-	</Label>
+	<div class="space-y-1">
+		<Label label="Namn">
+			<InputField bind:value={division.name} oninput={saveCtx.setDirty} />
+		</Label>
+
+		<Label label="Antal lag till slutspel">
+			<InputField type="number" bind:value={division.playoffLine} oninput={saveCtx.setDirty} />
+		</Label>
+	</div>
 
 	<Button icon="ph:trash" label="Radera division" kind="negative" onclick={submitDelete} />
 </AdminCard>

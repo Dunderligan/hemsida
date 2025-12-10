@@ -171,7 +171,7 @@
 		</div>
 
 		{#if mode === 'group'}
-			<StandingsTable rosters={division.rosters} scores={division.table} seasonSlug={season.slug} />
+			<StandingsTable {division} seasonSlug={season.slug} />
 
 			{#if division.latestMatches.length > 0}
 				<div class="mt-10 mb-4 flex max-w-2xl items-center justify-between">

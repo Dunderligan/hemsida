@@ -16,6 +16,7 @@
 		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
 	/>
 
+	<meta property="og:title" content="Dunderligan" />
 	<meta
 		property="og:description"
 		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
@@ -32,14 +33,12 @@
 		preload="auto"
 	></video>
 
-	<div
-		class="mx-auto flex h-full max-w-4xl flex-col justify-center gap-6 pt-8 text-left font-display"
-	>
-		<h1 class="text-4xl font-extrabold text-white text-shadow-xs sm:text-6xl">
+	<div class="mx-auto flex h-full max-w-4xl flex-col justify-center gap-6 pt-8 text-left">
+		<h1 class="font-display text-4xl font-extrabold text-white text-shadow-xs sm:text-6xl">
 			Sveriges <span class="underline">största</span><br /> återkommande
 			<br />Overwatchturnering
 		</h1>
-		<p class="text-white text-shadow-xs sm:text-lg">
+		<p class="font-display text-white text-shadow-xs sm:text-lg">
 			Varje år tävlar 36 lag från hela landet i Dunderligan.<br />Alla ranker och erfarenhetsnivåer
 			välkomnas!
 		</p>
@@ -48,7 +47,7 @@
 			icon="ph:arrow-right"
 			class="max-w-max shadow-lg"
 			label="Se ställningar"
-			href="/stallningar/test-sasong"
+			href="/stallningar"
 		/>
 	</div>
 </header>

@@ -4,11 +4,11 @@ import { sortBySeed } from './table';
 import { isMatchBetween } from './match';
 
 /**
- * Generates a bracket structure based on the seeds given by aggregating `groupMatches`.
+ * Generates a bracket structure based on the seeds given by the order of the rosters array.
  */
 export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rosters: R[],
-	groupMatches: M[]
+	matches: M[]
 ): FullMatch[][] {
 	if (rosters.length < 2) {
 		return [];
@@ -40,7 +40,6 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 
 	// don't mutate the original rosters array
 	rosters = [...rosters];
-	sortBySeed(rosters, groupMatches);
 
 	// fill the first round according to seeding
 	const matchOrder = getMatchOrder(numberOfRounds);
@@ -77,7 +76,7 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 			const otherRoster = rosters[i];
 
 			// if they have played each other in the group stage, skip
-			if (groupMatches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))) {
+			if (matches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))) {
 				continue;
 			}
 

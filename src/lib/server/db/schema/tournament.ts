@@ -31,6 +31,7 @@ export const division = pgTable(
 		id: uuid().primaryKey().defaultRandom(),
 		name: text().notNull(),
 		slug: text().notNull(),
+		playoffLine: integer(),
 		seasonId: uuid()
 			.notNull()
 			.references(() => season.id, { onDelete: 'cascade' }),

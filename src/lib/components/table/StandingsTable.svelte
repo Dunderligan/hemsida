@@ -4,13 +4,39 @@
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import Table from './Table.svelte';
 
-	type Props = {
+	type TableEntry = {
+		rosterId: string;
+		score: TableScore;
+	};
+
+	type Row = TableEntry | 'playoffLine';
+
+	type Division = {
 		rosters: Roster[];
-		scores: { rosterId: string; score: TableScore }[];
+		table: TableEntry[];
+		playoffLine: number | null;
+	};
+
+	type Props = {
+		division: Division;
 		seasonSlug: string;
 	};
 
-	let { rosters, scores, seasonSlug }: Props = $props();
+	let { division, seasonSlug }: Props = $props();
+
+	const rows = $derived.by(() => {
+		if (!division.playoffLine) return division.table;
+
+		const rowsWithLine: Row[] = [];
+		division.table.forEach((entry, index) => {
+			rowsWithLine.push(entry);
+			if (index === division.playoffLine! - 1) {
+				rowsWithLine.push('playoffLine');
+			}
+		});
+
+		return rowsWithLine;
+	});
 </script>
 
 <Table
@@ -24,44 +50,53 @@
 		'W/L/D',
 		'Matcher'
 	]}
-	rows={scores}
-	key={(row) => row.rosterId}
+	{rows}
+	key={(row) => (row === 'playoffLine' ? row : row.rosterId)}
 	class="max-w-2xl grid-cols-[40px_1fr_50px_60px_70px] sm:grid-cols-[50px_1fr_80px_60px_80px]"
 >
-	{#snippet row({ index, value: { rosterId, score } })}
-		{@const { id, name, slug } = rosters.find((roster) => roster.id === rosterId)!}
+	{#snippet row({ index, value: row })}
+		{#if row === 'playoffLine'}
+			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
+			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
+			<div class="my-auto text-center text-sm font-semibold text-red-600">Playoffs</div>
+			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
+			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
+		{:else}
+			{@const { rosterId, score } = row}
+			{@const { id, name, slug } = division.rosters.find((roster) => roster.id === rosterId)!}
 
-		<div class="group row contents text-lg font-medium">
-			<div class="flex items-center justify-center">
-				{index + 1}
+			{@const isAfterLine = division.playoffLine && index > division.playoffLine}
+			{@const seed = isAfterLine ? index : index + 1}
+
+			<div class="group score-row relative contents text-lg font-medium">
+				<div class="relative flex items-center justify-center">
+					{seed}
+				</div>
+
+				<div class="flex min-w-0 items-center gap-2 py-2 font-semibold">
+					<RosterLogo {id} class="size-12" />
+
+					<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:underline">{name}</a>
+				</div>
+
+				<div class="flex items-center justify-center text-xl font-semibold">
+					{score.mapWins}
+				</div>
+
+				<div class="flex items-center justify-center">
+					{score.mapWins}/{score.mapLosses}/{score.mapDraws}
+				</div>
+
+				<div class="flex items-center justify-center">
+					{score.matchesPlayed}
+				</div>
 			</div>
-
-			<div class="flex min-w-0 items-center gap-2 py-2 font-semibold">
-				<RosterLogo {id} class="size-12" />
-
-				<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:text-accent-600 hover:underline"
-					>{name}</a
-				>
-			</div>
-
-			<div class="flex items-center justify-center text-xl font-semibold">
-				{score.mapWins}
-			</div>
-
-			<div class="flex items-center justify-center">
-				{score.mapWins}/{score.mapLosses}/{score.mapDraws}
-			</div>
-
-			<div class="flex items-center justify-center">
-				{score.matchesPlayed}
-			</div>
-		</div>
+		{/if}
 	{/snippet}
 </Table>
 
 <style>
-	.row > div {
+	.score-row > div {
 		background-color: var(--color-gray-100);
-		transition-property: background-color;
 	}
 </style>

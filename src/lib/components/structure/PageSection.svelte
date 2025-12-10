@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { ClassValue } from '$lib/types';
-	import { cdnImageSrc } from '$lib/util';
 	import type { Snippet } from 'svelte';
 
 	type Props = {
@@ -14,7 +13,7 @@
 
 <main
 	class={[
-		topMargin && 'mt-18',
+		topMargin && 'mt-20',
 		'relative z-0 grow overflow-hidden bg-white px-4 pt-12 pb-20 shadow-2xl'
 	]}
 >

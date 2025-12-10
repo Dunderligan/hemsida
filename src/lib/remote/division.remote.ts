@@ -6,6 +6,8 @@ import * as z from 'zod';
 import { matchSchema } from '$lib/schemas';
 import { adminGuard } from './auth.remote';
 import { createBracket } from '$lib/bracket';
+import { error } from '@sveltejs/kit';
+import { sortBySeed } from '$lib/table';
 
 export const createDivision = command(
 	z.object({
@@ -34,15 +36,19 @@ export const updateDivision = command(
 	z.object({
 		id: z.uuid(),
 		name: z.string().nonempty(),
+		playoffLine: z.number().nullable(),
 		bracketMatches: z.array(matchSchema)
 	}),
-	async ({ id, name, bracketMatches }) => {
+	async ({ id, name, playoffLine, bracketMatches }) => {
 		await adminGuard();
 
 		await db.transaction(async (tx) => {
 			const slug = toSlug(name.split(' ').at(-1) ?? name);
 
-			await tx.update(schema.division).set({ slug, name }).where(eq(schema.division.id, id));
+			await tx
+				.update(schema.division)
+				.set({ slug, name, playoffLine })
+				.where(eq(schema.division.id, id));
 
 			await Promise.all(
 				bracketMatches.map((match) => {
@@ -71,9 +77,11 @@ export const generateBracket = command(
 	async ({ divisionId }) => {
 		await adminGuard();
 
-		const { rosters, groupMatches } = await getDivisionRostersAndGroupMatches(divisionId);
+		const { rosters, groupMatches, playoffLine } = await aggregateGroupsIn(divisionId);
+		sortBySeed(rosters, groupMatches);
 
-		const rounds = createBracket(rosters, groupMatches);
+		const qualifying = rosters.slice(0, playoffLine ?? undefined);
+		const rounds = createBracket(qualifying, groupMatches);
 
 		const matchInserts = rounds.flatMap((round) =>
 			round.map((match) => ({
@@ -87,39 +95,51 @@ export const generateBracket = command(
 	}
 );
 
-async function getDivisionRostersAndGroupMatches(divisionId: string) {
-	const data = await db.query.group.findMany({
+async function aggregateGroupsIn(divisionId: string) {
+	const data = await db.query.division.findFirst({
 		where: {
-			divisionId
+			id: divisionId
 		},
-		columns: {},
+		columns: {
+			playoffLine: true
+		},
 		with: {
-			rosters: {
-				columns: {
-					id: true,
-					name: true
-				}
-			},
-			matches: {
-				where: {
-					played: true
-				},
-				columns: {
-					id: true,
-					rosterAId: true,
-					rosterBId: true,
-					teamAScore: true,
-					teamBScore: true,
-					draws: true,
-					played: true
+			groups: {
+				columns: {},
+				with: {
+					rosters: {
+						columns: {
+							id: true,
+							name: true
+						}
+					},
+					matches: {
+						where: {
+							played: true
+						},
+						columns: {
+							id: true,
+							rosterAId: true,
+							rosterBId: true,
+							teamAScore: true,
+							teamBScore: true,
+							draws: true,
+							played: true
+						}
+					}
 				}
 			}
 		}
 	});
 
+	if (!data) {
+		error(404);
+	}
+
 	return {
-		rosters: data.flatMap((group) => group.rosters),
-		groupMatches: data.flatMap((group) => group.matches)
+		playoffLine: data.playoffLine,
+		rosters: data?.groups.flatMap((group) => group.rosters),
+		groupMatches: data?.groups.flatMap((group) => group.matches)
 	};
 }
 

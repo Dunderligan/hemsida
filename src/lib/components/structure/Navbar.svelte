@@ -14,7 +14,7 @@
 
 	const links = [
 		{
-			href: '/stallningar/test-sasong',
+			href: '/stallningar',
 			label: 'Ställningar'
 		},
 		{
@@ -42,29 +42,25 @@
 <nav
 	class={[
 		dark ? 'to-gray-900/30 text-gray-200' : 'to-gray-300/80 text-gray-800',
-		'fixed z-30 h-18 w-screen bg-gradient-to-t px-8 pt-4'
+		'fixed z-30 h-18 w-screen bg-linear-to-t px-8 pt-4  backdrop-blur-[1px]'
 	]}
 >
-	<div class="mx-auto flex h-full max-w-3xl items-center justify-between gap-2">
-		<div class="flex items-center gap-8">
-			<a href="/">
-				<img src="/logo.png" alt="Dunderligan" class="size-10" />
+	<div class="mx-auto flex h-full max-w-5xl items-center justify-between gap-2">
+		<div class="flex items-center gap-12 font-display">
+			<a href="/" class="mr-8">
+				<img src="/logo.png" alt="Dunderligan" class="size-12" />
 			</a>
 
 			{#each links as { href, label } (href)}
-				<a class="hidden text-lg font-semibold sm:block" {href}>{label}</a>
+				<a class="hidden font-medium hover:underline sm:block" {href}>{label}</a>
 			{/each}
 		</div>
 
 		<div class="flex items-center gap-6">
-			<!-- <button>
-				<Icon icon="mdi:white-balance-sunny" />
-			</button> -->
-
 			{#if page.data.user}
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger
-						class={[dark ? 'text-gray-200' : 'text-gray-800', 'text-lg font-semibold']}
+						class={[dark ? 'text-gray-200' : 'text-gray-800', 'font-display font-medium']}
 					>
 						{shownName}
 					</DropdownMenu.Trigger>

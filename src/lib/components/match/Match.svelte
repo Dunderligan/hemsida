@@ -80,7 +80,7 @@
 			root: 'flex-row sm:flex-row-reverse'
 		})}
 
-		<div class="hidden w-18 shrink-0 text-center text-3xl text-gray-600 sm:block">
+		<div class="hidden w-18 shrink-0 text-center text-3xl text-gray-800 sm:block">
 			{#if match.played}
 				<span class={[winner === leftTeam && 'text-accent-600', 'font-bold']}
 					>{matchScoreOrZero(match, leftTeam)}
@@ -113,11 +113,7 @@
 
 			<a
 				href="/lag/{roster.slug}/{seasonSlug}"
-				class={[
-					nameClass,
-					won ? 'text-gray-800' : 'text-gray-600',
-					'truncate text-lg font-semibold hover:underline'
-				]}
+				class={[nameClass, 'truncate text-lg font-semibold text-gray-800 hover:underline']}
 			>
 				{roster.name}
 			</a>

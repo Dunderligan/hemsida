@@ -75,8 +75,8 @@ export function calculateStandings<R extends { id: string }>(
 	// - whoever lost a match against the lower seeded opponent
 	for (let i = 0; i < sortedScores.length - 1; i++) {
 		// iterate by pairs, from top to bottom
-		const [rosterAId, rosterAScore] = sortedScores[i];
-		const [rosterBId, rosterBScore] = sortedScores[i + 1];
+		const [_rosterAId, rosterAScore] = sortedScores[i];
+		const [_rosterBId, rosterBScore] = sortedScores[i + 1];
 
 		if (compareSeed(rosterAScore, rosterBScore) !== 0) {
 			continue;
@@ -96,8 +96,6 @@ export function calculateStandings<R extends { id: string }>(
 		} else if (aShouldBeHigher < 0) {
 			// swap
 			[sortedScores[i], sortedScores[i + 1]] = [sortedScores[i + 1], sortedScores[i]];
-		} else {
-			console.warn('Could not break tie between', rosterAId, rosterBId);
 		}
 	}
 

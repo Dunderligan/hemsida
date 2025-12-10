@@ -1,8 +1,7 @@
-import { db, schema } from '$lib/server/db';
-import { error, redirect, type RequestHandler } from '@sveltejs/kit';
-import { desc } from 'drizzle-orm';
+import { db } from '$lib/server/db';
+import { error, redirect } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async () => {
+export const load = async () => {
 	const latestSeason = await db.query.season.findFirst({
 		orderBy: {
 			startedAt: 'desc'
