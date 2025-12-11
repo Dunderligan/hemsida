@@ -444,11 +444,14 @@ const rosters = await db.query.roster.findMany({
 The database connection uses connection pooling automatically:
 
 ```typescript
+import * as tournament from './schema/tournament';
+import * as auth from './schema/auth';
+
 export const db = drizzle({
   client: postgres(DATABASE_URL, {
     max: 10 // Connection pool size
   }),
-  schema: { ...tournament, ...auth }
+  schema: { ...tournament, ...auth } // Combine all schema exports
 });
 ```
 

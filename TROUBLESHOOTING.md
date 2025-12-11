@@ -123,7 +123,7 @@ This forces the schema to sync with database.
    dropdb dunderligan
    createdb dunderligan
    pnpm db:push
-   pnpm dev -- -- --seed
+   pnpm dev -- -- --seed  # Note: double -- passes args to Vite, then to the app
    ```
 
 ### Build Issues

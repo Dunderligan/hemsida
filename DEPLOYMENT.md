@@ -295,7 +295,7 @@ jobs:
       - name: Push to registry
         run: docker push dunderligan:${{ github.sha }}
       - name: Deploy to server
-        run: ssh user@lysator "docker pull && docker restart"
+        run: ssh user@lysator "docker pull dunderligan:${{ github.sha }} && docker restart dunderligan"
 ```
 
 ## Maintenance
