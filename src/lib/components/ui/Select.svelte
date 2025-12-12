@@ -68,7 +68,7 @@
 	<Select.Trigger
 		class={[
 			triggerClass,
-			'group flex items-center overflow-hidden rounded-lg bg-gray-100 px-4 py-2 font-medium text-gray-700 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500'
+			'group flex items-center overflow-hidden rounded-lg bg-gray-100 px-4 py-2 font-medium text-gray-700 data-disabled:cursor-not-allowed data-disabled:bg-gray-200 data-disabled:text-gray-500'
 		]}
 	>
 		{#if selectedItem}
@@ -91,7 +91,7 @@
 			{#snippet child({ wrapperProps, props, open })}
 				<div {...wrapperProps}>
 					{#if open}
-						<div {...props} class="floating w-[var(--bits-select-anchor-width)]">
+						<div {...props} class="floating w-(--bits-select-anchor-width)">
 							<Select.Viewport>
 								{#each items as item, i (i + item.value)}
 									<Select.Item {...item} class="floating-item">
