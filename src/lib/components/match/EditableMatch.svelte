@@ -19,8 +19,8 @@
 	const date = $derived(match.played ? match.playedAt : match.scheduledAt);
 </script>
 
-<div class="relative rounded-lg bg-gray-100 px-1 py-1">
-	<div class="px-4 py-1 text-sm font-medium text-gray-600">
+<div class="relative rounded-lg bg-gray-100 px-1 py-1 dark:bg-gray-900">
+	<div class="px-4 py-1 text-sm font-medium text-gray-600 dark:text-gray-400">
 		<Icon icon={match.played ? 'ph:check-circle' : 'ph:calendar-blank'} />
 		<span>{match.played ? 'Spelad' : 'Planerad'}</span>
 
@@ -51,7 +51,7 @@
 {#snippet side(rosterId?: string | null, score?: number | null)}
 	{@const roster = rosterCtx.find(rosterId)}
 
-	<div class="flex items-center py-0.5 text-gray-700">
+	<div class="flex items-center py-0.5 text-gray-700 dark:text-gray-300">
 		<div class="flex w-8 items-center justify-center text-xl font-bold">
 			{score ?? '-'}
 		</div>

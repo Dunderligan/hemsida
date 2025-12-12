@@ -20,7 +20,7 @@ type RosterInput = {
 };
 
 type MatchInput = {
-	date: Date;
+	date: string;
 	rosterA: string;
 	rosterB: string;
 	teamAScore: number;
@@ -29,54 +29,60 @@ type MatchInput = {
 };
 
 type GroupInput = {
-	rosters: Record<string, RosterInput>;
+	teams: Record<string, RosterInput>;
 	matches: MatchInput[];
 };
 
-type DivisionInput = Record<string, GroupInput>;
+type DivisionInput = {
+	groups: Record<string, GroupInput>;
+};
 
 type SeasonInput = {
 	season: number;
-	legacyRanks: boolean;
+	legacy_ranks: boolean;
+	start_date: string;
 	divisions: Record<string, DivisionInput>;
 };
 
 export const uploadSeasonData = command(
 	z.object({
 		season: z.int(),
-		legacyRanks: z.boolean(),
+		legacy_ranks: z.boolean(),
+		start_date: z.string(),
 		divisions: z.record(
 			z.string(),
-			z.record(
-				z.string(),
-				z.object({
-					rosters: z.record(
-						z.string(),
-						z.object({
-							players: z.array(
-								z.object({
-									battletag: z.string(),
-									rank: z.enum(Rank).nullable(),
-									tier: z.int().nullable(),
-									sr: z.int().nullable(),
-									role: z.enum(Role),
-									is_captain: z.boolean()
-								})
-							)
-						})
-					),
-					matches: z.array(
-						z.object({
-							date: z.date(),
-							rosterA: z.string(),
-							rosterB: z.string(),
-							teamAScore: z.int(),
-							teamBScore: z.int(),
-							draws: z.int()
-						})
-					)
-				})
-			)
+			z.object({
+				groups: z.record(
+					z.string(),
+					z.object({
+						teams: z.record(
+							z.string(),
+							z.object({
+								players: z.array(
+									z.object({
+										battletag: z.string(),
+										rank: z.enum(Rank).nullable(),
+										tier: z.int().nullable(),
+										sr: z.int().nullable(),
+										role: z.enum(Role),
+										is_captain: z.boolean()
+									})
+								)
+							})
+						),
+						matches: z.array(
+							z.object({
+								date: z.string(),
+								rosterA: z.string(),
+								rosterB: z.string(),
+								teamAScore: z.int(),
+								teamBScore: z.int(),
+								draws: z.int()
+							})
+						)
+					})
+				)
+			})
 		)
 	}),
 	async (input) => {
@@ -98,8 +104,8 @@ async function insertSeason(tx: Transaction, input: SeasonInput) {
 		.values({
 			name,
 			slug: toSlug(name),
-			startedAt: new Date(),
-			legacyRanks: input.legacyRanks
+			startedAt: new Date(input.start_date),
+			legacyRanks: input.legacy_ranks
 		})
 		.returning();
 
@@ -122,7 +128,7 @@ async function insertDivision(
 		.values({ name, slug: toSlug(name), seasonId })
 		.returning();
 
-	for (const [groupName, group] of Object.entries(input)) {
+	for (const [groupName, group] of Object.entries(input.groups)) {
 		await insertGroup(tx, seasonSlug, division.id, groupName, group);
 	}
 }
@@ -140,15 +146,15 @@ async function insertGroup(
 		.returning();
 
 	let rosterMap: Record<string, string> = {};
-	for (const [rosterName, rosterInput] of Object.entries(input.rosters)) {
-		const { roster } = await insertRoster(tx, seasonSlug, group.id, rosterName, rosterInput);
-		rosterMap[rosterName] = roster.id;
+	for (const [teamName, teamInput] of Object.entries(input.teams)) {
+		const { roster } = await insertRoster(tx, seasonSlug, group.id, teamName, teamInput);
+		rosterMap[teamName] = roster.id;
 	}
 
 	for (const matchInput of input.matches) {
 		await tx.insert(schema.match).values({
-			scheduledAt: matchInput.date,
-			playedAt: matchInput.date,
+			scheduledAt: new Date(matchInput.date),
+			playedAt: new Date(matchInput.date),
 			played: true,
 			groupId: group.id,
 			rosterAId: rosterMap[matchInput.rosterA],
@@ -181,6 +187,8 @@ async function insertRoster(
 
 	for (const player of input.players) {
 		const playerId = await findOrCreatePlayer(tx, player.battletag);
+
+		console.log(player);
 
 		await tx.insert(schema.member).values({
 			rosterId: roster.id,

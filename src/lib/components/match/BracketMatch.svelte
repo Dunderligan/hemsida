@@ -4,6 +4,7 @@
 	import { matchRoster, isWinner, type MatchSide, matchScore } from '$lib/match';
 	import { formatDate, formatDateTime } from '$lib/util';
 	import Icon from '../ui/Icon.svelte';
+	import MatchInfoRow from './MatchInfoRow.svelte';
 
 	type Props = {
 		match: ResolvedMatch;
@@ -28,31 +29,7 @@
 	tabindex="0"
 	role="button"
 >
-	<div
-		class="flex h-[25px] items-center gap-4 rounded-t-lg bg-gray-50 px-4 text-sm font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400"
-	>
-		{#if match.played}
-			<div>
-				{match.playedAt ? formatDate(match.playedAt) : 'Okänt datum'}
-			</div>
-
-			{#if match.vodUrl}
-				<a class="hover:underline" href={match.vodUrl} target="_blank" rel="noopener noreferrer">
-					<Icon icon="ph:arrow-square-out" />
-					VOD
-				</a>
-			{/if}
-		{:else}
-			<div>
-				<Icon icon="ph:calendar-blank" />
-				Planerad
-
-				{#if match.scheduledAt}
-					{formatDateTime(match.scheduledAt)}
-				{/if}
-			</div>
-		{/if}
-	</div>
+	<MatchInfoRow class="h-[25px] rounded-t-lg px-4" {match} isBracketMatch />
 
 	{@render side('A')}
 

@@ -43,7 +43,7 @@
 			class={[
 				'flex w-full items-center justify-center gap-2 p-2.5 transition-all ease-out',
 				disabled
-					? 'bg-gray-200 font-semibold text-gray-500'
+					? 'bg-gray-200 font-semibold text-gray-500 dark:bg-gray-800 dark:text-gray-400'
 					: isSelected
 						? 'cursor-default bg-accent-600 font-bold text-white'
 						: 'bg-accent-200 font-semibold text-accent-800 hover:bg-accent-300 hover:text-accent-900 dark:bg-accent-900 dark:text-accent-300 dark:hover:bg-accent-800 dark:hover:text-accent-200'

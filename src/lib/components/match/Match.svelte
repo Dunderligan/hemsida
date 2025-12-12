@@ -11,6 +11,7 @@
 	import { formatDate, formatDateTime } from '$lib/util';
 	import Icon from '../ui/Icon.svelte';
 	import RosterLogo from '../ui/RosterLogo.svelte';
+	import MatchInfoRow from './MatchInfoRow.svelte';
 
 	type Props = {
 		match: ResolvedMatch;
@@ -39,44 +40,8 @@
 </script>
 
 <div class="relative overflow-hidden rounded-lg bg-gray-100 px-6 py-3 dark:bg-gray-900">
-	<div
-		class="flex items-center gap-4 pb-1 text-sm font-medium text-gray-600 sm:justify-center dark:text-gray-400"
-	>
-		{#if match.played}
-			<div>
-				{match.playedAt ? formatDate(match.playedAt) : 'Okänt datum'}
-			</div>
+	<MatchInfoRow {match} {division} {isBracketMatch} class="pb-2" center />
 
-			{#if match.vodUrl}
-				<a class="hover:underline" href={match.vodUrl}>
-					<Icon icon="ph:arrow-square-out" />
-					VOD
-				</a>
-			{/if}
-		{:else}
-			<div>
-				<Icon icon="ph:calendar-blank" />
-				Planerad
-
-				{#if match.scheduledAt}
-					{formatDateTime(match.scheduledAt)}
-				{/if}
-			</div>
-		{/if}
-
-		{#if division}
-			<a
-				href="/stallningar/{division.season.slug}?div={division.slug}&visa={isBracketMatch
-					? 'slutspel'
-					: 'gruppspel'}"
-				class="hover:underline"
-			>
-				<Icon icon="ph:link" />
-				{division.name},
-				{division.season.name}
-			</a>
-		{/if}
-	</div>
 	<div class="flex flex-col items-center gap-2 sm:flex-row">
 		{@render side(leftTeam, {
 			root: 'flex-row sm:flex-row-reverse'

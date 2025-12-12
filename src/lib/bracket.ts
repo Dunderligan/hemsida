@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { FullMatch, LogicalMatch } from './types';
-import { sortBySeed } from './table';
 import { isMatchBetween } from './match';
 
 /**
@@ -8,7 +7,8 @@ import { isMatchBetween } from './match';
  */
 export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rosters: R[],
-	matches: M[]
+	matches: M[],
+	options: { avoidPreviousMatches?: boolean } = { avoidPreviousMatches: true }
 ): FullMatch[][] {
 	if (rosters.length < 2) {
 		return [];
@@ -76,7 +76,10 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 			const otherRoster = rosters[i];
 
 			// if they have played each other in the group stage, skip
-			if (matches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))) {
+			if (
+				options.avoidPreviousMatches &&
+				matches.some((match) => isMatchBetween(match, rosterA.id, otherRoster.id))
+			) {
 				continue;
 			}
 

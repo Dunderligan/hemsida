@@ -55,12 +55,9 @@ export const queryMatches = query(
 					}
 				],
 				groupId,
-				// group: {
-				// 	divisionId,
-				// 	division: {
-				// 		seasonId
-				// 	}
-				// },
+				group: {
+					divisionId
+				},
 				played
 			},
 			columns: fullMatchColumns,

@@ -40,7 +40,7 @@
 
 	const typeClass = $derived(
 		disabled
-			? 'text-gray-500 bg-gray-200 font-medium dark:bg-gray-900 dark:text-gray-400 cursor-not-allowed'
+			? 'text-gray-500 bg-gray-200 font-medium dark:bg-gray-800 dark:text-gray-400 cursor-not-allowed'
 			: {
 					primary: 'bg-accent-600 hover:bg-accent-700 font-semibold text-white',
 					secondary:

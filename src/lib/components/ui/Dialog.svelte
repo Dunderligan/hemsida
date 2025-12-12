@@ -53,7 +53,7 @@
 				{#if open}
 					<div
 						class={[
-							'fixed top-[50%] left-[50%] z-40 w-full max-w-[calc(100%-1rem)] translate-x-[-50%] translate-y-[-50%] space-y-2 rounded-xl bg-white p-8 shadow-xl dark:border dark:border-gray-800 dark:bg-gray-950',
+							'fixed top-[50%] left-[50%] z-40 w-full max-w-[calc(100%-1rem)] translate-x-[-50%] translate-y-[-50%] space-y-2 rounded-xl bg-white p-8 shadow-xl dark:border dark:border-gray-800 dark:bg-gray-900',
 							wide ? 'sm:max-w-xl' : 'sm:max-w-lg'
 						]}
 						transition:fade={{ duration: 25 }}

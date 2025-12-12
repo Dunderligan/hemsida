@@ -81,7 +81,9 @@ export const generateBracket = command(
 		sortBySeed(rosters, groupMatches);
 
 		const qualifying = rosters.slice(0, playoffLine ?? undefined);
-		const rounds = createBracket(qualifying, groupMatches);
+		const rounds = createBracket(qualifying, groupMatches, {
+			avoidPreviousMatches: false
+		});
 
 		const matchInserts = rounds.flatMap((round) =>
 			round.map((match) => ({

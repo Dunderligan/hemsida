@@ -21,6 +21,10 @@
 		{
 			platform: 'github',
 			href: 'https://github.com/Dunderligan'
+		},
+		{
+			platform: 'tiktok',
+			href: 'https://www.tiktok.com/@dunderligan'
 		}
 	];
 </script>
@@ -35,7 +39,7 @@
 				Källkod under
 				<a href="https://choosealicense.com/licenses/gpl-3.0/" class="underline">GPL v3</a>.
 			</p>
-			<div class="my-2 flex items-center gap-3">
+			<div class="my-2 grid w-max grid-cols-6 gap-x-4 gap-y-2 sm:grid-cols-3">
 				{#each socials as social}
 					<TeamSocial {...social} class="text-2xl" />
 				{/each}

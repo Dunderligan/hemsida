@@ -9,7 +9,7 @@ export const adminGuard = query(() => {
 	const { locals } = getRequestEvent();
 
 	if (!locals.user?.isAdmin) {
-		error(401);
+		error(403);
 	}
 });
 
@@ -17,7 +17,7 @@ export const superAdminGuard = query(() => {
 	const { locals } = getRequestEvent();
 
 	if (!locals.user?.isSuperAdmin) {
-		error(401);
+		error(403);
 	}
 });
 
@@ -41,7 +41,7 @@ export const createSuperUser = command(
 
 		if (existing) {
 			// already set up
-			error(403, 'A user already exists.');
+			error(404);
 		}
 
 		const [user] = await db

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import AdminCard from '$lib/components/admin/AdminCard.svelte';
 	import AdminLink from '$lib/components/admin/AdminLink.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
@@ -12,6 +11,7 @@
 	<title>Arkiv | Dunderligan</title>
 	<meta name="description" content="Se tidigare säsonger av Dunderligan." />
 
+	<meta property="og:title" content="Arkiv" />
 	<meta property="og:description" content="Se tidigare säsonger av Dunderligan." />
 </svelte:head>
 
