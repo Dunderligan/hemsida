@@ -26,7 +26,11 @@ const rankNums: Record<Rank, number> = {
 	champion: 7
 };
 
-export function averageRank(ranks: NullableFullRank[]): FullRank {
+export function averageRank(ranks: NullableFullRank[]): FullRank | null {
+	if (ranks.length === 0) {
+		return null;
+	}
+
 	let total = 0;
 	let nonNullCount = 0;
 
@@ -56,7 +60,11 @@ function numToRank(num: number): FullRank {
 	};
 }
 
-export function averageLegacyRank(ranks: NullableLegacyRank[]): LegacyRank {
+export function averageLegacyRank(ranks: NullableLegacyRank[]): LegacyRank | null {
+	if (ranks.length === 0) {
+		return null;
+	}
+
 	let total = 0;
 	let nonNullCount = 0;
 

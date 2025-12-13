@@ -70,7 +70,7 @@
 			<div
 				class={[
 					match.played ? 'text-2xl font-extrabold' : 'text-lg',
-					won && 'text-accent-600 dark:text-accent-500',
+					won ? 'text-accent-600 dark:text-accent-500' : 'text-gray-500 dark:text-gray-400',
 					'flex h-full shrink-0 items-center justify-center px-4 text-center'
 				]}
 			>
@@ -139,6 +139,6 @@
 	:global(.dark) .vertical-line,
 	:global(.dark) .not-last-match::after,
 	:global(.dark) .not-first-match::before {
-		background-color: var(--color-gray-700);
+		background-color: var(--color-gray-800);
 	}
 </style>

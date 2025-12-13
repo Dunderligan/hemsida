@@ -33,7 +33,7 @@
 
 		background-image: linear-gradient(
 			to top right,
-			var(--color-gray-100) 0%,
+			var(--color-gray-200) 0%,
 			var(--color-white) 50%
 		);
 	}

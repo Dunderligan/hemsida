@@ -15,7 +15,7 @@
 		items: Item[];
 		selected?: T;
 		class?: ClassValue;
-		hideSelectedIcon?: boolean;
+		fillIcons?: boolean;
 		onitemclick?: (value: T) => void;
 	};
 
@@ -23,7 +23,7 @@
 		items,
 		selected = $bindable(items[0].value),
 		class: classProp,
-		hideSelectedIcon = false,
+		fillIcons = false,
 		onitemclick
 	}: Props = $props();
 </script>
@@ -49,10 +49,10 @@
 						: 'bg-accent-200 font-semibold text-accent-800 hover:bg-accent-300 hover:text-accent-900 dark:bg-accent-900 dark:text-accent-300 dark:hover:bg-accent-800 dark:hover:text-accent-200'
 			]}
 		>
-			{@const renderedIcon = isSelected && !hideSelectedIcon ? null : icon}
+			{@const renderedIcon = icon && isSelected && fillIcons ? `${icon}-fill` : icon}
 
 			{#if renderedIcon}
-				<Icon icon={renderedIcon} />
+				<Icon icon={renderedIcon} class="text-xl" />
 			{/if}
 
 			{label}

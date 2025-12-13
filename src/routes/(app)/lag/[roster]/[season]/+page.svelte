@@ -12,6 +12,7 @@
 	import {
 		averageLegacyRank,
 		averageRank,
+		capitalize,
 		cdnImageSrc,
 		cdnRosterLogoPath,
 		flattenGroup
@@ -123,26 +124,26 @@
 		/>
 	</section>
 
-	<section class="shrink-0 sm:w-1/4">
-		{@render editButton('mb-4')}
+	<section class="flex shrink-0 flex-col gap-5 sm:w-1/4">
+		{@render editButton()}
 
-		<div>
-			{#if average}
+		{#if average}
+			<div>
 				<div class="font-medium text-gray-700 dark:text-gray-400">Genomsnittlig rank</div>
 				<div class="text-xl font-semibold text-gray-800 dark:text-gray-300">
 					<Rank rank={average} />
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</section>
 </PageSection>
 
-{#snippet editButton(classProp: ClassValue)}
+{#snippet editButton()}
 	{#if page.data.user?.isAdmin}
 		<Button
 			href="/admin/roster/{roster.id}"
 			kind="secondary"
-			class={[classProp, 'w-max']}
+			class="max-w-max"
 			label="Redigera lag"
 			icon="ph:pencil-simple"
 		/>

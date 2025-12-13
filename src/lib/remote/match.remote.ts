@@ -20,8 +20,7 @@ export const queryMatches = query(
 		played: z.boolean().optional(),
 		page: z.number().min(0).default(0)
 	}),
-	async ({ rosterId, seasonId, divisionId, groupId, played, page }) => {
-		console.log(rosterId);
+	async ({ rosterId, divisionId, groupId, played, page }) => {
 		const results = await db.query.match.findMany({
 			limit: PAGE_SIZE,
 			offset: page * PAGE_SIZE,
@@ -55,9 +54,11 @@ export const queryMatches = query(
 					}
 				],
 				groupId,
-				group: {
-					divisionId
-				},
+				...(divisionId && {
+					group: {
+						divisionId
+					}
+				}),
 				played
 			},
 			columns: fullMatchColumns,

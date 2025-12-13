@@ -18,6 +18,7 @@
 	title={capitalize(getRank(rank))}
 	class={[classProp, !hideLabel && 'mr-2', 'inline size-7']}
 />
+
 {#if !hideLabel}
 	{#if !isLegacyRank(rank)}
 		<span class={['mr-1', collapse && 'hidden sm:inline']}>{capitalize(getRank(rank))}</span>

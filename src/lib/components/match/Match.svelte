@@ -59,7 +59,7 @@
 					>{matchScoreOrZero(match, rightTeam)}</span
 				>
 			{:else}
-				<span class="font-semibold">?</span>
+				<span class="font-semibold">---</span>
 			{/if}
 		</div>
 

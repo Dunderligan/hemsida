@@ -125,7 +125,7 @@
 			/>
 
 			<Tabs
-				hideSelectedIcon
+				fillIcons
 				selected={mode}
 				items={[
 					{
@@ -135,7 +135,7 @@
 						href: `?div=${division.slug}&visa=gruppspel`
 					},
 					{
-						icon: 'iconoir:tournament',
+						icon: 'ph:trophy',
 						label: 'Slutspel',
 						value: 'bracket',
 						href: `?div=${division.slug}&visa=slutspel`,
