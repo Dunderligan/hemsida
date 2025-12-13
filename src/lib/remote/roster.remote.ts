@@ -10,6 +10,7 @@ import { and, eq, inArray, not, sql } from 'drizzle-orm';
 import z from 'zod';
 import { adminGuard } from './auth.remote';
 import sharp from 'sharp';
+import { error } from '@sveltejs/kit';
 
 /// Create a roster and add it to a group. If an associated teamId is not provided, a new team will be created.
 export const createRoster = command(
@@ -193,14 +194,18 @@ export const uploadRosterLogo = command(
 	}
 );
 
-export const editRosterTeam = command(
+export const mergeTeams = command(
 	z.object({
-		rosterId: z.uuid(),
-		teamId: z.uuid()
+		teamAId: z.uuid(),
+		teamBId: z.uuid()
 	}),
-	async ({ teamId, rosterId }) => {
+	async ({ teamAId, teamBId }) => {
 		await adminGuard();
 
-		await db.update(schema.roster).set({ teamId }).where(eq(schema.roster.id, rosterId));
+		// set all rosters in teamB to teamA
+		await db
+			.update(schema.roster)
+			.set({ teamId: teamAId })
+			.where(eq(schema.roster.teamId, teamBId));
 	}
 );

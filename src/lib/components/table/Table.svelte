@@ -2,12 +2,11 @@
 	import type { ClassValue } from 'svelte/elements';
 	import type { Snippet } from 'svelte';
 
-	type Column =
-		| string
-		| {
-				label: string;
-				center?: boolean;
-		  };
+	type Column = {
+		label: string;
+		center?: boolean;
+		title?: string;
+	};
 
 	type Props = {
 		columns: Column[];
@@ -26,16 +25,14 @@
 		'__table grid w-full gap-y-1 overflow-hidden overflow-x-auto rounded-lg text-gray-700 dark:text-gray-300'
 	]}
 >
-	{#each columns as column, i}
-		{@const [label, center] =
-			typeof column === 'string' ? [column, true] : [column.label, column.center ?? true]}
-
+	{#each columns as { label, center = false, title }, i}
 		<div
 			class={[
 				center ? 'text-center ' : 'text-left',
 				i === 0 && !center && 'pl-6',
 				'__table-header mb-0.5 bg-gray-50 py-2 font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300'
 			]}
+			{...title ? { title, tabindex: 0, role: 'tooltip' } : {}}
 		>
 			{label}
 		</div>

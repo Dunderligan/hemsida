@@ -30,7 +30,7 @@
 			{href}
 			class={[
 				isLast
-					? 'font-bold text-accent-600 hover:text-accent-700 hover:underline'
+					? 'font-bold text-accent-600 hover:text-accent-700 hover:underline dark:hover:text-accent-500'
 					: 'hidden font-medium hover:text-gray-700 hover:underline sm:block dark:hover:text-gray-300'
 			]}>{label}</a
 		>

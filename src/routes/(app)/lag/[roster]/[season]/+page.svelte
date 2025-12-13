@@ -33,15 +33,22 @@
 	const latestMatches = $derived(roster.matches.filter((match) => match.played));
 
 	const rosterTabItems = $derived(
-		team.rosters.map((roster) => {
-			const { season } = flattenGroup(roster.group);
+		team.rosters
+			.toSorted((a, b) => {
+				const seasonA = flattenGroup(a.group).season;
+				const seasonB = flattenGroup(b.group).season;
 
-			return {
-				label: season.name,
-				value: roster.id,
-				href: `/lag/${roster.slug}/${season.slug}`
-			};
-		})
+				return seasonA.name.localeCompare(seasonB.name);
+			})
+			.map((roster) => {
+				const { season } = flattenGroup(roster.group);
+
+				return {
+					label: season.name,
+					value: roster.id,
+					href: `/lag/${roster.slug}/${season.slug}`
+				};
+			})
 	);
 </script>
 
@@ -77,21 +84,19 @@
 
 <PageSection class="flex flex-col-reverse gap-10 sm:flex-row">
 	<section class="shrink grow text-gray-700 dark:text-gray-300">
-		{#if rosterTabItems.length > 1}
-			<div class="mb-6 flex items-center gap-6">
-				<h3 class="text-xl font-semibold">Rosters</h3>
-
+		<div class="mb-6">
+			{#if rosterTabItems.length > 1}
 				<Tabs class="grow" items={rosterTabItems} selected={roster.id} />
-			</div>
-		{:else}
-			<div class="mb-6 text-lg font-medium">
-				Spelar i <a
-					href="/stallningar/{season.slug}?div={division.slug}"
-					class="font-bold text-accent-600 hover:text-accent-700 hover:underline"
-					>{division.name}, {season.name}</a
-				>.
-			</div>
-		{/if}
+			{:else}
+				<span class="text-lg font-medium">
+					Spelar i <a
+						href="/stallningar/{season.slug}?div={division.slug}"
+						class="font-bold text-accent-600 hover:text-accent-700 hover:underline"
+						>{division.name}, {season.name}</a
+					>.
+				</span>
+			{/if}
+		</div>
 
 		<MembersTable members={roster.members} />
 

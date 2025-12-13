@@ -8,15 +8,26 @@ import { adminGuard } from './auth.remote';
 export const queryTeams = query(
 	z.object({
 		query: z.string(),
-		excludeSeasonId: z.uuidv4().optional()
+		excludeSeasonId: z.uuid().optional(),
+		excludeTeamId: z.uuid().optional()
 	}),
-	async ({ query, excludeSeasonId }) => {
+	async ({ query, excludeSeasonId, excludeTeamId }) => {
 		await adminGuard();
+
+		console.log('Hello?');
 
 		// gather rosters that match the query from any team/season
 		const rosters = await db.query.roster.findMany({
 			limit: 15,
-			where: { name: { ilike: `%${query}%` } },
+			where: {
+				name: { ilike: `%${query}%` },
+				...(excludeSeasonId && {
+					group: { division: { season: { NOT: { id: excludeSeasonId } } } }
+				}),
+				...(excludeTeamId && {
+					team: { NOT: { id: excludeTeamId } }
+				})
+			},
 			columns: {
 				id: true,
 				name: true,
@@ -36,9 +47,6 @@ export const queryTeams = query(
 		const teams = new Map<string, RosterWithGroup[]>();
 
 		for (const { team, ...roster } of rosters) {
-			// drizzle relational queryies don't support filtering on nested relations, so we have to do it manually here
-			if (roster.group.division.season.id === excludeSeasonId) continue;
-
 			const teamRosters = teams.get(team.id) ?? [];
 			teamRosters.push(roster);
 			teams.set(team.id, teamRosters);

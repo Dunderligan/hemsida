@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 	import AdminCard from '$lib/components/admin/AdminCard.svelte';
 	import AdminEmptyNotice from '$lib/components/admin/AdminEmptyNotice.svelte';
 	import AdminLink from '$lib/components/admin/AdminLink.svelte';
@@ -17,7 +17,7 @@
 	import { Rank, Role, SocialPlatform } from '$lib/types';
 	import { formatSocialPlatform, flattenGroup } from '$lib/util';
 	import TeamSelect from '$lib/components/admin/TeamSelect.svelte';
-	import { deleteRoster, editRoster, editRosterTeam } from '$lib/remote/roster.remote';
+	import { deleteRoster, editRoster, mergeTeams } from '$lib/remote/roster.remote';
 	import AdminMembersTable from '$lib/components/table/AdminMembersTable.svelte';
 	import Notice from '$lib/components/ui/Notice.svelte';
 
@@ -128,7 +128,10 @@
 	async function linkTeam() {
 		if (!linkTeamId) return;
 
-		await editRosterTeam({ rosterId: roster.id, teamId: linkTeamId });
+		await mergeTeams({ teamAId: team.id, teamBId: linkTeamId });
+		await invalidateAll();
+
+		linkTeamOpen = false;
 	}
 </script>
 
@@ -228,6 +231,8 @@
 					</AdminLink>
 				{/if}
 			{/each}
+
+			<Button icon="ph:link" class="mt-2" onclick={() => (linkTeamOpen = true)} />
 		</div>
 	{:else}
 		<AdminEmptyNotice
@@ -290,7 +295,7 @@
 	{/snippet}
 
 	<Label label="Lag">
-		<TeamSelect excludeSeasonId={season.id} bind:value={linkTeamId} />
+		<TeamSelect excludeSeasonId={season.id} excludeTeamId={team.id} bind:value={linkTeamId} />
 	</Label>
 </CreateDialog>
 

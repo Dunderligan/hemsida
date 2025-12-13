@@ -18,6 +18,8 @@
 	import CreateRosterDialog from '$lib/components/admin/CreateRosterDialog.svelte';
 	import { deleteGroup, updateGroup } from '$lib/remote/group.remote';
 	import { createRoster } from '$lib/remote/roster.remote';
+	import { isInMatch } from '$lib/match.js';
+	import RosterSelect from '$lib/components/admin/RosterSelect.svelte';
 
 	const { data } = $props();
 
@@ -38,6 +40,18 @@
 	let saveCtx = SaveContext.get();
 
 	let addRosterOpen = $state(false);
+
+	let rosterFilter: string | null = $state(null);
+
+	const shownMatchIndicies = $derived(
+		group.matches
+			.map((match, index) => ({ match, index }))
+			.filter(({ match, index }) => {
+				if (!rosterFilter) return true;
+				return isInMatch(match, rosterFilter);
+			})
+			.map(({ index }) => index)
+	);
 
 	$effect(() => {
 		group = data.group;
@@ -140,12 +154,18 @@
 			Denna grupp har inga matcher.
 		</AdminEmptyNotice>
 	{:else}
+		<Label label="Filtrera efter lag">
+			<RosterSelect bind:selectedId={rosterFilter} class="grow" />
+		</Label>
+
 		<div class="grid grid-cols-1 gap-2 overflow-hidden rounded-lg md:grid-cols-2">
-			{#each group.matches as match, i (match.id)}
+			{#each shownMatchIndicies as matchIndex (group.matches[matchIndex].id)}
+				{@const match = group.matches[matchIndex]}
+
 				<EditableMatch
 					{match}
 					ondelete={() => {
-						group.matches.splice(i, 1);
+						group.matches.splice(matchIndex, 1);
 						saveCtx.setDirty();
 					}}
 				/>

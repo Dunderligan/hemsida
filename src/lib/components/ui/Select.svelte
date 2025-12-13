@@ -6,6 +6,7 @@
 	import Icon from './Icon.svelte';
 	import { quadOut } from 'svelte/easing';
 	import type { Snippet } from 'svelte';
+	import type { ClassValue } from '$lib/types';
 
 	type LabelDecoration =
 		| {
@@ -29,7 +30,7 @@
 	type Props = WithoutChildren<Select.RootProps> & {
 		placeholder?: string;
 		items: { value: string; label: string; disabled?: boolean }[];
-		class?: string;
+		class?: ClassValue;
 		avoidCollisions?: boolean;
 	} & LabelDecoration &
 		ItemDecoration;
@@ -37,7 +38,7 @@
 	let {
 		open = $bindable(false),
 		value = $bindable(),
-		class: triggerClass,
+		class: classProp,
 		items,
 		placeholder,
 		avoidCollisions,
@@ -67,7 +68,7 @@
 <Select.Root bind:value={value as never} bind:open {disabled} {...restProps}>
 	<Select.Trigger
 		class={[
-			triggerClass,
+			classProp,
 			'group flex items-center overflow-hidden rounded-lg bg-gray-100 px-4 py-2 font-medium text-gray-700 data-disabled:cursor-not-allowed data-disabled:bg-gray-200 data-disabled:text-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:data-disabled:bg-gray-700 dark:data-disabled:text-gray-500'
 		]}
 	>

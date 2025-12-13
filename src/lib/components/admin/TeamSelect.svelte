@@ -8,11 +8,18 @@
 	type Props = {
 		value?: string;
 		excludeSeasonId?: string;
+		excludeTeamId?: string;
 		disabled?: boolean;
 		onValueChange?: (id: string, rosters: RosterWithGroup[]) => void;
 	};
 
-	let { value = $bindable(), excludeSeasonId, disabled = false, onValueChange }: Props = $props();
+	let {
+		value = $bindable(),
+		excludeSeasonId,
+		excludeTeamId,
+		disabled = false,
+		onValueChange
+	}: Props = $props();
 
 	let searchQuery = $state('');
 	let items: { label: string; value: string }[] = $state([]);
@@ -44,7 +51,7 @@
 	}
 
 	async function updateItems(searchQuery: string) {
-		const results = await queryTeams({ query: searchQuery, excludeSeasonId });
+		const results = await queryTeams({ query: searchQuery, excludeSeasonId, excludeTeamId });
 		teams = results;
 		items = results
 			.entries()
@@ -71,13 +78,13 @@
 	}}
 >
 	<Combobox.Input
-		class="group flex grow items-center overflow-hidden rounded-lg border border-transparent bg-gray-100 py-2 pr-2 pl-4 font-medium text-gray-800 ring-accent-600 transition-all focus:ring-2 focus:outline-none data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-200 data-[disabled]:text-gray-500"
+		class="group flex grow items-center overflow-hidden rounded-lg border border-transparent bg-gray-100 py-2 pr-2 pl-4 font-medium text-gray-800 ring-accent-600 transition-all focus:ring-2 focus:outline-none data-disabled:cursor-not-allowed data-disabled:bg-gray-200 data-disabled:text-gray-500"
 		placeholder="Sök efter lag..."
 		oninput={(evt) => (searchQuery = evt.currentTarget.value)}
 	></Combobox.Input>
 
 	{#if searchQuery.length >= 2}
-		<Combobox.Content class="floating w-[var(--bits-combobox-anchor-width)]">
+		<Combobox.Content class="floating w-(--bits-combobox-anchor-width)">
 			{#if loading}
 				<div class="py-2 text-center font-medium text-gray-500">
 					<Icon icon="ph:spinner" class="animate-spin" />

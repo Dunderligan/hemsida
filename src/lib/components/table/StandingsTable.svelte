@@ -41,14 +41,17 @@
 
 <Table
 	columns={[
-		'#',
 		{
-			label: 'Lag',
-			center: false
+			label: '#',
+			center: true,
+			title: 'Seed'
 		},
-		'Poäng',
-		'W/L/D',
-		'Matcher'
+		{
+			label: 'Lag'
+		},
+		{ label: 'Poäng', center: true, title: 'Antal vunna maps' },
+		{ label: 'W/L/D', center: true, title: 'Wins/Losses/Draws' },
+		{ label: 'Matcher', center: true, title: 'Spelade matcher' }
 	]}
 	{rows}
 	key={(row) => (row === 'playoffLine' ? row : row.rosterId)}

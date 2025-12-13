@@ -13,15 +13,16 @@
 
 	let element: HTMLImageElement;
 
+	const src = $derived(srcOverride ?? cdnImageSrc(cdnRosterLogoPath(id), { width: imgSize }));
+
 	function onerror() {
 		element.src = '/placeholder-team.avif';
-		element.style.borderRadius = '100%';
 	}
 </script>
 
 <img
-	src={srcOverride ?? cdnImageSrc(cdnRosterLogoPath(id), { width: imgSize })}
-	class={[classProp, 'shrink-0 rounded-[25%] object-contain']}
+	{src}
+	class={[classProp, 'shrink-0 rounded-[20%] object-contain']}
 	{onerror}
 	alt=""
 	bind:this={element}

@@ -14,14 +14,12 @@
 
 <Table
 	columns={[
-		'Roll',
+		{ label: 'Roll', center: true },
 		{
-			label: 'Battletag',
-			center: false
+			label: 'Battletag'
 		},
 		{
-			label: 'Rank',
-			center: false
+			label: 'Rank'
 		}
 	]}
 	rows={members}

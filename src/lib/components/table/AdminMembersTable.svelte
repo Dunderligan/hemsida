@@ -23,7 +23,13 @@
 
 <Table
 	rows={members}
-	columns={[{ label: 'Battletag', center: false }, 'Kapten', 'Roll', 'Rank', '']}
+	columns={[
+		{ label: 'Battletag' },
+		{ label: 'Kapten', center: true },
+		{ label: 'Roll', center: true },
+		{ label: 'Rank', center: true },
+		{ label: '', center: true }
+	]}
 	class="grid-cols-[1fr_80px_160px_250px_50px]"
 >
 	{#snippet row({ value: member, index })}

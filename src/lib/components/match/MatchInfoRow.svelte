@@ -21,11 +21,8 @@
 		'flex items-center gap-4 bg-gray-100 text-sm font-medium text-gray-500 dark:bg-gray-900 dark:text-gray-400'
 	]}
 >
-	{#if isBracketMatch !== null}
-		<Icon
-			icon={isBracketMatch ? 'ph:trophy' : 'ph:users'}
-			title={isBracketMatch ? 'Slutspel' : 'Gruppspel'}
-		/>
+	{#if isBracketMatch}
+		<Icon icon="ph:trophy" title="Slutspelsmatch" />
 	{/if}
 
 	{#if match.played}

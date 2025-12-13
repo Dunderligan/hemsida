@@ -42,6 +42,7 @@
 
 		<div class="flex gap-2">
 			<RosterSelect
+				class="w-full"
 				bind:selectedId={match.rosterAId}
 				disabled={!rosterCtx.canEditRosters}
 				onValueChange={saveCtx.setDirty}
@@ -56,6 +57,7 @@
 		</div>
 		<div class="flex gap-2">
 			<RosterSelect
+				class="w-full"
 				bind:selectedId={match.rosterBId}
 				disabled={!rosterCtx.canEditRosters}
 				onValueChange={saveCtx.setDirty}

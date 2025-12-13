@@ -29,7 +29,11 @@
 	<Table
 		rows={users}
 		key={(user) => user.id}
-		columns={[{ label: 'Battletag', center: false }, 'Admin', 'Första inloggning']}
+		columns={[
+			{ label: 'Battletag' },
+			{ label: 'Admin', center: true },
+			{ label: 'Första inloggning', center: true }
+		]}
 		class="grid-cols-[1fr_100px_200px]"
 	>
 		{#snippet row({ value: user })}
