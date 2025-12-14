@@ -6,15 +6,16 @@ RUN corepack enable
 
 FROM base AS prod
 
-COPY pnpm-lock.yaml /app
 WORKDIR /app
+COPY pnpm-lock.yaml ./
 RUN pnpm fetch --prod
 
-COPY . /app
+COPY . .
 RUN pnpm run build
 
 FROM base AS run
-COPY --from=prod /app/node_modules /app/node_modules
-COPY --from=prod /app/build /app/build
+WORKDIR /app
+COPY --from=prod /app/node_modules ./node_modules
+COPY --from=prod /app/build ./build
 EXPOSE 3000
 CMD [ "pnpm", "start" ]

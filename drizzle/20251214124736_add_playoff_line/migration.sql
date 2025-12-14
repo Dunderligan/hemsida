@@ -1,0 +1,1 @@
+ALTER TABLE "division" ADD COLUMN "playoff_line" integer;

@@ -1,5 +1,6 @@
-import { db, schema } from './db';
 import { eq } from 'drizzle-orm';
+import schema from './db/schema';
+import db from './db';
 
 async function getUserFromBattletag(battletag: string) {
 	const results = await db.select().from(schema.user).where(eq(schema.user.battletag, battletag));

@@ -1,6 +1,7 @@
 import { command } from '$app/server';
 import { S3_BUCKET_NAME } from '$env/static/private';
-import { db, schema } from '$lib/server/db';
+import db from '$lib/server/db';
+import schema from '$lib/server/db/schema';
 import { findOrCreatePlayer, type Transaction } from '$lib/server/db/helpers';
 import S3 from '$lib/server/s3';
 import { Rank, Role, SocialPlatform, type Member, type TeamSocial } from '$lib/types';

@@ -1,5 +1,6 @@
 import { command } from '$app/server';
-import { db, schema } from '$lib/server/db';
+import db from '$lib/server/db';
+import schema from '$lib/server/db/schema';
 import { Rank, Role } from '$lib/types';
 import z from 'zod';
 import { adminGuard } from './auth.remote';

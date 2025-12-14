@@ -1,5 +1,6 @@
 import { command } from '$app/server';
-import { db, schema } from '$lib/server/db';
+import db from '$lib/server/db';
+import schema from '$lib/server/db/schema';
 import { toSlug } from '$lib/util';
 import { eq } from 'drizzle-orm';
 import * as z from 'zod';

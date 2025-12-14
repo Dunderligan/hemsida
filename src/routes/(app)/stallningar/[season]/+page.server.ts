@@ -1,4 +1,5 @@
-import { db, schema } from '$lib/server/db';
+import db from '$lib/server/db';
+import schema from '$lib/server/db/schema';
 import { fullMatchColumns, groupMatchOrder } from '$lib/server/db/helpers.js';
 import { calculateStandings } from '$lib/table';
 import { aggregateGroups } from '$lib/util';
