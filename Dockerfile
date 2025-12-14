@@ -4,22 +4,18 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-FROM base as build
-WORKDIR /app
+FROM base AS prod
 
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-RUN pnpm install --frozen-lockfile
+WORKDIR /app
+COPY pnpm-lock.yaml ./
+RUN pnpm fetch --prod
 
 COPY . .
 RUN pnpm run build
 
 FROM base AS run
 WORKDIR /app
-
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-RUN pnpm install --prod --frozen-lockfile
-
-COPY --from=build /app/build ./build
-
+COPY --from=prod /app/node_modules ./node_modules
+COPY --from=prod /app/build ./build
 EXPOSE 3000
-CMD ["node", "build"]
+CMD [ "pnpm", "start" ]
