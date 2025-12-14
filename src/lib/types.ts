@@ -148,8 +148,8 @@ export type MatchRoster = {
 };
 
 export type ResolvedMatchWithContext<G = NestedGroup, D = NestedDivision> = ResolvedMatch & {
-	group: G | null;
-	division: D | null;
+	group?: G | null;
+	division?: D | null;
 };
 
 /**

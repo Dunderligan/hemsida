@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import Match from '$lib/components/match/Match.svelte';
+	import MatchList from '$lib/components/match/MatchList.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
 	import { queryMatches } from '$lib/remote/match.remote.js';
 
 	let { data } = $props();
@@ -53,25 +51,16 @@
 			<Button
 				class="ml-auto"
 				kind="secondary"
-				href={queryParamHref('sida', data.query.page + 1)}
 				icon="ph:arrow-right"
 				label="Nästa sida"
+				href={queryParamHref('sida', data.query.page + 1)}
 			/>
 		</div>
 
-		{#await matchQuery}
-			{#each Array.from({ length: data.pageSize })}
-				<div class="h-[136px] animate-pulse rounded-lg bg-gray-100 sm:h-24"></div>
-			{/each}
-		{:then results}
-			{#each results.matches.slice(0, data.pageSize) as { group, division, ...match } (match.id)}
-				<Match {match} {group} {division} flipped={data.query.rosterId === match.rosterBId} />
-			{:else}
-				<div class="text-center py-10 text-gray-700 space-y-2 bg-gray-100 rounded-lg">
-					<Icon icon="ph:ghost" class="text-5xl block mx-auto" />
-					<span class="text-xl font-semibold">Inga matcher hittades</span>
-				</div>
-			{/each}
-		{/await}
+		<MatchList
+			matches={matchQuery.then((res) => res.matches)}
+			skeletonCount={data.pageSize}
+			mainRosterId={data.query.rosterId}
+		/>
 	</div>
 </PageSection>

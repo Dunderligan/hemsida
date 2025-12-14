@@ -1,10 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
-	import Match from '$lib/components/match/Match.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
-	import type { ResolvedMatchWithContext } from '$lib/types';
 	import { cdnSrc } from '$lib/util';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
+	import MatchList from '$lib/components/match/MatchList.svelte';
 
 	let { data } = $props();
 </script>
@@ -30,6 +29,7 @@
 		autoplay
 		muted
 		loop
+		playsinline
 		preload="auto"
 	></video>
 
@@ -53,27 +53,12 @@
 </header>
 
 <PageSection topMargin={false} class="space-y-10">
-	{@render matchList('Kommande matcher', data.matches.upcoming)}
-	{@render matchList('Senaste matcherna', data.matches.latest)}
+	<Subheading class="mb-4">Senaste matcherna</Subheading>
+	<MatchList matches={data.matches.latest} />
+
+	<Subheading class="mb-4">Kommande matcher</Subheading>
+	<MatchList matches={data.matches.upcoming} />
 </PageSection>
-
-{#snippet matchList(title: string, matches: Promise<ResolvedMatchWithContext[]>)}
-	<Subheading class="mb-4">{title}</Subheading>
-
-	<div class="max-w-2xl space-y-2">
-		{#await matches}
-			{#each Array.from({ length: 3 })}
-				<div class="h-[140px] animate-pulse rounded-lg bg-gray-100 sm:h-20 dark:bg-gray-800"></div>
-			{/each}
-		{:then matches}
-			{#each matches as { division, group, ...match } (match.id)}
-				{@const seasonSlug = division?.season.slug ?? group!.division.season.slug}
-
-				<Match {seasonSlug} {match} {division} {group} />
-			{/each}
-		{/await}
-	</div>
-{/snippet}
 
 <style>
 	h1 {

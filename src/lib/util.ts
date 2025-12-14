@@ -148,7 +148,7 @@ export function cdnImageSrc(path: string, { width, height }: { width: number; he
 }
 
 export function cdnRosterLogoPath(rosterId: string) {
-	return `/dunderligan/${s3RosterLogoKey(rosterId)}`;
+	return `/${s3RosterLogoKey(rosterId)}`;
 }
 
 export function s3RosterLogoKey(rosterId: string) {

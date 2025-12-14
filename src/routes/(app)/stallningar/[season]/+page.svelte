@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import Button from '$lib/components/ui/Button.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import StandingsTable from '$lib/components/table/StandingsTable.svelte';
@@ -10,9 +9,9 @@
 	import Bracket from '$lib/components/match/Bracket.svelte';
 	import { buildBracketRounds } from '$lib/bracket.js';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
-	import Match from '$lib/components/match/Match.svelte';
-	import type { FullMatch, FullMatchWithoutOrder, ResolvedMatch } from '$lib/types.js';
+	import type { FullMatchWithoutOrder, ResolvedMatch } from '$lib/types.js';
 	import SeasonStateChip from '$lib/components/ui/SeasonStateChip.svelte';
+	import MatchList from '$lib/components/match/MatchList.svelte';
 
 	let { data } = $props();
 
@@ -160,21 +159,13 @@
 					/>
 				</div>
 
-				<div class="max-w-2xl space-y-2">
-					{#each division.latestMatches as match (match.id)}
-						<Match seasonSlug={season.slug} match={resolveMatch(match)} />
-					{/each}
-				</div>
+				<MatchList matches={division.latestMatches.map(resolveMatch)} seasonSlug={season.slug} />
 			{/if}
 
 			{#if division.upcomingMatches.length > 0}
 				<Subheading class="mt-10 mb-4">Kommande matcher</Subheading>
 
-				<div class="max-w-2xl space-y-2">
-					{#each division.upcomingMatches as match (match.id)}
-						<Match seasonSlug={season.slug} match={resolveMatch(match)} />
-					{/each}
-				</div>
+				<MatchList matches={division.upcomingMatches.map(resolveMatch)} seasonSlug={season.slug} />
 			{/if}
 		{:else}
 			<Bracket

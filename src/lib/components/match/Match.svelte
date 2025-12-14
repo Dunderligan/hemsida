@@ -7,35 +7,27 @@
 		type MatchSide,
 		flipSide
 	} from '$lib/match';
-	import type { ResolvedMatch, ClassValue, NestedDivision, NestedGroup } from '$lib/types';
-	import { formatDate, formatDateTime } from '$lib/util';
+	import type { ClassValue, ResolvedMatchWithContext } from '$lib/types';
 	import Icon from '../ui/Icon.svelte';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import MatchInfoRow from './MatchInfoRow.svelte';
 
 	type Props = {
-		match: ResolvedMatch;
-		division?: NestedDivision | null;
-		group?: NestedGroup | null;
+		match: ResolvedMatchWithContext;
 		seasonSlug?: string;
 		flipped?: boolean;
 	};
 
-	let {
-		match,
-		division: divisionProp,
-		group,
-		seasonSlug: seasonSlugProp,
-		flipped = false
-	}: Props = $props();
+	let { match, seasonSlug: seasonSlugProp, flipped = false }: Props = $props();
 
 	const winner = $derived(matchWinner(match));
 
 	const leftTeam = $derived(flipped ? 'B' : 'A');
 	const rightTeam = $derived(flipSide(leftTeam));
 
-	const isBracketMatch = $derived(divisionProp ? true : group ? false : null);
-	const division = $derived(divisionProp ?? group?.division);
+	const isBracketMatch = $derived(match.division ? true : match.group ? false : null);
+
+	const division = $derived(match.division ?? match.group?.division ?? null);
 	const seasonSlug = $derived(seasonSlugProp ?? division?.season.slug);
 </script>
 
@@ -74,7 +66,7 @@
 	{@const roster = matchRoster(match, side)}
 	{@const won = roster && isWinner(match, side)}
 
-	<div class={[rootClass, 'flex w-full items-center gap-2 text-gray-800 dark:text-gray-300']}>
+	<div class={[rootClass, 'flex w-full items-center gap-2 text-gray-800 dark:text-gray-100']}>
 		{#if roster}
 			<RosterLogo id={roster.id} class="size-10 sm:size-12" />
 

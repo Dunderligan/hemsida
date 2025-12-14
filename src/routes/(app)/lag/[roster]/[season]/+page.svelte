@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
-	import Match from '$lib/components/match/Match.svelte';
 	import MembersTable from '$lib/components/table/MembersTable.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
@@ -8,17 +7,16 @@
 	import RosterLogo from '$lib/components/ui/RosterLogo.svelte';
 	import Tabs from '$lib/components/ui/Tabs.svelte';
 	import TeamSocial from '$lib/components/ui/TeamSocial.svelte';
-	import type { ClassValue } from '$lib/types';
 	import {
 		averageLegacyRank,
 		averageRank,
-		capitalize,
 		cdnImageSrc,
 		cdnRosterLogoPath,
 		flattenGroup
 	} from '$lib/util';
 	import { page } from '$app/state';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
+	import MatchList from '$lib/components/match/MatchList.svelte';
 
 	let { data } = $props();
 
@@ -100,25 +98,11 @@
 
 		<MembersTable members={roster.members} />
 
-		{#if latestMatches.length > 0}
-			<Subheading class="mt-10 mb-4">Senaste matcher</Subheading>
+		<Subheading class="mt-10 mb-4">Senaste matcher</Subheading>
+		<MatchList matches={latestMatches} seasonSlug={season.slug} mainRosterId={roster.id} />
 
-			<div class="space-y-2">
-				{#each latestMatches as match (match.id)}
-					<Match seasonSlug={season.slug} {match} flipped={match.rosterB?.id === roster.id} />
-				{/each}
-			</div>
-		{/if}
-
-		{#if upcomingMatches.length > 0}
-			<Subheading class="mt-10 mb-4">Kommande matcher</Subheading>
-
-			<div class="space-y-2">
-				{#each upcomingMatches as match (match.id)}
-					<Match seasonSlug={season.slug} {match} flipped={match.rosterB?.id === roster.id} />
-				{/each}
-			</div>
-		{/if}
+		<Subheading class="mt-10 mb-4">Kommande matcher</Subheading>
+		<MatchList matches={upcomingMatches} seasonSlug={season.slug} mainRosterId={roster.id} />
 
 		<Button
 			href="/arkiv/matcher?roster={roster.id}&prev={page.url.pathname}"
