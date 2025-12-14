@@ -7,14 +7,16 @@ RUN corepack enable
 FROM base as build
 WORKDIR /app
 
-COPY . .
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 RUN pnpm install --frozen-lockfile
+
+COPY . .
 RUN pnpm run build
 
 FROM base AS run
 WORKDIR /app
 
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json drizzle ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 RUN pnpm install --prod --frozen-lockfile
 
 COPY --from=build /app/build ./build
