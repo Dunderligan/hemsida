@@ -28,7 +28,7 @@ A development database is also required. The simplest way to get started is to i
 Clone the repository and navigate to it:
 
 ```bash
-git clone https://github.com/Dunderligan/hemsida
+git clone https://github.com/Dunderligan/web
 cd hemsida
 ```
 
@@ -60,3 +60,4 @@ Open up http://localhost:5173/setup in a browser, where the website will ask you
 
 - [Cloud services (full setup)](./cloud-services.md)
 - [Database documentation](./database.md)
+
