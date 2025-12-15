@@ -4,7 +4,7 @@ Dunderligan's official website, [dunderligan.se](https://dunderligan.se). *Work 
 
 You can find the staging version at [dev.dunderligan.se](https://dev.dunderligan.se).
 
-See [./docs/](./docs/) for technical documentation.
+See [./docs/](./docs/overview.md) for technical documentation.
 
 ## Contact
 
