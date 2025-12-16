@@ -37,9 +37,10 @@ export const updateDivision = command(
 		id: z.uuid(),
 		name: z.string().nonempty(),
 		playoffLine: z.number().nullable(),
+		groupwiseStandings: z.boolean(),
 		bracketMatches: z.array(matchSchema)
 	}),
-	async ({ id, name, playoffLine, bracketMatches }) => {
+	async ({ id, name, playoffLine, groupwiseStandings, bracketMatches }) => {
 		await adminGuard();
 
 		await db.transaction(async (tx) => {
@@ -47,7 +48,7 @@ export const updateDivision = command(
 
 			await tx
 				.update(schema.division)
-				.set({ slug, name, playoffLine })
+				.set({ slug, name, playoffLine, groupwiseStandings })
 				.where(eq(schema.division.id, id));
 
 			await Promise.all(

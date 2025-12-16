@@ -32,6 +32,7 @@ export const division = pgTable(
 		name: text().notNull(),
 		slug: text().notNull(),
 		playoffLine: integer(),
+		groupwiseStandings: boolean().notNull().default(false),
 		seasonId: uuid()
 			.notNull()
 			.references(() => season.id, { onDelete: 'cascade' }),
@@ -122,7 +123,7 @@ export const member = pgTable(
 	(t) => [
 		primaryKey({ columns: [t.playerId, t.rosterId] }),
 		check('tier_range', sql`${t.tier} >= 1 AND ${t.tier} <= 5`),
-		check('notlegacy_sr_and_tier', not(and(isNotNull(t.sr), isNotNull(t.tier))!))
+		check('not_both_legacy_sr_and_tier', or(isNull(t.sr), isNull(t.tier))!)
 	]
 );
 

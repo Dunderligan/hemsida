@@ -6,7 +6,7 @@
 
 Cloudflare is used in two ways:
 
-- File storage via [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/). This is used for storing team logos and the landing page hero/trailer video. Any S3-compatible storage can technically be used, but R2 is preferred due to its (very) generous free tier and easy integration with Images.
+- File storage with [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/). This is used for storing team logos and the landing page hero/trailer video. Any S3-compatible storage can technically be used, but R2 is preferred due to its generous free tier and easy integration with Images.
 - Image serving and optimization via [Cloudflare Images](https://www.cloudflare.com/developer-platform/products/cloudflare-images/).
 
 To set these up for yourself, [create a Cloudflare account](https://dash.cloudflare.com/login) and navigate to the [Dashboard](https://dash.cloudflare.com).
@@ -28,3 +28,5 @@ Cloudflare will now show the `Access Key ID`, `Secret Access Key` and S3 endpoin
 R2 should now be working. However, team logos still won't display until you've setup Images as well. Nevertheless, you can still test it out by uploading a team logo via the admin page and check that it was added to the R2 bucket.
 
 ### Images
+
+Open the Cloudflare Dashboard and navigate to [Images/Transformations](https://dash.cloudflare.com/9c3c36808f7b9a5adadff441d7f2ddcd/images/transformations).

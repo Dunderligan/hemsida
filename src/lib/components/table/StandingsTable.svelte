@@ -5,32 +5,27 @@
 	import Table from './Table.svelte';
 
 	type TableEntry = {
-		rosterId: string;
+		roster: Roster;
 		score: TableScore;
 	};
 
 	type Row = TableEntry | 'playoffLine';
 
-	type Division = {
-		rosters: Roster[];
-		table: TableEntry[];
-		playoffLine: number | null;
-	};
-
 	type Props = {
-		division: Division;
+		standings: TableEntry[];
+		playoffLine: number | null;
 		seasonSlug: string;
 	};
 
-	let { division, seasonSlug }: Props = $props();
+	let { standings, playoffLine, seasonSlug }: Props = $props();
 
 	const rows = $derived.by(() => {
-		if (!division.playoffLine) return division.table;
+		if (!playoffLine) return standings;
 
 		const rowsWithLine: Row[] = [];
-		division.table.forEach((entry, index) => {
+		standings.forEach((entry, index) => {
 			rowsWithLine.push(entry);
-			if (index === division.playoffLine! - 1) {
+			if (index === playoffLine! - 1) {
 				rowsWithLine.push('playoffLine');
 			}
 		});
@@ -54,7 +49,7 @@
 		{ label: 'Matcher', center: true, title: 'Spelade matcher' }
 	]}
 	{rows}
-	key={(row) => (row === 'playoffLine' ? row : row.rosterId)}
+	key={(row) => (row === 'playoffLine' ? row : row.roster.id)}
 	class="max-w-2xl grid-cols-[40px_1fr_50px_60px_70px] sm:grid-cols-[50px_1fr_80px_60px_80px]"
 >
 	{#snippet row({ index, value: row })}
@@ -67,10 +62,9 @@
 			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
 			<div class="my-2.5 border-t-2 border-dashed border-red-600"></div>
 		{:else}
-			{@const { rosterId, score } = row}
-			{@const { id, name, slug } = division.rosters.find((roster) => roster.id === rosterId)!}
+			{@const { roster, score } = row}
 
-			{@const isAfterLine = division.playoffLine && index > division.playoffLine}
+			{@const isAfterLine = playoffLine && index > playoffLine}
 			{@const seed = isAfterLine ? index : index + 1}
 
 			<div class="relative flex items-center justify-center text-lg font-semibold">
@@ -78,9 +72,9 @@
 			</div>
 
 			<div class="flex min-w-0 items-center gap-2 py-2 text-lg font-semibold">
-				<RosterLogo {id} class="size-12" />
+				<RosterLogo id={roster.id} class="size-12" />
 
-				<a href="/lag/{slug}/{seasonSlug}" class="truncate hover:underline">{name}</a>
+				<a href="/lag/{roster.slug}/{seasonSlug}" class="truncate hover:underline">{roster.name}</a>
 			</div>
 
 			<div class="flex items-center justify-center text-xl font-semibold">

@@ -24,6 +24,7 @@
 		updateDivision
 	} from '$lib/remote/division.remote';
 	import { buildBracketRounds } from '$lib/bracket.js';
+	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 
 	const { data } = $props();
 
@@ -83,6 +84,7 @@
 			id: division.id,
 			name: division.name,
 			playoffLine: division.playoffLine,
+			groupwiseStandings: division.groupwiseStandings,
 			bracketMatches: rounds.flatMap((round) => round)
 		});
 	}
@@ -180,6 +182,10 @@
 
 		<Label label="Antal lag till slutspel">
 			<InputField type="number" bind:value={division.playoffLine} oninput={saveCtx.setDirty} />
+		</Label>
+
+		<Label label="Tabell per grupp">
+			<Checkbox bind:checked={division.groupwiseStandings} onCheckedChange={saveCtx.setDirty} />
 		</Label>
 	</div>
 

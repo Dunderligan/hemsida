@@ -7,9 +7,9 @@
 	import Tabs from '$lib/components/ui/Tabs.svelte';
 	import { seasonState } from '$lib/util';
 	import Bracket from '$lib/components/match/Bracket.svelte';
-	import { buildBracketRounds } from '$lib/bracket.js';
+	import { buildBracketRounds } from '$lib/bracket';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
-	import type { FullMatchWithoutOrder, ResolvedMatch } from '$lib/types.js';
+	import type { FullMatchWithoutOrder, ResolvedMatch, Roster } from '$lib/types';
 	import SeasonStateChip from '$lib/components/ui/SeasonStateChip.svelte';
 	import MatchList from '$lib/components/match/MatchList.svelte';
 
@@ -56,14 +56,14 @@
 		});
 	}
 
-	function resolveMatch(match: FullMatchWithoutOrder): ResolvedMatch {
-		// resolve match rosters
-		const rosterA = division.rosters.find((roster) => roster.id === match.rosterAId);
-		const rosterB = division.rosters.find((roster) => roster.id === match.rosterBId);
+	function resolveRoster(id?: string | null): Roster | null {
+		return division.rosters.find((roster) => roster.id === id) ?? null;
+	}
 
+	function resolveMatch(match: FullMatchWithoutOrder): ResolvedMatch {
 		return {
-			rosterA,
-			rosterB,
+			rosterA: resolveRoster(match.rosterAId),
+			rosterB: resolveRoster(match.rosterBId),
 			...match
 		};
 	}
@@ -114,7 +114,7 @@
 
 <PageSection>
 	<section class="grow overflow-hidden">
-		<div class="mb-6 flex max-w-lg flex-col gap-1.5">
+		<div class="mb-2 flex max-w-lg flex-col gap-1.5">
 			<Tabs
 				selected={division.id}
 				items={divisions.map((division) => ({
@@ -146,7 +146,20 @@
 		</div>
 
 		{#if mode === 'group'}
-			<StandingsTable {division} seasonSlug={season.slug} />
+			{#each division.tables as table}
+				{@const resolvedStandings = table.standings.map(({ rosterId, score }) => ({
+					roster: resolveRoster(rosterId)!,
+					score
+				}))}
+
+				<Subheading class="mt-8 mb-4">{table.title}</Subheading>
+
+				<StandingsTable
+					standings={resolvedStandings}
+					playoffLine={division.playoffLine}
+					seasonSlug={season.slug}
+				/>
+			{/each}
 
 			{#if division.latestMatches.length > 0}
 				<div class="mt-10 mb-4 flex max-w-2xl items-center justify-between">

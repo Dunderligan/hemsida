@@ -5,6 +5,7 @@ import z from 'zod';
 import { adminGuard } from './auth.remote';
 import { toSlug } from '$lib/util';
 import { findOrCreatePlayer, type Transaction } from '$lib/server/db/helpers';
+import type { DrizzleError } from 'drizzle-orm';
 
 type MemberInput = {
 	battletag: string;
@@ -188,17 +189,20 @@ async function insertRoster(
 	for (const player of input.players) {
 		const playerId = await findOrCreatePlayer(tx, player.battletag);
 
-		console.log(player);
-
-		await tx.insert(schema.member).values({
-			rosterId: roster.id,
-			playerId,
-			role: player.role,
-			rank: player.rank,
-			tier: player.tier,
-			sr: player.sr,
-			isCaptain: player.is_captain
-		});
+		try {
+			await tx.insert(schema.member).values({
+				rosterId: roster.id,
+				playerId,
+				role: player.role,
+				rank: player.rank,
+				tier: player.tier,
+				sr: player.sr,
+				isCaptain: player.is_captain
+			});
+		} catch (e: any) {
+			const drizzle = e as DrizzleError;
+			console.log(`Failed to insert ${player.battletag}: ${JSON.stringify(drizzle)}`);
+		}
 	}
 
 	return { roster };

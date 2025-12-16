@@ -3,7 +3,7 @@
 The tech stack in short:
 
 - [SvelteKit](https://svelte.dev/) (fullstack)
-    - Experimental [remote functions](https://svelte.dev/docs/kit/remote-functions) for mutations (where applicable).
+  - Experimental [remote functions](https://svelte.dev/docs/kit/remote-functions) for mutations (where applicable).
 - [PostgreSQL](https://www.postgresql.org/)
 - [Drizzle ORM](https://orm.drizzle.team/)
 - [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/) + [Cloudflare Images](https://www.cloudflare.com/developer-platform/products/cloudflare-images/)
@@ -38,8 +38,14 @@ Copy the `.env.example` file to `.env` and fill in the `DATABASE_URL` field with
 DATABASE_URL="postgresql://[user]:[password]@[host]/[database]"
 ```
 
+For example, on a local database named `dunderligan` using the root postgres user:
+
+```env
+DATABASE_URL="postgresql://postgres:[password]@localhost/dunderligan"
+```
+
 > [!NOTE]
-> While the rest of the fields are not necessary for core functionality, some notable features will be unavailable when the values are left as default. This includes account logins and team logos (both load and upload).
+> While the rest of the environment variables are not necessary for core functionality, some notable features will be unavailable when the values are left as default. This includes account logins and team logos (both load and upload).
 
 Then run the following commands:
 
@@ -58,6 +64,3 @@ Open up http://localhost:5173/setup in a browser, where the website will ask you
 
 - [Cloud services (full setup)](./cloud-services.md)
 - [Database documentation](./database.md)
-
-
-

@@ -1,6 +1,7 @@
 import { db } from '$lib/server/db';
 import { fullMatchColumns, groupMatchOrder } from '$lib/server/db/helpers';
 import { calculateStandings } from '$lib/table';
+import type { LogicalMatch } from '$lib/types.js';
 import { aggregateGroups } from '$lib/util';
 import { error } from '@sveltejs/kit';
 
@@ -24,7 +25,8 @@ export const load = async ({ params }) => {
 					id: true,
 					name: true,
 					slug: true,
-					playoffLine: true
+					playoffLine: true,
+					groupwiseStandings: true
 				},
 				with: {
 					matches: {
@@ -70,15 +72,20 @@ export const load = async ({ params }) => {
 	return {
 		season,
 		divisions: divisions.map(({ groups, ...division }) => {
-			const { rosters, matches: groupMatches } = aggregateGroups(groups);
-			const table = calculateStandings(rosters, groupMatches);
+			const { rosters, matches: combinedGroupMatches } = aggregateGroups(groups);
+			let tables;
+			if (division.groupwiseStandings) {
+				tables = groups.map((group) => makeTable(group.name, group.rosters, group.matches));
+			} else {
+				tables = [makeTable(division.name, rosters, combinedGroupMatches)];
+			}
 
-			const latestMatches = groupMatches.filter((match) => match.played).slice(0, 3);
-			const upcomingMatches = groupMatches.filter((match) => !match.played).slice(0, 3);
+			const latestMatches = combinedGroupMatches.filter((match) => match.played).slice(0, 3);
+			const upcomingMatches = combinedGroupMatches.filter((match) => !match.played).slice(0, 3);
 
 			return {
 				rosters,
-				table,
+				tables,
 				latestMatches,
 				upcomingMatches,
 				...division
@@ -86,3 +93,10 @@ export const load = async ({ params }) => {
 		})
 	};
 };
+
+function makeTable<R extends { id: string }>(title: string, rosters: R[], matches: LogicalMatch[]) {
+	return {
+		title,
+		standings: calculateStandings(rosters, matches)
+	};
+}
