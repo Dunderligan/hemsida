@@ -48,7 +48,7 @@
 	]}
 >
 	{#if context.current}
-		<div class="text-lg font-medium text-gray-600">
+		<div class="text-lg font-medium text-gray-600 dark:text-gray-300">
 			{@html context.current.description}
 		</div>
 	{/if}
