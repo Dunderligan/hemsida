@@ -207,21 +207,20 @@ export function seasonState({
 	return 'ongoing';
 }
 
-export function formatDate(date: Date): string {
-	// format as YYYY-MM-DD in sv-SE locale
+export function formatDate(date: Date, extra?: any): string {
+	const isCurrentYear = date.getFullYear() === new Date().getFullYear();
+
 	return date.toLocaleDateString('sv-SE', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit'
+		month: 'long',
+		day: 'numeric',
+		// only show year if not current year
+		...(isCurrentYear ? {} : { year: 'numeric' }),
+		...extra
 	});
 }
 
 export function formatDateTime(date: Date): string {
-	// format as YYYY-MM-DD HH:mm in sv-SE locale
-	return date.toLocaleDateString('sv-SE', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
+	return formatDate(date, {
 		hour: '2-digit',
 		minute: '2-digit'
 	});

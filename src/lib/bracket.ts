@@ -2,20 +2,29 @@ import { v4 as uuidv4 } from 'uuid';
 import type { FullMatch, LogicalMatch } from './types';
 import { isMatchBetween } from './match';
 
+export function minBracketRounds(teamCount: number): number {
+	if (teamCount < 2) {
+		return 0;
+	}
+	return Math.ceil(Math.log2(teamCount));
+}
+
 /**
  * Generates a bracket structure based on the seeds given by the order of the rosters array.
  */
 export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rosters: R[],
 	matches: M[],
-	options: { avoidPreviousMatches?: boolean } = { avoidPreviousMatches: true }
+	roundCount: number,
+	options: { avoidPreviousMatches?: boolean } = {
+		avoidPreviousMatches: true
+	}
 ): FullMatch[][] {
-	if (rosters.length < 2) {
-		return [];
+	if (roundCount < minBracketRounds(rosters.length)) {
+		throw new Error('Not enough rounds to accommodate the number of rosters');
 	}
 
-	const numberOfRounds = Math.ceil(Math.log2(rosters.length));
-	let emptySlots = Math.pow(2, numberOfRounds) - rosters.length;
+	let emptySlots = Math.pow(2, roundCount) - rosters.length;
 
 	const rounds = [];
 	let order = 0;
@@ -24,7 +33,7 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rounds.push([createMatch(order++)]);
 
 	// create matches in reverse order
-	for (let i = 1; i < numberOfRounds; i++) {
+	for (let i = 1; i < roundCount; i++) {
 		const round = [];
 
 		for (const nextMatch of rounds[i - 1]) {
@@ -42,10 +51,11 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 	rosters = [...rosters];
 
 	// fill the first round according to seeding
-	const matchOrder = getMatchOrder(numberOfRounds);
+	const matchOrder = getMatchOrder(roundCount);
 	const firstRound = rounds[rounds.length - 1];
 
 	for (const matchIndex of matchOrder) {
+		if (rosters.length === 0) break;
 		const match = firstRound[matchIndex];
 
 		const rosterA = rosters.shift()!;

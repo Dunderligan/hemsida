@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import AdminLink from '$lib/components/admin/AdminLink.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
@@ -27,5 +28,9 @@
 				<span class="ml-2 text-base font-medium">{startedAt.getFullYear()}</span>
 			</AdminLink>
 		{/each}
+	</div>
+
+	<div class="mt-10 space-y-1 overflow-hidden rounded-lg">
+		<AdminLink href="/arkiv/matcher?prev={page.url.pathname}">Matcher</AdminLink>
 	</div>
 </PageSection>

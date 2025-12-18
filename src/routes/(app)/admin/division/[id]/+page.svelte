@@ -23,7 +23,7 @@
 		generateBracket,
 		updateDivision
 	} from '$lib/remote/division.remote';
-	import { buildBracketRounds } from '$lib/bracket.js';
+	import { buildBracketRounds, minBracketRounds } from '$lib/bracket.js';
 	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 
 	const { data } = $props();
@@ -44,6 +44,14 @@
 
 	let createGroupOpen = $state(false);
 	let newGroupName = $state('');
+
+	const totalTeamCount = $derived(
+		division.groups.reduce((sum, group) => sum + group.rosters.length, 0)
+	);
+	const minRoundCount = $derived(minBracketRounds(totalTeamCount));
+
+	let generateBracketOpen = $state(false);
+	let bracketRoundCount = $state(0);
 
 	async function submitDelete() {
 		await confirmCtx.confirm({
@@ -71,12 +79,15 @@
 
 	let rounds: FullMatch[][] = $state([]);
 
-	async function generate() {
+	async function submitGenerateBracket() {
 		const result = await generateBracket({
-			divisionId: division.id
+			divisionId: division.id,
+			roundCount: bracketRoundCount,
+			avoidPreviousMatches: true
 		});
 
 		rounds = result.rounds;
+		generateBracketOpen = false;
 	}
 
 	async function save() {
@@ -168,7 +179,15 @@
 		<Notice kind="info">
 			Denna division har inget bracket.
 
-			<Button kind="transparent" icon="ph:plus" label="Generera" class="ml-auto" onclick={generate}
+			<Button
+				kind="transparent"
+				icon="ph:plus"
+				label="Generera"
+				class="ml-auto"
+				onclick={() => {
+					bracketRoundCount = minRoundCount;
+					generateBracketOpen = true;
+				}}
 			></Button>
 		</Notice>
 	{/if}
@@ -205,6 +224,17 @@
 >
 	<Label label="Namn">
 		<InputField bind:value={newGroupName} placeholder="T.ex. Grupp A..." />
+	</Label>
+</CreateDialog>
+
+<CreateDialog
+	title="Generera bracket"
+	bind:open={generateBracketOpen}
+	oncreate={submitGenerateBracket}
+	disabled={!bracketRoundCount}
+>
+	<Label label="Antal rundor">
+		<InputField bind:value={bracketRoundCount} type="number" />
 	</Label>
 </CreateDialog>
 

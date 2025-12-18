@@ -209,6 +209,16 @@
 				seasonSlug={season.slug}
 				rounds={buildBracketRounds(division.matches.map(resolveMatch))}
 			/>
+
+			{#if page.data.user?.isAdmin}
+				<Button
+					label="Redigera division"
+					icon="ph:pencil-simple"
+					kind="secondary"
+					class="mt-4 max-w-max"
+					href="/admin/division/{division.id}"
+				/>
+			{/if}
 		{/if}
 	</section>
 </PageSection>
