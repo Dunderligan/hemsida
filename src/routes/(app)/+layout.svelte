@@ -25,10 +25,7 @@
 	}
 
 	:global(.dark) #background {
-		background-blend-mode: multiply;
-		background-image:
-			linear-gradient(to bottom, transparent, var(--color-gray-800) 100%), url('/striped-bg.avif'),
-			linear-gradient(var(--color-gray-900));
+		background-image: linear-gradient(to bottom, var(--color-gray-900), var(--color-gray-950));
 	}
 
 	#splotch {
