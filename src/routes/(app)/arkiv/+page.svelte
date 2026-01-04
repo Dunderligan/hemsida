@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import AdminLink from '$lib/components/admin/AdminLink.svelte';
+	import Meta from '$lib/components/structure/Meta.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
@@ -8,13 +9,7 @@
 	let { data } = $props();
 </script>
 
-<svelte:head>
-	<title>Arkiv | Dunderligan</title>
-	<meta name="description" content="Se tidigare säsonger av Dunderligan." />
-
-	<meta property="og:title" content="Arkiv" />
-	<meta property="og:description" content="Se tidigare säsonger av Dunderligan." />
-</svelte:head>
+<Meta title="Arkiv" description="Se tidigare säsonger av Dunderligan." />
 
 <PageHeader title="Arkiv"></PageHeader>
 

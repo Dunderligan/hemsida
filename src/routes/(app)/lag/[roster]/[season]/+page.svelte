@@ -17,6 +17,7 @@
 	import { page } from '$app/state';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
 	import MatchList from '$lib/components/match/MatchList.svelte';
+	import Meta from '$lib/components/structure/Meta.svelte';
 
 	let { data } = $props();
 
@@ -50,20 +51,11 @@
 	);
 </script>
 
-<svelte:head>
-	<title>{roster.name} - {season.name} | Dunderligan</title>
-	<meta
-		name="description"
-		content="Se medlemmar och senaste matcher för {roster.name} i {season.name} av Dunderligan."
-	/>
-
-	<meta property="og:title" content={roster.name} />
-	<meta property="og:image" content={cdnImageSrc(cdnRosterLogoPath(roster.id), { width: 630 })} />
-	<meta
-		property="og:description"
-		content="Se medlemmar och senaste matcher för {roster.name} i {season.name} av Dunderligan."
-	/>
-</svelte:head>
+<Meta
+	title="{roster.name} - {season.name}"
+	description="Se medlemmar och senaste matcher för {roster.name} i {season.name} av Dunderligan."
+	ogImage={cdnImageSrc(cdnRosterLogoPath(roster.id), { width: 630 })}
+/>
 
 <PageHeader class="flex flex-col items-center gap-6 sm:flex-row">
 	<RosterLogo id={roster.id} class="size-40" imgSize={256} />

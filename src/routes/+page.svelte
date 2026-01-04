@@ -3,23 +3,12 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import { cdnSrc } from '$lib/util';
 	import MatchList from '$lib/components/match/MatchList.svelte';
+	import Meta from '$lib/components/structure/Meta.svelte';
 
 	let { data } = $props();
 </script>
 
-<svelte:head>
-	<title>Dunderligan</title>
-	<meta
-		name="description"
-		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
-	/>
-
-	<meta property="og:title" content="Dunderligan" />
-	<meta
-		property="og:description"
-		content="Välkommen till Dunderligan, Sveriges största återkommande Overwatchturnering!"
-	/>
-</svelte:head>
+<Meta />
 
 <header class="relative h-200 w-full px-4 sm:h-180">
 	<video

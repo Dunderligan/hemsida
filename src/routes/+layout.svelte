@@ -15,16 +15,6 @@
 	const theme = ThemeState.get();
 </script>
 
-<svelte:head>
-	<link rel="icon" href={favicon} />
-
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content={page.url.toString()} />
-	<meta property="og:domain" content={page.url.hostname} />
-	<meta property="og:site_name" content="Dunderligan" />
-	<meta property="og:image" content={favicon} />
-</svelte:head>
-
 <div class={[theme.current === 'dark' && 'dark']}>
 	<ProgressBar class="text-accent-500" zIndex={100} />
 

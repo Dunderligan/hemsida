@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import MatchList from '$lib/components/match/MatchList.svelte';
+	import Meta from '$lib/components/structure/Meta.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -22,13 +23,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Matcharkiv - Dunderligan</title>
-	<meta name="description" content="Bläddra igenom Dunderligans matcharkiv." />
-
-	<meta property="og:title" content="Matcharkiv - Dunderligan" />
-	<meta property="og:description" content="Bläddra igenom Dunderligans matcharkiv." />
-</svelte:head>
+<Meta title="Matcharkiv" description="Bläddra genom Dunderligans matcharkiv." />
 
 <PageHeader title="Matcharkiv"></PageHeader>
 

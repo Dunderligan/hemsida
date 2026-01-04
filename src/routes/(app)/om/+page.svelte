@@ -1,21 +1,10 @@
 <script lang="ts">
+	import Meta from '$lib/components/structure/Meta.svelte';
 	import PageHeader from '$lib/components/structure/PageHeader.svelte';
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 </script>
 
-<svelte:head>
-	<title>Om oss | Dunderligan</title>
-	<meta
-		name="description"
-		content="Om Dunderligan, Sveriges största återkommande Overwatchturnering."
-	/>
-
-	<meta property="og:title" content="Om oss" />
-	<meta
-		property="og:description"
-		content="Om Dunderligan, Sveriges största återkommande Overwatchturnering."
-	/>
-</svelte:head>
+<Meta title="Om oss" />
 
 <PageHeader title="Om oss"></PageHeader>
 

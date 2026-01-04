@@ -13,6 +13,7 @@
 	import SeasonStateChip from '$lib/components/ui/SeasonStateChip.svelte';
 	import MatchList from '$lib/components/match/MatchList.svelte';
 	import { goto } from '$app/navigation';
+	import Meta from '$lib/components/structure/Meta.svelte';
 
 	let { data } = $props();
 
@@ -103,19 +104,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{displayMode} - {division.name} - {season.name} | Dunderligan</title>
-	<meta
-		name="description"
-		content="Se tabellen och resultaten för {division.name} i {season.name} av Dunderligan."
-	/>
-
-	<meta property="og:title" content="{displayMode} - {division.name} - {season.name}" />
-	<meta
-		property="og:description"
-		content="Se tabellen och resultaten för {division.name} i {season.name} av Dunderligan."
-	/>
-</svelte:head>
+<Meta
+	title="{displayMode} - {division.name} - {season.name}"
+	description="Se tabellen och resultaten för {division.name} i {season.name} av Dunderligan."
+/>
 
 <PageHeader>
 	<h1 class="mb-3 text-center text-6xl font-extrabold sm:text-left sm:text-7xl">
