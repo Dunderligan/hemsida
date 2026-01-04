@@ -41,7 +41,7 @@
 		</div>
 
 		{#if match.vodUrl}
-			<a class="hover:underline" href={match.vodUrl}>
+			<a class="hover:underline" href={match.vodUrl} target="_blank">
 				<Icon icon="ph:arrow-square-out" />
 				VOD
 			</a>
