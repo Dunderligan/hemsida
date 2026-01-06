@@ -52,6 +52,7 @@
 	}
 
 	.trailer {
-		background-image: url('/trailer-thumbnail.avif'), linear-gradient(var(--color-accent-600));
+		background-image:
+			url('$lib/assets/images/trailer-thumbnail.avif'), linear-gradient(var(--color-accent-600));
 	}
 </style>
