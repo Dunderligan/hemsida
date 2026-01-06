@@ -15,5 +15,5 @@ export const load = async () => {
 		error(404);
 	}
 
-	redirect(303, `/stallningar/${latestSeason.slug}`);
+	redirect(302, `/stallningar/${latestSeason.slug}`);
 };

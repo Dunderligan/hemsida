@@ -6,6 +6,6 @@ export const load = async () => {
 
 	if (user) {
 		// already set up
-		redirect(303, '/');
+		redirect(302, '/');
 	}
 };

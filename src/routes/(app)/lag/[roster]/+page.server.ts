@@ -19,5 +19,5 @@ export const load = async ({ params }) => {
 		error(404);
 	}
 
-	redirect(303, `/lag/${params.roster}/${latest.seasonSlug}`);
+	redirect(302, `/lag/${params.roster}/${latest.seasonSlug}`);
 };

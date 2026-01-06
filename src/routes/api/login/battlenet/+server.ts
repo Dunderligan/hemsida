@@ -14,5 +14,5 @@ export const GET = async ({ cookies }) => {
 		sameSite: 'lax'
 	});
 
-	redirect(302, url);
+	redirect(303, url);
 };
