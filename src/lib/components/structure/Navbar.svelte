@@ -73,7 +73,7 @@
 		</div>
 
 		<div class="flex items-center gap-8">
-			<button onclick={() => theme.toggle()} class="p-2 text-lg">
+			<button onclick={() => theme.toggle()} class="p-2 text-lg" title="Byt tema">
 				<Icon icon={theme.current === 'light' ? 'ph:sun-fill' : 'ph:moon-fill'} />
 			</button>
 
@@ -86,7 +86,7 @@
 			{/if}
 
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger class="flex items-center sm:hidden">
+				<DropdownMenu.Trigger class="flex items-center sm:hidden" aria-label="Meny">
 					<Icon icon="ph:list" class="text-2xl" />
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content

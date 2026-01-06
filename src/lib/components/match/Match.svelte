@@ -62,7 +62,7 @@
 		})}
 
 		<div
-			class="hidden w-18 shrink-0 text-center text-3xl text-gray-500 sm:block dark:text-gray-400"
+			class="hidden w-18 shrink-0 text-center text-3xl text-gray-600 sm:block dark:text-gray-300"
 		>
 			{#if match.played}
 				<span class={[winner === leftTeam && 'text-accent-600 dark:text-accent-500', 'font-bold']}
@@ -101,9 +101,7 @@
 				{roster.name}
 			</a>
 		{:else}
-			<div class="ml-2 font-medium text-gray-500">
-				{match.played ? 'W/O' : 'Okänt lag'}
-			</div>
+			<div class="ml-2 font-medium text-gray-500">Okänt lag</div>
 		{/if}
 
 		{#if won}

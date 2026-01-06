@@ -1,6 +1,7 @@
-import { error, type Handle } from '@sveltejs/kit';
+import { error, type Handle, type ServerInit } from '@sveltejs/kit';
 import session from '$lib/server/session';
 import { sequence } from '@sveltejs/kit/hooks';
+import { initDb } from '$lib/server/db';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(session.TOKEN_COOKIE_NAME);
@@ -38,3 +39,7 @@ const guardAdmin: Handle = async ({ event, resolve }) => {
 };
 
 export const handle: Handle = sequence(handleAuth, guardAdmin);
+
+export const init: ServerInit = async () => {
+	await initDb();
+};
