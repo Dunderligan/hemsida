@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { TableScore } from '$lib/table';
 	import type { Roster } from '$lib/types';
+	import Icon from '../ui/Icon.svelte';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import Table from './Table.svelte';
 
@@ -68,7 +69,15 @@
 			{@const seed = isAfterLine ? index : index + 1}
 
 			<div class="relative flex items-center justify-center text-lg font-semibold">
-				{seed}
+				{#if roster.resigned}
+					<Icon
+						icon="ph:minus-circle-fill"
+						title="Laget fullföljde inte säsongen"
+						class="text-xl text-yellow-600"
+					/>
+				{:else}
+					{seed}
+				{/if}
 			</div>
 
 			<div class="flex min-w-0 items-center gap-2 py-1.5 text-lg font-semibold">

@@ -99,6 +99,7 @@ export type Roster = {
 	id: string;
 	name: string;
 	slug: string;
+	resigned?: boolean;
 };
 
 export type RosterWithGroup = Roster & {

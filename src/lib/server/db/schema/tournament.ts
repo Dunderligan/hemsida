@@ -73,6 +73,7 @@ export const roster = pgTable(
 		groupId: uuid()
 			.notNull()
 			.references(() => group.id, { onDelete: 'cascade' }),
+		resigned: boolean().notNull().default(false),
 		...timestamps
 	},
 	(t) => [unique().on(t.slug, t.seasonSlug), unique().on(t.teamId, t.seasonSlug)]

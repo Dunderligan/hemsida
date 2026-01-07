@@ -21,6 +21,7 @@
 	import AdminMembersTable from '$lib/components/table/AdminMembersTable.svelte';
 	import Notice from '$lib/components/ui/Notice.svelte';
 	import { getDivisionsBySeason } from '$lib/remote/season.remote';
+	import Checkbox from '$lib/components/ui/Checkbox.svelte';
 
 	let { data } = $props();
 
@@ -65,6 +66,7 @@
 			id: roster.id,
 			teamId: team.id,
 			name: roster.name,
+			resigned: roster.resigned,
 			members: roster.members,
 			socials: team.socials
 		});
@@ -214,6 +216,10 @@
 <AdminCard title="Inställningar">
 	<Label label="Namn">
 		<InputField bind:value={roster.name} oninput={saveCtx.setDirty} />
+	</Label>
+
+	<Label label="Resignerad">
+		<Checkbox bind:checked={roster.resigned} onCheckedChange={saveCtx.setDirty} />
 	</Label>
 
 	<Label label="Logotyp">

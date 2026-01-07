@@ -68,6 +68,7 @@ export const editRoster = command(
 		id: z.string(),
 		teamId: z.string(),
 		name: z.string(),
+		resigned: z.boolean(),
 		members: z.array(
 			z.object({
 				role: z.enum(Role),
@@ -88,14 +89,14 @@ export const editRoster = command(
 			})
 		)
 	}),
-	async ({ id, teamId, name, members, socials }) => {
+	async ({ id, teamId, name, resigned, members, socials }) => {
 		await adminGuard();
 
 		const newSlug = toSlug(name);
 
 		await db.transaction(async (tx) => {
 			await Promise.all([
-				updateName(tx, id, name, newSlug),
+				updateInfo(tx, id, name, newSlug, resigned),
 				updateMembers(tx, id, members),
 				updateSocials(tx, teamId, socials)
 			]);
@@ -105,12 +106,19 @@ export const editRoster = command(
 	}
 );
 
-async function updateName(tx: Transaction, rosterId: string, name: string, slug: string) {
+async function updateInfo(
+	tx: Transaction,
+	rosterId: string,
+	name: string,
+	slug: string,
+	resigned: boolean
+) {
 	await tx
 		.update(schema.roster)
 		.set({
 			name,
-			slug
+			slug,
+			resigned
 		})
 		.where(eq(schema.roster.id, rosterId));
 }

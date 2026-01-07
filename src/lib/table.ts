@@ -10,9 +10,10 @@ export type TableScore = {
 type ExtraTableInfo = {
 	wonAgainst: Set<string>;
 	lostAgainst: Set<string>;
+	resigned?: boolean;
 };
 
-export function calculateStandings<R extends { id: string }>(
+export function calculateStandings<R extends { id: string; resigned?: boolean }>(
 	rosters: R[],
 	matches: LogicalMatch[]
 ): {
@@ -28,7 +29,8 @@ export function calculateStandings<R extends { id: string }>(
 			mapDraws: 0,
 			matchesPlayed: 0,
 			wonAgainst: new Set(),
-			lostAgainst: new Set()
+			lostAgainst: new Set(),
+			resigned: roster.resigned
 		});
 	}
 
@@ -109,6 +111,10 @@ export function calculateStandings<R extends { id: string }>(
 
 /** Decides whether a should be seeded higher than b. */
 function compareSeed(a: TableScore & ExtraTableInfo, b: TableScore & ExtraTableInfo): number {
+	// put resigned teams at the bottom
+	if (a.resigned && !b.resigned) return 1;
+	if (!a.resigned && b.resigned) return -1;
+
 	// tiebreakers in order:
 	// - most map wins
 	// - least map losses

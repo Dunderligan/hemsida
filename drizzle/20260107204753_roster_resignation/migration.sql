@@ -1,0 +1,1 @@
+ALTER TABLE "roster" ADD COLUMN "resigned" boolean DEFAULT false NOT NULL;
