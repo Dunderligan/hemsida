@@ -205,7 +205,7 @@
 			{/if}
 		{:else}
 			{#each division.brackets as bracket (bracket.id)}
-				{#if bracket.name !== division.name}
+				{#if division.brackets.length > 1 || bracket.name !== division.name}
 					<Subheading class="mt-6 mb-4">{bracket.name}</Subheading>
 				{/if}
 

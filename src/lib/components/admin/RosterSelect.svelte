@@ -26,7 +26,7 @@
 
 <Select
 	type="single"
-	bind:value={() => selectedId ?? undefined, (value) => (selectedId = value)}
+	bind:value={() => selectedId ?? undefined, (value) => (selectedId = value ?? null)}
 	items={rosters.map
 		.values()
 		.map((roster) => ({

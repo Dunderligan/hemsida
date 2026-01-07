@@ -16,12 +16,16 @@
 
 	// don't ask
 	const verticalLineHeight = $derived(32 * Math.pow(prevMatches, 2) - 34 * prevMatches + 16);
+
+	// hide the match if only one roster is known (we assume it's a bye)
+	const hidden = $derived(match.played && (!match.rosterA || !match.rosterB));
 </script>
 
 <div
 	class={[
 		!isFirst && 'not-first-match',
 		!isLast && 'not-last-match',
+		hidden && 'invisible',
 		'relative h-[125px] w-60 rounded-lg'
 	]}
 	tabindex="0"
