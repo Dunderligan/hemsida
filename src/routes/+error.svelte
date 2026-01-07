@@ -38,7 +38,8 @@
 <style>
 	#background {
 		background-image:
-			linear-gradient(to bottom, transparent, var(--color-gray-100) 100%), url('/striped-bg.avif');
+			linear-gradient(to bottom, transparent, var(--color-gray-100) 100%),
+			url('$lib/assets/images/striped-bg.avif');
 		background-size: cover;
 		aspect-ratio: 16 / 9;
 	}
