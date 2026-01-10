@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { RosterContext } from '$lib/state/rosters.svelte';
-	import type { FullMatchWithoutOrder } from '$lib/types';
+	import type { UnresolvedMatch } from '$lib/types';
 	import { formatDate } from '$lib/util';
 	import Button from '../ui/Button.svelte';
 	import Icon from '../ui/Icon.svelte';
 
 	type Props = {
-		match: FullMatchWithoutOrder;
+		match: UnresolvedMatch;
 		canEditRosters?: boolean;
 		canDelete?: boolean;
 		ondelete?: () => void;
