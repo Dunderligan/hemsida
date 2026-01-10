@@ -8,9 +8,10 @@
 		class?: ClassValue;
 		imgSize?: number;
 		src?: string | null;
+		href?: string | null;
 	};
 
-	let { id, class: classProp, imgSize = 64, src: srcOverride }: Props = $props();
+	let { id, class: classProp, imgSize = 64, src: srcOverride, href }: Props = $props();
 
 	let element: HTMLImageElement;
 
@@ -21,10 +22,18 @@
 	}
 </script>
 
-<img
-	{src}
-	class={[classProp, 'shrink-0 rounded-[20%] object-contain']}
-	{onerror}
-	alt="Logotyp"
-	bind:this={element}
-/>
+{#if href}
+	<a {href} class="shrink-0">{@render image()}</a>
+{:else}
+	{@render image()}
+{/if}
+
+{#snippet image()}
+	<img
+		{src}
+		{onerror}
+		class={[classProp, 'shrink-0 rounded-[20%] object-contain']}
+		alt="Logotyp"
+		bind:this={element}
+	/>
+{/snippet}

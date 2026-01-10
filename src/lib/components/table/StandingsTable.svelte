@@ -68,6 +68,8 @@
 			{@const isAfterLine = playoffLine && index > playoffLine}
 			{@const seed = isAfterLine ? index : index + 1}
 
+			{@const href = `/lag/${roster.slug}/${seasonSlug}`}
+
 			<div class="relative flex items-center justify-center text-lg font-semibold">
 				{#if roster.resigned}
 					<Icon
@@ -81,9 +83,9 @@
 			</div>
 
 			<div class="flex min-w-0 items-center gap-2 py-1.5 text-lg font-semibold">
-				<RosterLogo id={roster.id} class="size-12" />
+				<RosterLogo id={roster.id} {href} class="size-12" />
 
-				<a href="/lag/{roster.slug}/{seasonSlug}" class="truncate hover:underline">{roster.name}</a>
+				<a {href} class="truncate hover:underline">{roster.name}</a>
 			</div>
 
 			<div class="flex items-center justify-center text-xl font-semibold">

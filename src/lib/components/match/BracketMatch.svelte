@@ -60,6 +60,8 @@
 	{@const won = isWinner(match, side)}
 	{@const score = matchScore(match, side)}
 
+	{@const href = `/lag/${roster?.slug}/${seasonSlug}`}
+
 	<div
 		class={[
 			classProp,
@@ -82,9 +84,9 @@
 				{match.played ? score.toString() : '?'}
 			</div>
 
-			<RosterLogo id={roster.id} class="mr-2 size-8" />
+			<RosterLogo id={roster.id} {href} class="mr-2 size-8" />
 			<a
-				href="/lag/{roster?.slug}/{seasonSlug}"
+				{href}
 				class={[
 					won && 'font-semibold text-gray-800 dark:text-gray-200',
 					'mr-auto truncate hover:underline'

@@ -23,6 +23,7 @@
 
 	const winner = $derived(matchWinner(match));
 
+	// always show main roster on the left
 	const flipped = $derived(mainRosterId === match.rosterB?.id);
 	const leftTeam = $derived(flipped ? 'B' : 'A');
 	const rightTeam = $derived(flipSide(leftTeam));
@@ -92,12 +93,11 @@
 
 	<div class={[rootClass, 'flex w-full items-center gap-2 text-gray-700 dark:text-gray-300']}>
 		{#if roster}
-			<RosterLogo id={roster.id} class="size-10 sm:size-12" />
+			{@const href = `/lag/${roster.slug}/${seasonSlug}`}
 
-			<a
-				href="/lag/{roster.slug}/{seasonSlug}"
-				class={[nameClass, 'truncate text-lg font-semibold hover:underline']}
-			>
+			<RosterLogo id={roster.id} {href} class="size-10 sm:size-12" />
+
+			<a {href} class={[nameClass, 'truncate text-lg font-semibold hover:underline']}>
 				{roster.name}
 			</a>
 		{:else}
