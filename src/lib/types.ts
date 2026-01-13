@@ -51,6 +51,13 @@ export enum MatchType {
 	BRACKET = 'bracket'
 }
 
+export enum MatchState {
+	SCHEDULED = 'scheduled',
+	PLAYED = 'played',
+	WALKOVER = 'walkover',
+	CANCELLED = 'cancelled'
+}
+
 export type BaseLeague = {
 	name: string;
 	slug: string;
@@ -128,7 +135,7 @@ export type MatchWithoutRosters = {
 	draws: number;
 	teamANote?: string | null;
 	teamBNote?: string | null;
-	played: boolean;
+	state: MatchState;
 	playedAt?: Date | null;
 	scheduledAt?: Date | null;
 	vodUrl?: string | null;
@@ -188,7 +195,7 @@ export type LogicalMatch = {
 	teamAScore: number;
 	teamBScore: number;
 	draws: number;
-	played: boolean;
+	state: MatchState;
 };
 
 export type ButtonKind = 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'negative';

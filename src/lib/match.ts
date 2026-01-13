@@ -1,4 +1,16 @@
-import type { LogicalMatch, MatchRoster, ResolvedMatch, MatchWithoutRosters } from './types';
+import {
+	type LogicalMatch,
+	type MatchRoster,
+	type ResolvedMatch,
+	type MatchWithoutRosters,
+	type UnresolvedMatch,
+	MatchState
+} from './types';
+import { v4 as uuidv4 } from 'uuid';
+
+export function hasMatchScore(match: LogicalMatch): boolean {
+	return match.state === MatchState.PLAYED || match.state === MatchState.WALKOVER;
+}
 
 /** Check if a match is played between two rosters */
 export function isMatchBetween(match: LogicalMatch, aId: string, bId: string): boolean {
@@ -23,7 +35,7 @@ export function matchScore(match: LogicalMatch, side: MatchSide): number {
 }
 
 export function matchWinner(match: LogicalMatch): MatchSide | null {
-	if (!match.played) return null;
+	if (!hasMatchScore(match)) return null;
 
 	const teamA = matchScore(match, 'A');
 	const teamB = matchScore(match, 'B');
@@ -66,4 +78,28 @@ export function compareMatchDates(a: MatchWithoutRosters, b: MatchWithoutRosters
 	if (bDate) return 1;
 
 	return 0;
+}
+
+/**
+ * Creates a new unresolved match with default values for a group.
+ * Only sets required fields, avoiding verbose null assignments.
+ */
+export function createGroupMatch(groupId: string) {
+	return {
+		id: uuidv4(),
+		groupId,
+		bracketId: null,
+		rosterAId: null,
+		rosterBId: null,
+		teamAScore: 0,
+		teamBScore: 0,
+		draws: 0,
+		teamANote: null,
+		teamBNote: null,
+		state: MatchState.SCHEDULED,
+		playedAt: null,
+		scheduledAt: null,
+		vodUrl: null,
+		nextMatchId: null
+	};
 }

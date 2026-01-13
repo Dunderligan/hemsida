@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { UnresolvedMatchWithOrder, LogicalMatch } from './types';
+import { type UnresolvedMatchWithOrder, type LogicalMatch, MatchState } from './types';
 import { isMatchBetween } from './match';
 
 export function minBracketRounds(teamCount: number): number {
@@ -70,7 +70,7 @@ export function createBracket<R extends { id: string }, M extends LogicalMatch>(
 			emptySlots--;
 
 			// automatically advance this roster
-			match.played = true;
+			match.state = MatchState.WALKOVER;
 			match.teamAScore = 3;
 
 			const nextRound = rounds[rounds.length - 2];
@@ -167,7 +167,7 @@ function createMatch(order: number, nextMatchId?: string): UnresolvedMatchWithOr
 		id: uuidv4(),
 		nextMatchId,
 		order,
-		played: false,
+		state: MatchState.SCHEDULED,
 		teamAScore: 0,
 		teamBScore: 0,
 		draws: 0

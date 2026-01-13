@@ -1,4 +1,5 @@
-import type { LogicalMatch } from './types';
+import { hasMatchScore } from './match';
+import { MatchState, type LogicalMatch } from './types';
 
 export type TableScore = {
 	mapWins: number;
@@ -35,7 +36,7 @@ export function calculateStandings<R extends { id: string; resigned?: boolean }>
 	}
 
 	for (const match of matches) {
-		if (!match.played || !match.rosterAId || !match.rosterBId) continue;
+		if (!hasMatchScore(match) || !match.rosterAId || !match.rosterBId) continue;
 
 		const teamA = rosterScores.get(match.rosterAId);
 		const teamB = rosterScores.get(match.rosterBId);

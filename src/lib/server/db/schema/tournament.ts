@@ -13,7 +13,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { timestamps, enumToPgEnum, xor } from './util';
 import { and, isNotNull, isNull, not, or, sql } from 'drizzle-orm';
-import { MatchType, Rank, Role, SocialPlatform } from '../../../types';
+import { MatchState, MatchType, Rank, Role, SocialPlatform } from '../../../types';
 
 export const season = pgTable('season', {
 	id: uuid().primaryKey().defaultRandom(),
@@ -105,6 +105,8 @@ export const rankEnum = pgEnum('rank', enumToPgEnum(Rank));
 
 export const roleEnum = pgEnum('role', enumToPgEnum(Role));
 
+export const matchStateEnum = pgEnum('match_state', enumToPgEnum(MatchState));
+
 export const member = pgTable(
 	'member',
 	{
@@ -144,7 +146,7 @@ export const match = pgTable(
 		draws: integer().notNull().default(0),
 		teamANote: text(),
 		teamBNote: text(),
-		played: boolean().notNull().default(false),
+		state: matchStateEnum().notNull().default(MatchState.SCHEDULED),
 		playedAt: timestamp(),
 		scheduledAt: timestamp(),
 		vodUrl: text(),

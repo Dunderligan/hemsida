@@ -66,7 +66,6 @@ export const matchRosterQuery = entityQuery;
  * Default ordering for matches within a group.
  */
 export const groupMatchOrder = {
-	played: 'asc', // planned matches first
 	playedAt: 'desc', // played matches by most recent first
 	scheduledAt: 'asc' // order planned by nearest scheduled first
 } as const;
@@ -81,7 +80,7 @@ export const fullMatchColumns = {
 	teamANote: true,
 	teamBNote: true,
 	nextMatchId: true,
-	played: true,
+	state: true,
 	vodUrl: true,
 	playedAt: true,
 	scheduledAt: true

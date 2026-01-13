@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RosterContext } from '$lib/state/rosters.svelte';
-	import type { UnresolvedMatch } from '$lib/types';
+	import { MatchState, type UnresolvedMatch } from '$lib/types';
 	import { formatDate } from '$lib/util';
 	import Button from '../ui/Button.svelte';
 	import Icon from '../ui/Icon.svelte';
@@ -16,18 +16,23 @@
 
 	const rosterCtx = RosterContext.get();
 
-	const date = $derived(match.played ? match.playedAt : match.scheduledAt);
+	const { icon, label, date } = $derived(
+		{
+			played: { icon: 'ph:check-circle', label: 'Spelad', date: match.playedAt },
+			scheduled: { icon: 'ph:calendar-blank', label: 'Planerad', date: match.scheduledAt },
+			walkover: { icon: 'ph:warning', label: 'Walkover' },
+			cancelled: { icon: 'ph:x-circle', label: 'Inställd' }
+		}[match.state]
+	);
 </script>
 
 <div class="relative rounded-lg bg-gray-100 px-1 py-1 dark:bg-gray-900">
 	<div class="px-4 py-1 text-sm font-medium text-gray-600 dark:text-gray-400">
-		<Icon icon={match.played ? 'ph:check-circle' : 'ph:calendar-blank'} />
-		<span>{match.played ? 'Spelad' : 'Planerad'}</span>
+		<Icon {icon} />
+		<span>{label}</span>
 
 		{#if date}
 			{formatDate(date)}
-		{:else}
-			<span>(inget datum)</span>
 		{/if}
 	</div>
 
@@ -53,7 +58,9 @@
 
 	<div class="flex items-center py-0.5 text-gray-700 dark:text-gray-300">
 		<div class="flex w-8 items-center justify-center text-xl font-bold">
-			{match.played ? score.toString() : '-'}
+			{match.state === MatchState.WALKOVER || match.state === MatchState.PLAYED
+				? score.toString()
+				: '-'}
 		</div>
 
 		{#if roster}

@@ -6,13 +6,14 @@ import {
 	nestedDivisionQuery,
 	nestedGroupQuery
 } from '$lib/server/db/helpers';
+import { MatchState } from '$lib/types';
 
-const getMatches = async ({ played }: { played: boolean }) => {
+const getMatches = async ({ state }: { state: MatchState }) => {
 	return await db.query.match.findMany({
 		limit: 3,
 		orderBy: groupMatchOrder,
 		where: {
-			played,
+			state,
 			rosterAId: {
 				isNotNull: true
 			},
@@ -25,7 +26,7 @@ const getMatches = async ({ played }: { played: boolean }) => {
 			teamAScore: true,
 			teamBScore: true,
 			draws: true,
-			played: true,
+			state: true,
 			playedAt: true,
 			scheduledAt: true,
 			vodUrl: true
@@ -41,8 +42,8 @@ const getMatches = async ({ played }: { played: boolean }) => {
 
 export const load = async () => {
 	const [upcoming, latest] = await Promise.all([
-		getMatches({ played: false }),
-		getMatches({ played: true })
+		getMatches({ state: MatchState.SCHEDULED }),
+		getMatches({ state: MatchState.PLAYED })
 	]);
 
 	return {

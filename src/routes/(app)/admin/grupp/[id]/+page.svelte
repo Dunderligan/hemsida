@@ -14,12 +14,12 @@
 	import { ConfirmContext } from '$lib/state/confirm.svelte';
 	import { RosterContext } from '$lib/state/rosters.svelte';
 	import { SaveContext } from '$lib/state/save.svelte';
-	import { v4 as uuidv4 } from 'uuid';
 	import CreateRosterDialog from '$lib/components/admin/CreateRosterDialog.svelte';
 	import { deleteGroup, updateGroup } from '$lib/remote/group.remote';
 	import { createRoster } from '$lib/remote/roster.remote';
-	import { isInMatch } from '$lib/match.js';
+	import { createGroupMatch, isInMatch } from '$lib/match.js';
 	import RosterSelect from '$lib/components/admin/RosterSelect.svelte';
+	import { MatchState } from '$lib/types.js';
 
 	const { data } = $props();
 
@@ -93,26 +93,7 @@
 	}
 
 	function addMatchAndEdit() {
-		// TODO: find a way to do this without _this_, while keeping TS happy
-		const match = {
-			id: uuidv4(),
-			groupId: data.group.id,
-			played: false,
-			bracketId: null,
-			draws: 0,
-			teamAScore: 0,
-			teamBScore: 0,
-			nextMatchId: null,
-			playedAt: null,
-			rosterAId: null,
-			rosterBId: null,
-			scheduledAt: null,
-			vodUrl: null,
-			createdAt: null,
-			order: null,
-			teamANote: null,
-			teamBNote: null
-		};
+		const match = createGroupMatch(data.group.id);
 
 		group.matches.unshift(match);
 		rosterCtx.editMatch(group.matches[0]);

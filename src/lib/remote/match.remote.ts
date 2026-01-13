@@ -7,6 +7,7 @@ import {
 	nestedDivisionQuery,
 	nestedGroupQuery
 } from '$lib/server/db/helpers';
+import { MatchState } from '$lib/types';
 import z from 'zod';
 
 const PAGE_SIZE = 10;
@@ -21,6 +22,9 @@ export const queryMatches = query(
 		page: z.number().min(0).default(0)
 	}),
 	async ({ rosterId, divisionId, groupId, played, page }) => {
+		const state =
+			played === undefined ? undefined : played ? MatchState.PLAYED : MatchState.SCHEDULED;
+
 		const results = await db.query.match.findMany({
 			// retrieve one extra to determine if there should be a next page
 			limit: PAGE_SIZE + 1,
@@ -40,7 +44,7 @@ export const queryMatches = query(
 								}
 							},
 							{
-								played: true
+								state: MatchState.PLAYED
 							}
 						]
 					},
@@ -56,7 +60,7 @@ export const queryMatches = query(
 						]
 					}
 				],
-				played,
+				state,
 				groupId,
 				...(divisionId && {
 					group: {

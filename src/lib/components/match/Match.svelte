@@ -8,7 +8,7 @@
 		matchScore,
 		matchNote
 	} from '$lib/match';
-	import type { ClassValue, ResolvedMatchWithContext } from '$lib/types';
+	import { MatchState, type ClassValue, type ResolvedMatchWithContext } from '$lib/types';
 	import Icon from '../ui/Icon.svelte';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import MatchInfoRow from './MatchInfoRow.svelte';
@@ -67,7 +67,7 @@
 		<div
 			class="hidden w-18 shrink-0 text-center text-3xl text-gray-600 sm:block dark:text-gray-400"
 		>
-			{#if match.played}
+			{#if match.state === MatchState.PLAYED || match.state === MatchState.WALKOVER}
 				<span class={[winner === leftTeam && 'text-accent-600 dark:text-accent-500', 'font-bold']}
 					>{matchScore(match, leftTeam)}
 				</span>
@@ -77,6 +77,8 @@
 				<span class={[winner === rightTeam && 'text-accent-600 dark:text-accent-500', 'font-bold']}
 					>{matchScore(match, rightTeam)}</span
 				>
+			{:else if match.state === MatchState.CANCELLED}
+				<span class="text-3xl font-semibold">x - x</span>
 			{:else}
 				<span class="font-semibold">---</span>
 			{/if}
@@ -115,7 +117,7 @@
 			<Icon icon="ph:crown-simple-fill" class="text-xl text-accent-600" title="Vinnare" />
 		{/if}
 
-		{#if match.played}
+		{#if match.state === MatchState.PLAYED || match.state === MatchState.WALKOVER}
 			<div
 				class={[
 					won ? 'text-accent-600' : 'text-gray-500',
