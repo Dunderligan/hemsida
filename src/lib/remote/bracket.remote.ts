@@ -7,7 +7,7 @@ import { adminGuard } from './auth.remote';
 import { createBracket } from '$lib/bracket';
 import { error } from '@sveltejs/kit';
 import { sortBySeed } from '$lib/table';
-import type { UnresolvedMatchWithOrder } from '$lib/types';
+import { MatchState, type UnresolvedMatchWithOrder } from '$lib/types';
 import { fullMatchColumns, matchRosterQuery } from '$lib/server/db/helpers';
 
 export const generateBracket = command(
@@ -123,7 +123,9 @@ async function fetchDivision(divisionId: string) {
 					rosters: matchRosterQuery,
 					matches: {
 						where: {
-							played: true
+							state: {
+								OR: [MatchState.PLAYED, MatchState.WALKOVER]
+							}
 						},
 						columns: fullMatchColumns
 					}

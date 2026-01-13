@@ -95,7 +95,7 @@ export const load = async ({ params }) => {
 			teamBNote: true,
 			playedAt: true,
 			scheduledAt: true,
-			played: true,
+			state: true,
 			vodUrl: true
 		},
 		with: {

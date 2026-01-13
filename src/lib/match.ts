@@ -1,4 +1,14 @@
-import type { LogicalMatch, MatchRoster, ResolvedMatch, MatchWithoutRosters } from './types';
+import {
+	type LogicalMatch,
+	type MatchRoster,
+	type ResolvedMatch,
+	type MatchWithoutRosters,
+	MatchState
+} from './types';
+
+export function hasMatchScore(match: LogicalMatch): boolean {
+	return match.state === MatchState.PLAYED || match.state === MatchState.WALKOVER;
+}
 
 /** Check if a match is played between two rosters */
 export function isMatchBetween(match: LogicalMatch, aId: string, bId: string): boolean {
@@ -23,7 +33,7 @@ export function matchScore(match: LogicalMatch, side: MatchSide): number {
 }
 
 export function matchWinner(match: LogicalMatch): MatchSide | null {
-	if (!match.played) return null;
+	if (!hasMatchScore(match)) return null;
 
 	const teamA = matchScore(match, 'A');
 	const teamB = matchScore(match, 'B');

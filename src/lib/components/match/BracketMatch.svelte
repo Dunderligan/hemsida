@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ResolvedMatch } from '$lib/types';
+	import { MatchState, type ResolvedMatch } from '$lib/types';
 	import RosterLogo from '../ui/RosterLogo.svelte';
 	import { matchRoster, isWinner, type MatchSide, matchScore, matchNote } from '$lib/match';
 	import MatchInfoRow from './MatchInfoRow.svelte';
@@ -70,7 +70,7 @@
 		class={[
 			classProp,
 			'flex h-[49px] items-center pr-4 font-medium text-gray-700 dark:text-gray-300',
-			match.played
+			match.state === MatchState.PLAYED
 				? won
 					? 'bg-gray-200 dark:bg-gray-800'
 					: 'bg-gray-50 dark:bg-gray-900'
@@ -80,12 +80,12 @@
 		{#if roster}
 			<div
 				class={[
-					match.played ? 'text-2xl font-extrabold' : 'text-lg',
+					match.state === MatchState.PLAYED ? 'text-2xl font-extrabold' : 'text-lg',
 					won ? 'text-accent-600 dark:text-accent-500' : 'text-gray-500 dark:text-gray-400',
 					'flex h-full shrink-0 items-center justify-center px-4 text-center'
 				]}
 			>
-				{match.played ? score.toString() : '?'}
+				{match.state === MatchState.PLAYED ? score.toString() : '?'}
 			</div>
 
 			<RosterLogo id={roster.id} {href} class="mr-2 size-8" />
@@ -104,7 +104,7 @@
 			{/if}
 		{:else}
 			<div class="grow text-center font-medium">
-				{match.played ? '---' : '???'}
+				{match.state === MatchState.PLAYED ? '---' : '???'}
 			</div>
 		{/if}
 	</div>

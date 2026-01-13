@@ -1,4 +1,5 @@
 import z from 'zod';
+import { MatchState } from './types';
 
 export const matchSchema = z.object({
 	id: z.uuid(),
@@ -9,7 +10,7 @@ export const matchSchema = z.object({
 	draws: z.int(),
 	teamANote: z.string().nullish(),
 	teamBNote: z.string().nullish(),
-	played: z.boolean(),
+	state: z.enum(MatchState),
 	vodUrl: z.url().nullish(),
 	scheduledAt: z.date().nullish(),
 	playedAt: z.date().nullish()

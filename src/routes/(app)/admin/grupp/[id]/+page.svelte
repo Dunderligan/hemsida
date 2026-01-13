@@ -20,6 +20,7 @@
 	import { createRoster } from '$lib/remote/roster.remote';
 	import { isInMatch } from '$lib/match.js';
 	import RosterSelect from '$lib/components/admin/RosterSelect.svelte';
+	import { MatchState } from '$lib/types.js';
 
 	const { data } = $props();
 
@@ -97,7 +98,7 @@
 		const match = {
 			id: uuidv4(),
 			groupId: data.group.id,
-			played: false,
+			state: MatchState.SCHEDULED,
 			bracketId: null,
 			draws: 0,
 			teamAScore: 0,

@@ -66,7 +66,6 @@
 		for (let i = 0; i < rounds.length - 1; i++) {
 			for (let j = 0; j < rounds[i].length; j++) {
 				const match = rounds[i][j];
-				if (!match.rosterAId || !match.rosterBId) continue;
 
 				const nextMatch = rounds[i + 1][Math.floor(j / 2)];
 				const isRosterSideAInNext = j % 2 == 0;

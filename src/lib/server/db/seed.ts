@@ -1,6 +1,6 @@
 import { reset } from 'drizzle-seed';
 import { schema } from '.';
-import { Rank, Role } from '$lib/types';
+import { MatchState, Rank, Role } from '$lib/types';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 function rand() {
@@ -227,7 +227,7 @@ export async function seed(db: PostgresJsDatabase<typeof schema>) {
 						rosterBId: groupRosters[j].id,
 						teamAScore,
 						teamBScore,
-						played: true,
+						state: MatchState.PLAYED,
 						playedAt: new Date(),
 						scheduledAt: new Date(),
 						draws: 3 - (teamAScore + teamBScore)

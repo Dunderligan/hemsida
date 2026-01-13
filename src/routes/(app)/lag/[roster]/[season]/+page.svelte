@@ -18,6 +18,7 @@
 	import Subheading from '$lib/components/ui/Subheading.svelte';
 	import MatchList from '$lib/components/match/MatchList.svelte';
 	import Meta from '$lib/components/structure/Meta.svelte';
+	import { MatchState } from '$lib/types.js';
 
 	let { data } = $props();
 
@@ -28,8 +29,16 @@
 		season.legacyRanks ? averageLegacyRank(roster.members) : averageRank(roster.members)
 	);
 
-	const upcomingMatches = $derived(roster.matches.filter((match) => !match.played));
-	const playedMatches = $derived(roster.matches.filter((match) => match.played));
+	const playedMatches = $derived(
+		roster.matches.filter(
+			(match) => match.state === MatchState.PLAYED || match.state === MatchState.WALKOVER
+		)
+	);
+	const upcomingMatches = $derived(
+		roster.matches.filter(
+			(match) => match.state === MatchState.SCHEDULED || match.state === MatchState.CANCELLED
+		)
+	);
 
 	const rosterTabItems = $derived(
 		team.rosters

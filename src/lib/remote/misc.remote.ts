@@ -1,6 +1,6 @@
 import { command } from '$app/server';
 import { db, schema } from '$lib/server/db';
-import { Rank, Role } from '$lib/types';
+import { MatchState, Rank, Role } from '$lib/types';
 import z from 'zod';
 import { adminGuard } from './auth.remote';
 import { toSlug } from '$lib/util';
@@ -155,7 +155,7 @@ async function insertGroup(
 		await tx.insert(schema.match).values({
 			scheduledAt: new Date(matchInput.date),
 			playedAt: new Date(matchInput.date),
-			played: true,
+			state: MatchState.PLAYED,
 			groupId: group.id,
 			rosterAId: rosterMap[matchInput.rosterA],
 			rosterBId: rosterMap[matchInput.rosterB],

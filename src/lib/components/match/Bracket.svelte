@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ResolvedMatch } from '$lib/types';
+	import { MatchState, type ResolvedMatch } from '$lib/types';
 	import BracketMatch from './BracketMatch.svelte';
 
 	type Props = {
@@ -13,7 +13,7 @@
 		if (!match) return true;
 
 		// hide the match if only one roster is known (we assume it's a bye)
-		return match.played && (!match.rosterA || !match.rosterB);
+		return match.state === MatchState.PLAYED && (!match.rosterA || !match.rosterB);
 	}
 </script>
 

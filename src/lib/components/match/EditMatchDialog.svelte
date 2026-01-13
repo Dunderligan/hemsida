@@ -8,6 +8,9 @@
 	import DateInput from '../ui/DateInput.svelte';
 	import { Accordion } from 'bits-ui';
 	import Icon from '../ui/Icon.svelte';
+	import { MatchState } from '$lib/types';
+	import Match from './Match.svelte';
+	import Select from '../ui/Select.svelte';
 
 	const rosterCtx = RosterContext.get();
 	const saveCtx = SaveContext.get();
@@ -16,9 +19,20 @@
 
 	let open = $derived(match !== null);
 
+	const specialState = $derived(
+		match?.state === MatchState.WALKOVER || match?.state === MatchState.CANCELLED
+			? match.state
+			: null
+	);
+
+	const hasAdvancedSetting = $derived(
+		match && (match.teamANote || match.teamBNote || match.draws > 0 || match.vodUrl || specialState)
+	);
+
 	$effect(() => {
-		if (match) {
-			match.played = match.teamAScore > 0 || match.teamBScore > 0;
+		if (match && !specialState) {
+			const played = match.teamAScore > 0 || match.teamBScore > 0 || match.draws > 0;
+			match.state = played ? MatchState.PLAYED : MatchState.SCHEDULED;
 		}
 	});
 </script>
@@ -76,10 +90,18 @@
 		</div>
 
 		<Label label="Planerad">
-			<DateInput bind:value={match.scheduledAt} oninput={saveCtx.setDirty} />
+			<DateInput
+				bind:value={match.scheduledAt}
+				oninput={saveCtx.setDirty}
+				disabled={match.state !== MatchState.SCHEDULED}
+			/>
 		</Label>
 		<Label label="Spelad">
-			<DateInput bind:value={match.playedAt} oninput={saveCtx.setDirty} disabled={!match.played} />
+			<DateInput
+				bind:value={match.playedAt}
+				oninput={saveCtx.setDirty}
+				disabled={match.state !== MatchState.PLAYED}
+			/>
 		</Label>
 
 		<Accordion.Root type="single">
@@ -90,13 +112,28 @@
 					<Icon icon="ph:gear-six" class="inline-block" />
 					Fler inställningar
 
-					{#if match.teamANote || match.teamBNote || match.draws > 0 || match.vodUrl}
+					{#if hasAdvancedSetting}
 						<Icon icon="ph:circle-fill" class="ml-auto text-accent-600" />
 					{/if}
 				</Accordion.Trigger>
 				<Accordion.Content
 					class="space-y-2 rounded-b-md border-x-2 border-b-2 border-gray-100 px-6 py-4 dark:border-gray-800"
 				>
+					<Label label="Status">
+						<Select
+							type="single"
+							class="grow"
+							items={[
+								{ label: 'Walkover', value: MatchState.WALKOVER },
+								{ label: 'Inställd', value: MatchState.CANCELLED }
+							]}
+							placeholder="Ingen"
+							bind:value={() => specialState?.toString(), (v) => (match.state = v as MatchState)}
+							onValueChange={saveCtx.setDirty}
+							canClear
+						/>
+					</Label>
+
 					<Label label="Draws">
 						<InputField
 							bind:value={match.draws}

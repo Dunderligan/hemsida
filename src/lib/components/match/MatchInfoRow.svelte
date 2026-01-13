@@ -1,5 +1,11 @@
 <script lang="ts">
-	import type { ClassValue, NestedBracket, NestedGroup, MatchWithoutRosters } from '$lib/types';
+	import {
+		type ClassValue,
+		type NestedBracket,
+		type NestedGroup,
+		type MatchWithoutRosters,
+		MatchState
+	} from '$lib/types';
 	import { formatDate, formatDateTime } from '$lib/util';
 	import Icon from '../ui/Icon.svelte';
 
@@ -22,6 +28,21 @@
 	}: Props = $props();
 
 	const division = $derived(group ? group.division : bracket ? bracket.division : null);
+
+	const { icon, label, date } = $derived(
+		{
+			played: {
+				date: match.playedAt ? formatDate(match.playedAt) : 'Okänt datum'
+			},
+			scheduled: {
+				icon: 'ph:calendar-blank',
+				label: 'Planerad',
+				date: match.scheduledAt ? formatDateTime(match.scheduledAt) : null
+			},
+			walkover: { icon: 'ph:warning', label: 'Walkover' },
+			cancelled: { icon: 'ph:x-circle', label: 'Inställd' }
+		}[match.state]
+	);
 </script>
 
 <div
@@ -35,26 +56,25 @@
 		<Icon icon="ph:trophy" title="Slutspelsmatch" class="mb-1" />
 	{/if}
 
-	{#if match.played}
-		<div>
-			{match.playedAt ? formatDate(match.playedAt) : 'Okänt datum'}
-		</div>
-
-		{#if match.vodUrl}
-			<a class="hover:underline" href={match.vodUrl} target="_blank" rel="noopener noreferrer">
-				<Icon icon="ph:arrow-square-out" />
-				VOD
-			</a>
+	<div>
+		{#if icon}
+			<Icon {icon} />
 		{/if}
-	{:else}
-		<div>
-			<Icon icon="ph:calendar-blank" />
-			Planerad
 
-			{#if match.scheduledAt}
-				{formatDateTime(match.scheduledAt)}
-			{/if}
-		</div>
+		{#if label}
+			{label}
+		{/if}
+
+		{#if date}
+			{date}
+		{/if}
+	</div>
+
+	{#if match.vodUrl}
+		<a class="hover:underline" href={match.vodUrl} target="_blank" rel="noopener noreferrer">
+			<Icon icon="ph:arrow-square-out" />
+			VOD
+		</a>
 	{/if}
 
 	{#if division && !hideDivision}

@@ -2,7 +2,7 @@ import { compareMatchDates } from '$lib/match';
 import { db } from '$lib/server/db';
 import { fullMatchColumns, groupMatchOrder, divisionOrder } from '$lib/server/db/helpers';
 import { calculateStandings } from '$lib/table';
-import type { LogicalMatch } from '$lib/types';
+import { MatchState, type LogicalMatch } from '$lib/types';
 import { aggregateGroups } from '$lib/util';
 import { error } from '@sveltejs/kit';
 
@@ -93,8 +93,12 @@ export const load = async ({ params }) => {
 			}
 
 			divisionMatches.sort((a, b) => compareMatchDates(a, b));
-			const latestMatches = divisionMatches.filter((match) => match.played).slice(0, 3);
-			const upcomingMatches = divisionMatches.filter((match) => !match.played).slice(0, 3);
+			const latestMatches = divisionMatches
+				.filter((match) => match.state === MatchState.PLAYED)
+				.slice(0, 3);
+			const upcomingMatches = divisionMatches
+				.filter((match) => match.state === MatchState.SCHEDULED)
+				.slice(0, 3);
 
 			return {
 				rosters,
