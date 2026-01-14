@@ -3,7 +3,10 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import errorImage from '$lib/assets/images/error.avif';
+	import Meta from '$lib/components/structure/Meta.svelte';
 </script>
+
+<Meta title={page.status.toString()} description="Ett fel uppstod" />
 
 <div id="background" class="fixed top-0 min-h-140 w-full min-w-lg"></div>
 
@@ -18,10 +21,10 @@
 	<PageSection topMargin={false} class="text-center">
 		<img src={errorImage} class="mx-auto -mt-6 size-60" alt="Zenyatta spray" />
 
-		<h1 class="-mt-2 text-center text-8xl font-bold text-gray-900">
+		<h1 class="-mt-2 text-center text-8xl font-bold text-gray-900 dark:text-gray-100">
 			{page.status}
 		</h1>
-		<h2 class="text-lg font-medium text-gray-700">Något gick fel</h2>
+		<h2 class="text-lg font-medium text-gray-700 dark:text-gray-300">Något gick fel</h2>
 
 		{#if page.status === 404}
 			<Button
