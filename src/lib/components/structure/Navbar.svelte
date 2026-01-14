@@ -7,7 +7,7 @@
 	import { logout } from '$lib/remote/auth.remote';
 	import { ThemeState } from '$lib/state/theme.svelte';
 	import Dropdown from '../ui/Dropdown.svelte';
-	import logo from '$lib/assets/images/logo.avif';
+	import logo from '$lib/assets/images/logo.webp';
 
 	type Props = {
 		dark?: boolean;

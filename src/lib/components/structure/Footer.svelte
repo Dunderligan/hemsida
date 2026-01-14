@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import Icon from '../ui/Icon.svelte';
 	import TeamSocial from '../ui/TeamSocial.svelte';
-	import logo from '$lib/assets/images/logo.avif';
+	import logo from '$lib/assets/images/logo.webp';
 	import lysatorLogo from '$lib/assets/images/lysator.svg';
 
 	const socials = [

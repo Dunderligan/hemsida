@@ -9,9 +9,9 @@
 	let { data } = $props();
 </script>
 
-<Meta title="Arkiv" description="Se tidigare säsonger av Dunderligan." />
+<Meta title="Arkiv" description="Se tidigare säsonger av Dunderligan samt matcharkivet." />
 
-<PageHeader title="Arkiv"></PageHeader>
+<PageHeader title="Arkiv" subtitle="Bläddra genom säsonger av Dunderligan" />
 
 <PageSection>
 	<Subheading class="mb-4">Säsonger</Subheading>

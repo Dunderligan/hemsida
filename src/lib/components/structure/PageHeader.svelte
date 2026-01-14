@@ -5,10 +5,11 @@
 	type Props = {
 		class?: ClassValue;
 		title?: string;
+		subtitle?: string;
 		children?: Snippet;
 	};
 
-	let { children, title, class: classProp }: Props = $props();
+	let { children, title, subtitle, class: classProp }: Props = $props();
 </script>
 
 <header
@@ -21,6 +22,14 @@
 		<h1 class="text-center font-display text-6xl font-extrabold sm:text-left sm:text-7xl">
 			{title}
 		</h1>
+	{/if}
+
+	{#if subtitle}
+		<div
+			class="mt-2 mb-1 text-center text-xl font-semibold text-gray-800 sm:text-left dark:text-gray-300"
+		>
+			{subtitle}
+		</div>
 	{/if}
 
 	{@render children?.()}

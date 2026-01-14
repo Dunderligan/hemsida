@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import favicon from '$lib/assets/images/favicon.png';
+	import logo from '$lib/assets/images/logo.webp';
 
 	type Props = {
 		title?: string;
@@ -14,7 +14,7 @@
 	let {
 		title,
 		description = 'Välkommen till Dunderligan, Sveriges främsta Overwatchturnerning!',
-		ogImage = favicon,
+		ogImage = logo,
 		ogImageAlt,
 		ogImageWidth,
 		ogImageHeight

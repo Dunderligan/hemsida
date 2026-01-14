@@ -30,7 +30,7 @@
 			class={[
 				center ? 'text-center ' : 'text-left',
 				i === 0 && !center && 'pl-6',
-				'__table-header mb-0.5 bg-gray-50 py-2 font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300'
+				'__table-header mb-0.5 bg-gray-50 py-2 font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400'
 			]}
 			{...title ? { title, tabindex: 0, role: 'tooltip' } : {}}
 		>

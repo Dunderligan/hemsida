@@ -8,13 +8,7 @@
 
 <Meta title="Om oss" />
 
-<PageHeader title="Om oss">
-	<div
-		class="mt-2 mb-1 text-center text-xl font-semibold text-gray-800 sm:text-left dark:text-gray-300"
-	>
-		Lite om turneringen och våran vision
-	</div>
-</PageHeader>
+<PageHeader title="Om oss" subtitle="Lite om turneringen och våran vision" />
 
 <PageSection class="gap-2 space-y-18 text-lg font-medium">
 	{@render card(
@@ -54,7 +48,7 @@
 		<img src={image} {alt} class="lg:w-110" />
 
 		<div class="px-10 py-8">
-			<h3 class="mb-2 text-xl font-semibold">{title}</h3>
+			<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
 
 			<p>
 				{@html text}
