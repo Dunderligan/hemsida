@@ -74,6 +74,8 @@ export const updateUsers = command(
 		)
 	}),
 	async ({ users }) => {
+		// if we get a lot of people who log in, this might need to be split up to
+		// update individual users instead of everyone at once
 		await superAdminGuard();
 
 		await db.transaction(async (tx) => {

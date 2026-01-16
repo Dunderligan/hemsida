@@ -10,7 +10,7 @@ import { schema } from '$lib/server/db';
  * Commonly used for fetching for rosters, groups, brackets, divisions and seasons
  * (collectively "entities") in nested queries.
  */
-// TODO: find a better name for this
+// TODO: find a better name for this?
 export const entityQuery = {
 	columns: {
 		id: true,

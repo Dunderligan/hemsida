@@ -1,6 +1,9 @@
 import { hasMatchScore } from './match';
-import { MatchState, type LogicalMatch } from './types';
+import { type LogicalMatch } from './types';
 
+/**
+ * The score of a team in the standings table.
+ */
 export type TableScore = {
 	mapWins: number;
 	mapLosses: number;
@@ -8,12 +11,22 @@ export type TableScore = {
 	matchesPlayed: number;
 };
 
+/**
+ * Additional per-team data used during the calculation of standings (particularly tiebreakers).
+ */
 type ExtraTableInfo = {
 	wonAgainst: Set<string>;
 	lostAgainst: Set<string>;
 	resigned?: boolean;
 };
 
+/**
+ * Calculates scores and standings for a list of rosters, according to the scores of the given matches
+ * and the tournament's (current) tiebreakers.
+ *
+ * The result is sorted from highest to lowest seed (as usually displayed in a table).
+ * Resigned rosters are placed at the bottom of the table (that is last in the result).
+ */
 export function calculateStandings<R extends { id: string; resigned?: boolean }>(
 	rosters: R[],
 	matches: LogicalMatch[]
@@ -80,28 +93,29 @@ export function calculateStandings<R extends { id: string; resigned?: boolean }>
 		const [_rosterAId, rosterAScore] = sortedScores[i];
 		const [_rosterBId, rosterBScore] = sortedScores[i + 1];
 
+		// check if we did resolve the tie using the standard tiebreakers
 		if (compareSeed(rosterAScore, rosterBScore) !== 0) {
 			continue;
 		}
 
-		// a lower number here means a higher seed
 		const [highestBeatenA, lowestLostToA] = highestAndLowestLostTo(rosterAScore, sortedScores);
 		const [highestBeatenB, lowestLostToB] = highestAndLowestLostTo(rosterBScore, sortedScores);
 
+		// keep in mind that a lower seed is better (i.e. index 0 is highest seed)
 		const aShouldBeHigher =
-			(highestBeatenA !== null && highestBeatenB !== null && highestBeatenB - highestBeatenA) ||
-			(lowestLostToA !== null && lowestLostToB !== null && lowestLostToA - lowestLostToB) ||
-			0;
+			(highestBeatenA !== null && highestBeatenB !== null && highestBeatenB - highestBeatenA) || // a beat a higher seed
+			(lowestLostToA !== null && lowestLostToB !== null && lowestLostToA - lowestLostToB) || // a lost to a lower seed
+			0; // still tied :/
 
 		if (aShouldBeHigher > 0) {
-			// already correct
+			// already correct, do nothing
 		} else if (aShouldBeHigher < 0) {
 			// swap
 			[sortedScores[i], sortedScores[i + 1]] = [sortedScores[i + 1], sortedScores[i]];
 		}
 	}
 
-	// filter out our extra info
+	// filter out our extra info out of the result
 	const result = sortedScores.map(([rosterId, { wonAgainst, lostAgainst, ...score }]) => ({
 		rosterId,
 		score
@@ -126,10 +140,11 @@ function compareSeed(a: TableScore & ExtraTableInfo, b: TableScore & ExtraTableI
 	);
 }
 
+/** Returns the indicies of the highest beaten and lowest lost to opponents of a roster. */
 function highestAndLowestLostTo(
 	score: TableScore & ExtraTableInfo,
 	sortedScores: [string, TableScore & ExtraTableInfo][]
-) {
+): [number | null, number | null] {
 	let highestBeaten: number | null = null;
 	let lowestLostTo: number | null = null;
 
@@ -147,6 +162,7 @@ function highestAndLowestLostTo(
 	return [highestBeaten, lowestLostTo];
 }
 
+/** Sorts rosters in-place according to their seed, as calculated by the calculateStandings function. */
 export function sortBySeed<R extends { id: string }>(rosters: R[], matches: LogicalMatch[]) {
 	const seeds = new Map(
 		calculateStandings(rosters, matches).map((row, seed) => [row.rosterId, seed])

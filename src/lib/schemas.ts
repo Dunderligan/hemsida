@@ -1,6 +1,7 @@
 import z from 'zod';
 import { MatchState } from './types';
 
+/** Zod schema for remote functions that take matches as arguments. */
 export const matchSchema = z.object({
 	id: z.uuid(),
 	rosterAId: z.string().nullish(),

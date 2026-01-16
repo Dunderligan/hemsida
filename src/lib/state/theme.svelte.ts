@@ -1,10 +1,11 @@
 import { browser } from '$app/environment';
-import { deleteCookie, setCookie } from '$lib/util';
+import { setCookie } from '$lib/util';
 import { defineContext } from './util';
 
 const { get, set } = defineContext<ThemeState>('$_theme_state');
 
-/** Context for light/dark mode.
+/**
+ * Context for light/dark mode.
  *
  * Here's an overview of the theme system:
  * - On load, the server reads the `theme` cookie of the client (see root +layout.server.ts).

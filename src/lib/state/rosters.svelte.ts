@@ -3,6 +3,11 @@ import { defineContext } from './util';
 
 const { get, set } = defineContext<RosterContext>('$_roster_state');
 
+/**
+ * Context for the currently "in-scope" rosters for an admin page.
+ * Also contains logic for editing a match (EditMatchDialog required on the page).
+ * For example, in the division edit page, this will contain all rosters in that division's groups.
+ */
 export class RosterContext {
 	static get = get;
 	static set = set;
@@ -28,6 +33,7 @@ export class RosterContext {
 		this.editingMatch = null;
 	};
 
+	/** Looks up a roster by id. */
 	find = (id?: string | null) => {
 		return id ? this.map.get(id) : null;
 	};

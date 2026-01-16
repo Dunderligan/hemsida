@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { seasonState } from '$lib/util';
+	import type { SeasonState } from '$lib/types';
 	import Icon from './Icon.svelte';
 
-	type Props = { state: 'upcoming' | 'ongoing' | 'ended' };
+	type Props = { state: SeasonState };
 
 	let { state }: Props = $props();
 

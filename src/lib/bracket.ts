@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { type UnresolvedMatchWithOrder, type LogicalMatch, MatchState } from './types';
 import { isMatchBetween } from './match';
 
+/** Returns the minimum number of rounds needed in a bracket to accommodate a number of teams. */
 export function minBracketRounds(teamCount: number): number {
 	if (teamCount < 2) {
 		return 0;

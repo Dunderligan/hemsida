@@ -1,114 +1,18 @@
 import slugify from 'slugify';
-import {
-	Rank,
-	SocialPlatform,
-	type FullRank,
-	type NestedGroup,
-	type Role,
-	type NestedDivision,
-	type NullableFullRank,
-	type NullableLegacyRank,
-	type LegacyRank,
-	type AnyRank
-} from './types';
 import { browser } from '$app/environment';
 import { getRequestEvent } from '$app/server';
 import { PUBLIC_CDN_ENDPOINT } from '$env/static/public';
+import {
+	type FlattenedDivision,
+	type FlattenedGroup,
+	type NestedDivision,
+	type NestedGroup,
+	Role,
+	type SeasonState,
+	SocialPlatform
+} from './types';
 
-const rankNums: Record<Rank, number> = {
-	bronze: 0,
-	silver: 1,
-	gold: 2,
-	platinum: 3,
-	diamond: 4,
-	master: 5,
-	grandmaster: 6,
-	champion: 7
-};
-
-export function averageRank(ranks: NullableFullRank[]): FullRank | null {
-	if (ranks.length === 0) {
-		return null;
-	}
-
-	let total = 0;
-	let nonNullCount = 0;
-
-	for (const { rank, tier } of ranks) {
-		if (!rank || !tier) continue;
-		nonNullCount++;
-		total += rankToNum({ rank, tier });
-	}
-
-	return numToRank(total / nonNullCount);
-}
-
-function rankToNum(rank: FullRank): number {
-	// map the rank to a whole number, then a fraction based on tier
-	// instead of the tier being 5-1 where 1 is the highest, we invert it to 0-4 where 4 (tier 1) is the highest
-	return rankNums[rank.rank] * 5 + (5 - rank.tier);
-}
-
-function numToRank(num: number): FullRank {
-	const rounded = Math.round(num);
-
-	const rankNum = Math.floor(rounded / 5);
-	const rank = Object.keys(rankNums).find((key) => rankNums[key as Rank] === rankNum) as Rank;
-
-	const tier = 5 - (rounded % 5);
-
-	return {
-		rank,
-		tier
-	};
-}
-
-export function averageLegacyRank(ranks: NullableLegacyRank[]): LegacyRank | null {
-	if (ranks.length === 0) {
-		return null;
-	}
-
-	let total = 0;
-	let nonNullCount = 0;
-
-	for (const { sr } of ranks) {
-		if (sr === null) continue;
-		nonNullCount++;
-		total += sr;
-	}
-
-	return { sr: Math.round(total / nonNullCount) };
-}
-
-export function getRank(rank: AnyRank): Rank {
-	if ('rank' in rank) {
-		return rank.rank;
-	} else {
-		if (rank.sr < 1500) return Rank.BRONZE;
-		if (rank.sr < 2000) return Rank.SILVER;
-		if (rank.sr < 2500) return Rank.GOLD;
-		if (rank.sr < 3000) return Rank.PLATINUM;
-		if (rank.sr < 3500) return Rank.DIAMOND;
-		if (rank.sr < 4000) return Rank.MASTER;
-		return Rank.GRANDMASTER;
-	}
-}
-
-export function getTierLabel(rank: AnyRank): string {
-	if ('rank' in rank) {
-		return rank.tier.toString();
-	} else {
-		return `${Math.round(rank.sr / 100) / 10.0}k`;
-	}
-}
-
-export function isLegacyRank(rank: AnyRank): boolean {
-	if ('sr' in rank) {
-		return true;
-	}
-	return false;
-}
-
+/** Returns a readable version of a SocialPlatform. */
 export function formatSocialPlatform(platform: SocialPlatform) {
 	switch (platform) {
 		case SocialPlatform.TWITTER:
@@ -118,18 +22,26 @@ export function formatSocialPlatform(platform: SocialPlatform) {
 	}
 }
 
-export function flattenDivision<S, D>(nestedDivision: NestedDivision<S, D>) {
+/** Flattens a nested division. ({ division: { season } } -> { division, season }) */
+export function flattenDivision<S, D>(
+	nestedDivision: NestedDivision<S, D>
+): FlattenedDivision<S, D> {
 	const { season, ...division } = nestedDivision;
-	return { season, division };
+
+	// cast to D since TS can't infer that the rest operator gives us a D
+	return { season, division: division as D };
 }
 
-export function flattenGroup<S, D, G>(nestedGroup: NestedGroup<S, D, G>) {
+/** Flattens a nested group. ({ group: { division: { season } } } -> { group, division, season }) */
+export function flattenGroup<S, D, G>(nestedGroup: NestedGroup<S, D, G>): FlattenedGroup<S, D, G> {
 	const { division: nestedDivision, ...group } = nestedGroup;
 	const { season, division } = flattenDivision(nestedDivision);
 
-	return { season, division, group };
+	// see above for why we need to cast
+	return { season, division, group: group as G };
 }
 
+/** Converts a string to a URL-friendly slug. */
 export function toSlug(str: string) {
 	return slugify(str, {
 		lower: true,
@@ -137,10 +49,20 @@ export function toSlug(str: string) {
 	});
 }
 
+/**
+ * Returns a url to the CDN endpoint (specified via environment variable) with a path appended.
+ * The path must be prefixed with a forward slash.
+ */
 export function cdnSrc(path: string) {
 	return `${PUBLIC_CDN_ENDPOINT}${path}`;
 }
 
+/**
+ * Returns a url to the Cloudflare Images endpoint with the specified transformations applied.
+ * See https://developers.cloudflare.com/images/transform-images/transform-via-url/ for details.
+ *
+ * This assumes Images is configured on top of the CDN domain (called zones by cloudflare).
+ */
 export function cdnImageSrc(path: string, { width, height }: { width: number; height?: number }) {
 	let filters = `format=auto,fit=scale-down,width=${width}`;
 	if (height) {
@@ -150,10 +72,12 @@ export function cdnImageSrc(path: string, { width, height }: { width: number; he
 	return cdnSrc(`/cdn-cgi/image/${filters}${path}`);
 }
 
+/** Returns the CDN path (as used with cdnSrc) for a roster logo. */
 export function cdnRosterLogoPath(rosterId: string) {
 	return `/${s3RosterLogoKey(rosterId)}`;
 }
 
+/** Returns the S3 key for a roster logo. */
 export function s3RosterLogoKey(rosterId: string) {
 	return `logos/${rosterId}.webp`;
 }
@@ -188,6 +112,7 @@ export function aggregateGroups<R, M>(groups: { rosters: R[]; matches: M[] }[]) 
 	};
 }
 
+/** Maps an empty string to `undefined`, otherwise returns the string. */
 export function mapEmptyToUndefined(str: string) {
 	if (str.length === 0) return undefined;
 	return str;
@@ -199,7 +124,7 @@ export function seasonState({
 }: {
 	startedAt: Date;
 	endedAt?: Date | null;
-}): 'upcoming' | 'ongoing' | 'ended' {
+}): SeasonState {
 	const now = new Date();
 	if (startedAt && now < startedAt) {
 		return 'upcoming';
@@ -210,6 +135,7 @@ export function seasonState({
 	return 'ongoing';
 }
 
+/** Formats a date in a readable way, without time. */
 export function formatDate(date: Date, extra?: any): string {
 	const isCurrentYear = date.getFullYear() === new Date().getFullYear();
 
@@ -222,6 +148,7 @@ export function formatDate(date: Date, extra?: any): string {
 	});
 }
 
+/** Formats a date in a readable way, with time. */
 export function formatDateTime(date: Date): string {
 	return formatDate(date, {
 		hour: '2-digit',

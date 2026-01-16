@@ -124,6 +124,7 @@ async function fetchDivision(divisionId: string) {
 					matches: {
 						where: {
 							state: {
+								// equivalent to the hasMatchScore function
 								OR: [MatchState.PLAYED, MatchState.WALKOVER]
 							}
 						},

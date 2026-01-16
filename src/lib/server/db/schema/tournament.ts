@@ -11,8 +11,8 @@ import {
 	type AnyPgColumn,
 	check
 } from 'drizzle-orm/pg-core';
-import { timestamps, enumToPgEnum, xor } from './util';
-import { and, isNotNull, isNull, not, or, sql } from 'drizzle-orm';
+import { timestamps, enumToPgEnum } from './util';
+import { and, isNotNull, isNull, or, sql } from 'drizzle-orm';
 import { MatchState, MatchType, Rank, Role, SocialPlatform } from '../../../types';
 
 export const season = pgTable('season', {

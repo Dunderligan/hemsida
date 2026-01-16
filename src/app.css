@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 
+/* Variable-weight font; only define it once. */
 @font-face {
 	font-display: swap;
 	font-family: Inter;
@@ -44,6 +45,10 @@
 		url('$lib/assets/fonts/Rajdhani/Rajdhani-Bold.woff') format('woff');
 }
 
+/*
+ * Enable custom dark mode for Tailwind
+ * See https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
+ */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -52,22 +57,33 @@
 		background: white;
 	}
 
-	button:enabled {
+	/*
+	 * Make buttons have a pointer by default.
+	 * Taken from https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor 
+	*/
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
 		cursor: pointer;
 	}
 
+	/** 
+	 * Prevent layout shift when icons load.
+	 * Taken from https://iconify.design/docs/iconify-icon/#layout-shift
+	*/
 	iconify-icon {
 		display: inline-block;
 		width: 1em;
 		height: 1em;
 	}
 
+	/* Make tab navigation look better. */
 	*:focus-visible {
 		outline: 2px solid var(--color-accent-600);
 		border-radius: 4px;
 		outline-offset: 2px;
 	}
 
+	/* Remove number input spinners. */
 	input[type='number']::-webkit-inner-spin-button,
 	input[type='number']::-webkit-outer-spin-button {
 		-webkit-appearance: none;
@@ -75,7 +91,12 @@
 	}
 }
 
+/*
+ * Custom Tailwind styles for similar elements to prevent repeating the same styles.
+ * Evaluate before adding to these! We use Tailwind for a reason.
+ */
 @layer components {
+	/* Style for floating elements such as selects and tooltips. */
 	.floating {
 		z-index: 50;
 		max-height: calc(var(--spacing) * 96);
@@ -100,6 +121,7 @@
 		border-color: var(--color-gray-800);
 	}
 
+	/* Style for items inside floating elements, such as select items. */
 	.floating-item {
 		display: flex;
 		cursor: pointer;
@@ -127,6 +149,7 @@
 		color: var(--color-gray-300);
 	}
 
+	/* Style for input fields such as text inputs and date pickers. */
 	.field {
 		border-radius: var(--radius-md);
 		background-color: var(--color-gray-100);
@@ -158,12 +181,14 @@
 	--default-font-family: 'Rajdhani', 'Inter', sans-serif;
 	--font-display: 'Inter', 'Rajdhani', sans-serif;
 
+	/* Remove default Tailwind colors. This restricts us to the smaller palette below. */
 	--color-*: initial;
 
 	--color-transparent: rgba(0, 0, 0, 0);
 	--color-black: rgb(0, 0, 0);
 	--color-white: rgb(255, 255, 255);
 
+	/* The Dunderligan purple */
 	--color-accent-50: rgb(250, 245, 249);
 	--color-accent-100: rgb(247, 236, 244);
 	--color-accent-200: rgb(240, 218, 234);
@@ -175,6 +200,12 @@
 	--color-accent-800: rgb(123, 57, 97);
 	--color-accent-900: rgb(104, 51, 82);
 	--color-accent-950: rgb(62, 25, 47);
+
+	/* 
+	* These are taken from Tailwind's default color palette ...
+	* https://tailwindcss.com/docs/colors#default-color-palette-reference
+	* ... but only include a subset to remain consistent.
+	*/
 
 	--color-gray-50: oklch(98.5% 0.002 247.839);
 	--color-gray-100: oklch(96.7% 0.003 264.542);

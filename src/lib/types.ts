@@ -1,26 +1,40 @@
+/**
+ * SvelteKit accepts these types in the class attribute, but does not expose the type definitions.
+ * However, it is often useful to have them for typing class props to allow more flexibility over a simple `string`.
+ *
+ * This code is taken from the clsx library, which SvelteKit uses internally.
+ */
 export type ClassDictionary = Record<string, any>;
 export type ClassArray = ClassValue[];
 export type ClassValue = ClassArray | ClassDictionary | string | null | undefined;
 
+/** Full rank representation with rank (bronze, silver, etc.) and tier (1-5 where 1 is the highest). */
 export type FullRank = {
 	rank: Rank;
 	tier: number;
 };
 
-export type LegacyRank = {
-	sr: number;
-};
-
-export type AnyRank = FullRank | LegacyRank;
-
+/**
+ * Full rank with the fields nullable.
+ * This is useful for database queries, where these two are separate, nullable fields.
+ * Both fields should either be null or non-null together.
+ */
 export type NullableFullRank = {
 	rank: Rank | null;
 	tier: number | null;
 };
 
+/** Legacy rank from Overwatch 1, consisting of a single skill rating number. */
+export type LegacyRank = {
+	sr: number;
+};
+
 export type NullableLegacyRank = {
 	sr: number | null;
 };
+
+/** Either a full rank or a legacy rank. */
+export type AnyRank = FullRank | LegacyRank;
 
 export enum Rank {
 	BRONZE = 'bronze',
@@ -33,6 +47,7 @@ export enum Rank {
 	CHAMPION = 'champion'
 }
 
+/** Available social platforms for team social media links. */
 export enum SocialPlatform {
 	YOUTUBE = 'youtube',
 	TWITTER = 'twitter'
@@ -58,33 +73,39 @@ export enum MatchState {
 	CANCELLED = 'cancelled'
 }
 
-export type BaseLeague = {
+/**
+ * Base information used to identify seasons, divisions, groups, etc.
+ * Often used in nested types from database queries.
+ * See the $lib/server/db/helpers.ts file for the equivalent query definition.
+ */
+export type BaseEntity = {
 	name: string;
 	slug: string;
 };
 
-export type NestedSeason<S = BaseLeague> = S;
-export type NestedDivision<S = BaseLeague, D = S> = D & {
+// Definitions of nested entities used in various places throughout the app.
+export type NestedSeason<S = BaseEntity> = S;
+export type NestedDivision<S = BaseEntity, D = S> = D & {
 	season: S;
 };
-export type NestedGroup<S = BaseLeague, D = S, G = S> = G & {
+export type NestedGroup<S = BaseEntity, D = S, G = S> = G & {
 	division: NestedDivision<S, D>;
 };
 
-export type FlattenedSeason<S = BaseLeague> = {
+export type FlattenedSeason<S = BaseEntity> = {
 	season: S;
 };
-export type FlattenedDivision<S = BaseLeague, D = S> = {
+export type FlattenedDivision<S = BaseEntity, D = S> = {
 	season: S;
 	division: D;
 };
-export type FlattenedGroup<S = BaseLeague, D = S, G = S> = {
+export type FlattenedGroup<S = BaseEntity, D = S, G = S> = {
 	season: S;
 	division: D;
 	group: G;
 };
 
-export type NestedBracket<S = BaseLeague, D = S> = {
+export type NestedBracket<S = BaseEntity, D = S> = {
 	id: string;
 	name: string;
 	division: NestedDivision<S, D>;
@@ -123,7 +144,7 @@ export type TeamSocial = {
 };
 
 /**
- * All essential match information without rosters.
+ * All essential match information but without rosters.
  */
 export type MatchWithoutRosters = {
 	id: string;
@@ -178,7 +199,7 @@ export type MatchRoster = {
  * A resolved match with its associated group and bracket context, which
  * by default is the base nested group and brackets.
  *
- * Exactly one of group or bracket should be present depending on the match type.
+ * Exactly one of group or bracket should be present, depending on the match type.
  */
 export type ResolvedMatchWithContext<G = NestedGroup, B = NestedBracket> = ResolvedMatch & {
 	group?: G | null;
@@ -199,3 +220,5 @@ export type LogicalMatch = {
 };
 
 export type ButtonKind = 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'negative';
+
+export type SeasonState = 'upcoming' | 'ongoing' | 'ended';

@@ -9,13 +9,12 @@ The tech stack in short:
 - [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/) + [Cloudflare Images](https://www.cloudflare.com/developer-platform/products/cloudflare-images/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Bits UI](https://bits-ui.com/) (headless components)
-- Docker (currently production only)
 
-No cloud services beyond Cloudflare are used. The server and database are as of 2025-12-15 hosted on a VPS provided by Linköping University's computer association [Lysator](https://www.lysator.liu.se/).
+The server and database are hosted on a VPS provided by Linköping University's computer association [Lysator](https://www.lysator.liu.se/). [Coolify](https://coolify.io) is used to automatically deploy changes, configure the reverse proxy (Caddy) and manage Docker containers. Any pushed changes to the `dev` branch will trigger a redeploy on the [staging site](https://dev.dunderligan.se), while pushes on `master` go straight to [production](https://dunderligan.se)!
 
 ## Development
 
-### Prequisites
+### Prerequisites
 
 You'll need these installed:
 
@@ -69,3 +68,12 @@ The project uses [Prettier](https://prettier.io/) for code formatting. **Always 
 
 - [Cloud services (for the full setup)](./cloud-services.md)
 - [Database documentation](./database.md)
+
+### Contributing
+
+New contributions are always welcome! Just make sure to follow these:
+
+- Adhere to the tournament code of conduct ([discord message link](https://discord.com/channels/631178408268660756/1077717324049690765/1345763447589044284))
+- Make sure to target the `dev` branch with your pull request **(important!)**
+- Please contact Dunderligan management if you wish to make larger changes 
+- Prefer to split larger PRs into smaller chunks

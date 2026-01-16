@@ -54,6 +54,7 @@ export const deleteRoster = command(
 
 		await db.delete(schema.roster).where(eq(schema.roster.id, id));
 
+		// TODO: also delete logos when rosters are deleted from cascades (deleting groups e.t.c.)
 		const command = new DeleteObjectCommand({
 			Bucket: S3_BUCKET_NAME,
 			Key: cdnRosterLogoPath(id)
