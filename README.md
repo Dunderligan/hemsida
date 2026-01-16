@@ -1,6 +1,3 @@
-
-<img src="https://raw.githubusercontent.com/Dunderligan/web/refs/heads/master/src/lib/assets/images/logo.webp" width="100%" />
-
 # web
 
 Dunderligan's official website, [dunderligan.se](https://dunderligan.se). The site houses information about the tournament, teams and their players, as well as current and historial standings, match records and brackets, with more to come!
