@@ -36,6 +36,21 @@
 		const played = match.teamAScore > 0 || match.teamBScore > 0 || match.draws > 0;
 		return played ? MatchState.PLAYED : MatchState.SCHEDULED;
 	}
+
+	function onScoreChange() {
+		if (!match) return;
+
+		saveCtx.setDirty();
+
+		const defaultState = getDefaultState();
+		if (match.state !== defaultState) {
+			match.state = defaultState;
+
+			if (!match.playedAt) {
+				match.playedAt = match.scheduledAt;
+			}
+		}
+	}
 </script>
 
 <Dialog
@@ -67,10 +82,10 @@
 			<InputField
 				class="w-1/3 min-w-0"
 				bind:value={match.teamAScore}
-				onchange={saveCtx.setDirty}
 				type="number"
 				placeholder="Poäng"
 				disabled={!canEditScores}
+				onchange={onScoreChange}
 			/>
 		</div>
 
@@ -85,10 +100,10 @@
 			<InputField
 				class="w-1/3 min-w-0"
 				bind:value={match.teamBScore}
-				onchange={saveCtx.setDirty}
 				type="number"
 				placeholder="Poäng"
 				disabled={!canEditScores}
+				onchange={onScoreChange}
 			/>
 		</div>
 
