@@ -120,7 +120,7 @@
 	>
 		<SeasonStateChip {state} />
 
-		<div class="font-medium text-gray-500">
+		<div class="font-medium text-gray-600 dark:text-gray-400">
 			{#if state === 'upcoming'}
 				Startar {formatDateWithoutYear(season.startedAt)}
 				{season.startedAt.getFullYear()}
@@ -130,10 +130,12 @@
 					<span>och avslutas {formatDateWithoutYear(season.endedAt)}</span>
 				{/if}
 			{:else}
-				Pågick mellan {formatDateWithoutYear(season.startedAt)} och {formatDateWithoutYear(
-					season.endedAt!
-				)}
-				{season.startedAt.getFullYear()}
+				Pågick mellan {formatDateWithoutYear(season.startedAt)}
+				{#if season.endedAt!.getFullYear() !== season.startedAt!.getFullYear()}
+					{season.startedAt.getFullYear()}
+				{/if}
+				och {formatDateWithoutYear(season.endedAt!)}
+				{season.endedAt!.getFullYear()}
 			{/if}
 		</div>
 	</div>

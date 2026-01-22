@@ -26,7 +26,7 @@
 
 	{#if subtitle}
 		<div
-			class="mt-2 mb-1 text-center text-xl font-semibold text-gray-800 sm:text-left dark:text-gray-300"
+			class="mt-2 mb-1 text-center text-xl font-semibold text-gray-600 sm:text-left dark:text-gray-400"
 		>
 			{subtitle}
 		</div>
