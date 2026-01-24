@@ -2,6 +2,7 @@
 	import { Accordion, type WithoutChildrenOrChild } from 'bits-ui';
 	import { slide } from 'svelte/transition';
 	import Icon from './Icon.svelte';
+	import { expoOut } from 'svelte/easing';
 
 	type Props = WithoutChildrenOrChild<Accordion.ItemProps> & {
 		title: string;
@@ -26,7 +27,11 @@
 	<Accordion.Content forceMount class="overflow-hidden tracking-[-0.01em]">
 		{#snippet child({ props, open })}
 			{#if open}
-				<div {...props} transition:slide={{ duration: 400 }} class="pt-1 pb-2 text-lg">
+				<div
+					{...props}
+					transition:slide={{ duration: 400, easing: expoOut }}
+					class="pt-1 pb-2 text-lg"
+				>
 					{content}
 				</div>
 			{/if}
