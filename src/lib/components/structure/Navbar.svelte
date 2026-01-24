@@ -83,7 +83,11 @@
 					{shownName}
 				</Dropdown>
 			{:else}
-				<Button href="/api/login/battlenet" kind="tertiary" label="Logga in" />
+				<Button
+					href="/api/login/battlenet?next={page.url.pathname}"
+					kind="tertiary"
+					label="Logga in"
+				/>
 			{/if}
 
 			<DropdownMenu.Root>
