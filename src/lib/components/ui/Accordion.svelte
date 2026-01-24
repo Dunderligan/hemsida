@@ -26,6 +26,6 @@
 	class="flex w-full flex-col space-y-2 overflow-hidden rounded-lg text-gray-700 sm:max-w-[70%] dark:text-gray-300"
 >
 	{#each items as item, i (item.title + i)}
-		<span><AccordionItem {...item} /></span>
+		<AccordionItem {...item} />
 	{/each}
 </Accordion.Root>

@@ -4,7 +4,7 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 
 	import Subheading from '$lib/components/ui/Subheading.svelte';
-	import Accordion from '$lib/components/ui/Accordions.svelte';
+	import Accordion from '$lib/components/ui/Accordion.svelte';
 
 	const items = [
 		{
@@ -25,7 +25,7 @@
 		{
 			title: 'Vilken rank måste man vara i Dunderligan?',
 			content:
-				'Alla ranker är välkomna. Ditt lag kommer efter anmälning att seedas utifrån anmäld rank på spelare för att hamn i en så jämn division som möjligt. Varje år har vi spelare i allt ifrån brons upp till champion, verkligen alla ranker finns representerade.'
+				'Alla ranker är välkomna. Ditt lag kommer efter anmälning att seedas utifrån anmäld rank på spelare för att hamna i en så jämn division som möjligt. Varje år har vi spelare i allt ifrån brons upp till champion, verkligen alla ranker finns representerade.'
 		},
 		{
 			title: 'Hur länge pågår Dunderligan?',
@@ -52,7 +52,7 @@
 	<div
 		class="mt-2 mb-1 text-center text-xl font-semibold text-gray-800 sm:text-left dark:text-gray-300"
 	>
-		Svar på några av de vanligast förekommande frågorna.
+		Svar på några av de vanligast förekommande frågorna
 	</div>
 </PageHeader>
 

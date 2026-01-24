@@ -13,17 +13,17 @@
 
 <Accordion.Item
 	{...restProps}
-	class="bg-gray-100 px-8  py-3 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800"
+	class="bg-gray-100 px-8 py-3 hover:bg-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800"
 >
 	<Accordion.Header>
 		<Accordion.Trigger
-			class="flex min-h-12 w-full flex-1 items-center justify-between text-left font-display text-xl font-semibold hover:underline [&[data-state=open]>span]:rotate-180"
+			class="flex min-h-12 w-full items-center justify-between text-left font-display text-xl font-semibold hover:underline [&[data-state=open]>iconify-icon]:rotate-180"
 		>
 			<div>{title}</div>
-			<span><Icon icon="ph:caret-down" /></span>
+			<Icon icon="ph:caret-down" />
 		</Accordion.Trigger>
 	</Accordion.Header>
-	<Accordion.Content forceMount={true} class="overflow-hidden text-sm tracking-[-0.01em]">
+	<Accordion.Content forceMount class="overflow-hidden tracking-[-0.01em]">
 		{#snippet child({ props, open })}
 			{#if open}
 				<div {...props} transition:slide={{ duration: 400 }} class="pt-1 pb-2 text-lg">
