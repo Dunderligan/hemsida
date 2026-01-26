@@ -25,6 +25,10 @@
 			label: 'Arkiv'
 		},
 		{
+			href: '/faq',
+			label: 'FAQ'
+		},
+		{
 			href: '/om',
 			label: 'Om oss'
 		}
