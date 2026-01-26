@@ -5,7 +5,7 @@
 	import PageSection from '$lib/components/structure/PageSection.svelte';
 	import StandingsTable from '$lib/components/table/StandingsTable.svelte';
 	import Tabs from '$lib/components/ui/Tabs.svelte';
-	import { seasonState } from '$lib/util';
+	import { seasonState, formatDate } from '$lib/util';
 	import Bracket from '$lib/components/match/Bracket.svelte';
 	import { buildBracketRounds } from '$lib/bracket';
 	import Subheading from '$lib/components/ui/Subheading.svelte';
@@ -14,6 +14,7 @@
 	import MatchList from '$lib/components/match/MatchList.svelte';
 	import { goto } from '$app/navigation';
 	import Meta from '$lib/components/structure/Meta.svelte';
+	import { util } from 'zod';
 
 	let { data } = $props();
 
@@ -129,7 +130,7 @@
 					<span>och avslutas {formatDateWithoutYear(season.endedAt)}</span>
 				{/if}
 			{:else if season.startedAt.getDate() === season.endedAt!.getDate()}
-				Pågick under {formatDateWithoutYear(season.startedAt)}
+				Pågick under {formatDate(season.startedAt)}
 			{:else}
 				Pågick mellan {formatDateWithoutYear(season.startedAt)}
 				{#if season.endedAt!.getFullYear() !== season.startedAt!.getFullYear()}
