@@ -29,7 +29,7 @@
 			{#if open}
 				<div
 					{...props}
-					transition:slide={{ duration: 400, easing: expoOut }}
+					transition:slide={{ duration: 500, easing: expoOut }}
 					class="pt-1 pb-2 text-lg"
 				>
 					{content}

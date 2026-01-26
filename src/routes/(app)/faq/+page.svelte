@@ -25,7 +25,7 @@
 		{
 			title: 'Vilken rank måste man vara i Dunderligan?',
 			content:
-				'Alla ranker är välkomna. Ditt lag kommer efter anmälning att seedas utifrån anmäld rank på spelare för att hamna i en så jämn division som möjligt. Varje år har vi spelare i allt ifrån brons upp till champion, verkligen alla ranker finns representerade.'
+				'Alla ranker är välkomna. Ditt lag kommer efter anmälning att seedas utifrån anmäld rank på spelare, för att skapa så jämna division som möjligt. Varje år har vi alla ranker representerade, allt från brons upp till och med champion.'
 		},
 		{
 			title: 'Hur länge pågår Dunderligan?',
@@ -36,12 +36,12 @@
 		{
 			title: 'Kommer matcher att sändas live?',
 			content:
-				'Ja, ganska många dessutom. Och vissa som inte sänds live kommer att i efterhand publiceras på våran YouTube-kanal genom att vods castas med hjälp av replaykoder. Vi brukar alltid anstränga oss för att varje lag ska få åtminstone en match publicerad på YouTube.'
+				'Ja, ganska många. Vissa som inte sänds live kommer dessutom att i efterhand publiceras på vår YouTube-kanal med hjälp av replaykoder. Vi brukar alltid anstränga oss för att varje lag ska få åtminstone en match publicerad på YouTube.'
 		},
 		{
 			title: 'Hur kan jag hjälpa till i Dunderligan?',
 			content:
-				'DL existerar på grund utav och tackvare eldsjälar. Varje år behöver vi hjälp med modsysslor på discordservern, redigerare, casters, grafiker och bildproducenter för att nämna några. Vill du hjälpa till och känner att du kanske har något som du kan tillföra, ta kontakt med moderatorerna på discordservern.'
+				'DL existerar på grund utav och tack vare eldsjälar. Varje år behöver vi hjälp med modsysslor på discordservern, redigerare, casters, grafiker, och bildproducenter. Vill du hjälpa till och känner att du kanske har något som du kan tillföra, ta kontakt med moderatorerna på discordservern.'
 		}
 	];
 </script>
